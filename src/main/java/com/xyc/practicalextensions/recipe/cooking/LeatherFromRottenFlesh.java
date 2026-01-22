@@ -1,6 +1,6 @@
 package com.xyc.practicalextensions.recipe.cooking;
 
-import com.xyc.practicalextensions.Config;
+import com.xyc.practicalextensions.config.ModConfig;
 import com.xyc.practicalextensions.recipe.DynamicRecipeUtils;
 import com.xyc.practicalextensions.recipe.IDynamicRecipeModule;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -16,7 +16,7 @@ import java.util.List;
 public class LeatherFromRottenFlesh implements IDynamicRecipeModule {
     @Override
     public boolean condition() {
-        return Config.leatherFromRottenFlesh;
+        return ModConfig.leatherFromRottenFlesh;
     }
 
     @Override

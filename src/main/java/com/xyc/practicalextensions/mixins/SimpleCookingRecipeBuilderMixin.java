@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.mixin;
+package com.xyc.practicalextensions.mixins;
 
 import com.xyc.practicalextensions.recipe.IDynamicRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;

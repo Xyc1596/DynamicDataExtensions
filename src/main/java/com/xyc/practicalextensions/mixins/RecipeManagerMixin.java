@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.mixin;
+package com.xyc.practicalextensions.mixins;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;

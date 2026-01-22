@@ -1,20 +1,22 @@
 package com.xyc.practicalextensions;
 
 import com.mojang.logging.LogUtils;
+import com.xyc.practicalextensions.config.ModConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import org.slf4j.Logger;
 
 @Mod(ModMain.MOD_ID)
 public class ModMain {
     public static final String MOD_ID = "practicalextensions";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static ModContainer CONTAINER;
 
     public ModMain(IEventBus modEventBus, ModContainer container) {
-        container.registerConfig(ModConfig.Type.COMMON, Config.COMMON);
+        ModMain.CONTAINER = container;
+        container.registerConfig(net.neoforged.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON);
     }
 
     public static ResourceLocation resourceLocation(String id) {
