@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.recipe;
+package com.xyc.practicalextensions.modules;
 
 import net.minecraft.world.item.crafting.Recipe;
 

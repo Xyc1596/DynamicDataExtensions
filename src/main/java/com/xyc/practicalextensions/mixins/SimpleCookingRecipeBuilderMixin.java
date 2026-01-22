@@ -1,6 +1,6 @@
 package com.xyc.practicalextensions.mixins;
 
-import com.xyc.practicalextensions.recipe.IDynamicRecipeBuilder;
+import com.xyc.practicalextensions.modules.IDynamicRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
