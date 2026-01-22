@@ -23,6 +23,8 @@ repositories {
     maven { url = "https://neoforged.forgecdn.net/mojang-meta" }
     maven { url = "https://maven.aliyun.com/repository/gradle-plugin" }
     mavenLocal()
+
+    maven { url = "https://api.modrinth.com/maven" }
 }
 
 base {
@@ -148,6 +150,8 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    runtimeOnly("maven.modrinth:jei:$jei_version")
+    api("maven.modrinth:cloth-config:$cloth_config_version+neoforge")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.xyc.practicalextensions.mixin",
+  "mixins": [
+    "RecipeManagerMixin",
+    "SimpleCookingRecipeBuilderMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "compatibilityLevel": "JAVA_21",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
