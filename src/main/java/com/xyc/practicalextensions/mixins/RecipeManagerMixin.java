@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Mixin(RecipeManager.class)
-public class RecipeManagerMixin {
+public abstract class RecipeManagerMixin {
     @Shadow
     private Multimap<RecipeType<?>, RecipeHolder<?>> byType = ImmutableMultimap.of();
     @Shadow

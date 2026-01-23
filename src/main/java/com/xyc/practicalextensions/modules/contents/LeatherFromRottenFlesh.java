@@ -1,7 +1,7 @@
 package com.xyc.practicalextensions.modules.contents;
 
 import com.xyc.practicalextensions.modules.IModule;
-import com.xyc.practicalextensions.modules.Utils;
+import com.xyc.practicalextensions.utils.Cooking;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -18,8 +18,8 @@ public class LeatherFromRottenFlesh implements IModule {
 
     @Override
     public Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
-        return Utils.createSmokingAll(
-            "leather_from_rotten_flesh",
+        return Cooking.createSmokingAll(
+            getId(),
             Ingredient.of(Items.ROTTEN_FLESH),
             RecipeCategory.MISC,
             Items.LEATHER,

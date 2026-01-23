@@ -3,7 +3,11 @@
   "package": "com.xyc.practicalextensions.mixins",
   "mixins": [
     "RecipeManagerMixin",
-    "SimpleCookingRecipeBuilderMixin"
+    "ShapedRecipeBuilderMixin",
+    "ShapelessRecipeBuilderMixin",
+    "SimpleCookingRecipeBuilderMixin",
+    "SingleItemRecipeBuilderMixin",
+    "SpecialRecipeBuilderMixin"
   ],
   "client": [
   ],

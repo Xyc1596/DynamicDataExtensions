@@ -5,13 +5,12 @@ import com.xyc.practicalextensions.config.ModuleClothConfig;
 import com.xyc.practicalextensions.config.ModuleConfig;
 import com.xyc.practicalextensions.modules.ModuleManager;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
 @Mod(ModMain.MOD_ID)
@@ -20,20 +19,14 @@ public class ModMain {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static ModContainer CONTAINER;
 
-    public ModMain(ModContainer container) {
+    public ModMain(IEventBus modEventBus, ModContainer container) {
         ModMain.CONTAINER = container;
         ModuleConfig.init(container, ModuleManager.getModules());
-    }
 
-    @OnlyIn(Dist.CLIENT)
-    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-    public static final class ClientSetupEvents {
-        @SubscribeEvent
-        public static void onEnqueue(final InterModEnqueueEvent event) {
-            if (ModList.get().isLoaded("cloth_config")) {
+        modEventBus.addListener((final InterModEnqueueEvent event) -> {
+            if (FMLEnvironment.dist == Dist.CLIENT && ModList.get().isLoaded("cloth_config")) {
                 event.enqueueWork(() -> ModuleClothConfig.init(CONTAINER, ModuleManager.getModules()));
             }
-        }
+        });
     }
-
 }

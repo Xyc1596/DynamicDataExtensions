@@ -1,5 +1,6 @@
 package com.xyc.practicalextensions.modules;
 
+import com.xyc.practicalextensions.utils.Utils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;

@@ -2,6 +2,7 @@ package com.xyc.practicalextensions.modules;
 
 import com.xyc.practicalextensions.config.ModuleConfig;
 import com.xyc.practicalextensions.modules.contents.LeatherFromRottenFlesh;
+import com.xyc.practicalextensions.modules.contents.RawOreBlockSmelting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -12,7 +13,8 @@ import java.util.Set;
 
 public class ModuleManager {
     protected static final Set<IModule> MODULES = Set.of(
-        new LeatherFromRottenFlesh()
+        new LeatherFromRottenFlesh(),
+        new RawOreBlockSmelting()
     );
 
     public static Set<IModule> getModules() {

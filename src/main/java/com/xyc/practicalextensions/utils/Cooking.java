@@ -1,9 +1,8 @@
-package com.xyc.practicalextensions.modules;
+package com.xyc.practicalextensions.utils;
 
-import com.xyc.practicalextensions.ModMain;
+import com.xyc.practicalextensions.modules.IDynamicRecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -13,7 +12,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public class Utils {
+public final class Cooking {
     public static RecipeHolder<Recipe<?>> createSmelting(
         String id,
         Ingredient ingredient,
@@ -22,11 +21,12 @@ public class Utils {
         float experience,
         int cookingTime
     ) {
+        ResourceLocation location = Utils.resourceLocation(id);
         return new RecipeHolder<>(
-            resourceLocation(id),
+            location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.smelting(
                 ingredient, category, result, experience, cookingTime
-            )).practicalextensions$toRecipe()
+            )).practicalextensions$toRecipe(location)
         );
     }
 
@@ -38,11 +38,12 @@ public class Utils {
         float experience,
         int cookingTime
     ) {
+        ResourceLocation location = Utils.resourceLocation(id);
         return new RecipeHolder<>(
-            resourceLocation(id),
+            location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.smoking(
                 ingredient, category, result, experience, cookingTime
-            )).practicalextensions$toRecipe()
+            )).practicalextensions$toRecipe(location)
         );
     }
 
@@ -54,11 +55,12 @@ public class Utils {
         float experience,
         int cookingTime
     ) {
+        ResourceLocation location = Utils.resourceLocation(id);
         return new RecipeHolder<>(
-            resourceLocation(id),
+            location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.campfireCooking(
                 ingredient, category, result, experience, cookingTime
-            )).practicalextensions$toRecipe()
+            )).practicalextensions$toRecipe(location)
         );
     }
 
@@ -70,11 +72,12 @@ public class Utils {
         float experience,
         int cookingTime
     ) {
+        ResourceLocation location = Utils.resourceLocation(id);
         return new RecipeHolder<>(
-            resourceLocation(id),
+            location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.blasting(
                 ingredient, category, result, experience, cookingTime
-            )).practicalextensions$toRecipe()
+            )).practicalextensions$toRecipe(location)
         );
     }
 
@@ -105,17 +108,5 @@ public class Utils {
             createSmelting(id + "_smelting", ingredient, category, result, experience, cookingTimeInFurnace),
             createBlasting(id + "_blasting", ingredient, category, result, experience, cookingTimeInFurnace / 2)
         );
-    }
-
-    public static ResourceLocation resourceLocation(String id) {
-        return ResourceLocation.fromNamespaceAndPath(ModMain.MOD_ID, id);
-    }
-
-    public static String translateKey(String category, String id) {
-        return category + "." + ModMain.MOD_ID + "." + id;
-    }
-
-    public static Component translatable(String category, String id) {
-        return Component.translatable(translateKey(category, id));
     }
 }
