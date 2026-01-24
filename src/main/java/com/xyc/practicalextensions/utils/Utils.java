@@ -1,6 +1,6 @@
-package com.xyc.practicalextensions;
+package com.xyc.practicalextensions.utils;
 
-import com.xyc.practicalextensions.modules.IDynamicRecipeBuilder;
+import com.xyc.practicalextensions.ModMain;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;

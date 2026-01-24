@@ -1,7 +1,7 @@
 package com.xyc.practicalextensions.modules.contents;
 
 import com.xyc.practicalextensions.ModMain;
-import com.xyc.practicalextensions.Utils;
+import com.xyc.practicalextensions.utils.Utils;
 import com.xyc.practicalextensions.modules.Module;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.Items;

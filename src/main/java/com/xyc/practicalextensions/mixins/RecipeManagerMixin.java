@@ -3,21 +3,18 @@ package com.xyc.practicalextensions.mixins;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.google.gson.JsonElement;
-import com.xyc.practicalextensions.ModMain;
 import com.xyc.practicalextensions.PracticalExtensionRegistry;
+import com.xyc.practicalextensions.utils.IInjectingRecipe;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import org.apache.commons.lang3.tuple.Triple;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Map;
 import java.util.Set;
@@ -25,27 +22,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Mixin(RecipeManager.class)
-public abstract class RecipeManagerMixin {
+public abstract class RecipeManagerMixin implements IInjectingRecipe {
     @Shadow
     private Multimap<RecipeType<?>, RecipeHolder<?>> byType = ImmutableMultimap.of();
     @Shadow
     private Map<ResourceLocation, RecipeHolder<?>> byName = ImmutableMap.of();
 
-    @Inject(
-        method = "apply(Ljava/util/Map;Lnet/minecraft/server/packs/resources/ResourceManager;" +
-            "Lnet/minecraft/util/profiling/ProfilerFiller;)V",
-        at = @At(
-            value = "INVOKE",
-            target = "Lcom/google/common/collect/ImmutableMap$Builder;build()Lcom/google/common/collect/ImmutableMap;",
-            shift = At.Shift.AFTER
-        )
-    )
-    private void onUpdateRecipes(
-        Map<ResourceLocation, JsonElement> object,
-        ResourceManager resourceManager,
-        ProfilerFiller profiler,
-        CallbackInfo ci
-    ) {
+    /**
+     * @see PracticalExtensionRegistry#onServerStarting(ServerStartingEvent)
+     */
+    @Unique
+    public Triple<Long, Long, Long> practicalextensions$injectRecipes() {
         long t1 = System.currentTimeMillis();
         long nByType = byType.size();
         var recipesToUpdate = PracticalExtensionRegistry.getAllRecipesToUpdate();
@@ -72,9 +59,10 @@ public abstract class RecipeManagerMixin {
         );
         long nAfterAdd = byType.size();
 
-        ModMain.LOGGER.info(
-            "{} recipe(s) removed and {} recipe(s) added in {} ms",
-            nByType - nAfterRemove, nAfterAdd - nAfterRemove, System.currentTimeMillis() - t1
+        return Triple.of(
+            nByType - nAfterRemove,
+            nAfterAdd - nAfterRemove,
+            System.currentTimeMillis() - t1
         );
     }
 }

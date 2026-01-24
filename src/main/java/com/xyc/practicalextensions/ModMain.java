@@ -1,6 +1,5 @@
 package com.xyc.practicalextensions;
 
-import com.mojang.logging.LogUtils;
 import com.xyc.practicalextensions.client.ModuleClothConfig;
 import com.xyc.practicalextensions.client.ModuleLang;
 import com.xyc.practicalextensions.modules.Module;
@@ -16,14 +15,14 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Mod(ModMain.MOD_ID)
 public class ModMain {
     public static final String MOD_ID = "practicalextensions";
-    public static final Logger LOGGER = LogUtils.getLogger();
 
     public ModMain(IEventBus modEventBus, ModContainer container) {
         ModuleConfig config = new ModuleConfig(
