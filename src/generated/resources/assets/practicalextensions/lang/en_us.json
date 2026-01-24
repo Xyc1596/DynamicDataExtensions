@@ -1,0 +1,10 @@
+{
+  "message.practicalextensions.reload_config": "[%s] Reloading recipes...",
+  "option.practicalextensions.leather_from_rotten_flesh": "Leather from Rotten Flesh",
+  "option.practicalextensions.raw_ore_block_smelting": "Raw Ore Block Smelting",
+  "practicalextensions": "Practical Extensions",
+  "title.practicalextensions.config": "Practical Extensions",
+  "title.practicalextensions.modules": "Modules",
+  "tooltip.practicalextensions.leather_from_rotten_flesh": "Make rotten flesh more useful.",
+  "tooltip.practicalextensions.raw_ore_block_smelting": "Smelt raw mineral blocks directly into mineral blocks."
+}

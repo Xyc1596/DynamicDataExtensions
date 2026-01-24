@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonElement;
 import com.xyc.practicalextensions.ModMain;
-import com.xyc.practicalextensions.modules.ModuleManager;
+import com.xyc.practicalextensions.PracticalExtensionRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -48,7 +48,7 @@ public abstract class RecipeManagerMixin {
     ) {
         long t1 = System.currentTimeMillis();
         long nByType = byType.size();
-        var recipesToUpdate = ModuleManager.getRecipesToUpdate();
+        var recipesToUpdate = PracticalExtensionRegistry.getAllRecipesToUpdate();
         Set<RecipeHolder<Recipe<?>>> recipesToAdd = recipesToUpdate.getLeft();
         Set<ResourceLocation> recipesToRemove = recipesToUpdate.getRight();
 

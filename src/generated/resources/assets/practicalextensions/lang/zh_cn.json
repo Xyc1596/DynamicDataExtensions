@@ -1,0 +1,10 @@
+{
+  "message.practicalextensions.reload_config": "[%s] 正在重新加载配方……",
+  "option.practicalextensions.leather_from_rotten_flesh": "腐肉换皮革",
+  "option.practicalextensions.raw_ore_block_smelting": "粗矿物块烧炼",
+  "practicalextensions": "实用配方扩展",
+  "title.practicalextensions.config": "实用配方扩展",
+  "title.practicalextensions.modules": "模块",
+  "tooltip.practicalextensions.leather_from_rotten_flesh": "让腐肉变得更有用",
+  "tooltip.practicalextensions.raw_ore_block_smelting": "粗矿物块可以直接烧炼成矿物块"
+}

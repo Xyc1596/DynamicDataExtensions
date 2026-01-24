@@ -1,7 +1,8 @@
 package com.xyc.practicalextensions.modules.contents;
 
-import com.xyc.practicalextensions.modules.IModule;
-import com.xyc.practicalextensions.utils.Cooking;
+import com.xyc.practicalextensions.ModMain;
+import com.xyc.practicalextensions.Utils;
+import com.xyc.practicalextensions.modules.Module;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -18,10 +19,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RawOreBlockSmelting implements IModule {
-    @Override
-    public String getId() {
-        return "raw_ore_block_smelting";
+public class RawOreBlockSmelting extends Module {
+    public RawOreBlockSmelting() {
+        super(ModMain.MOD_ID, "raw_ore_block_smelting");
     }
 
     @Override
@@ -55,7 +55,7 @@ public class RawOreBlockSmelting implements IModule {
                 Item result = resultHolders.get().get(0).value();
                 holders.forEach(
                     h -> output.addAll(
-                        Cooking.createBlastingAll(
+                        Utils.createBlastingAll(
                             id,
                             Ingredient.of(h.value()),
                             RecipeCategory.MISC,
@@ -68,5 +68,21 @@ public class RawOreBlockSmelting implements IModule {
             }
         );
         return output;
+    }
+
+    @Override
+    public Map<String, String> getOptionTranslations() {
+        return Map.of(
+            "zh_cn", "粗矿物块烧炼",
+            "en_us", "Raw Ore Block Smelting"
+        );
+    }
+
+    @Override
+    public Map<String, String> getTooltipTranslations() {
+        return Map.of(
+            "zh_cn", "粗矿物块可以直接烧炼成矿物块",
+            "en_us", "Smelt raw mineral blocks directly into mineral blocks."
+        );
     }
 }

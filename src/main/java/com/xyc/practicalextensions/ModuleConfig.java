@@ -1,14 +1,11 @@
-package com.xyc.practicalextensions.config;
+package com.xyc.practicalextensions;
 
-import com.xyc.practicalextensions.ModMain;
-import com.xyc.practicalextensions.modules.IModule;
-import com.xyc.practicalextensions.utils.Utils;
+import com.xyc.practicalextensions.modules.Module;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -16,50 +13,51 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-@EventBusSubscriber(modid = ModMain.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ModuleConfig {
-    public static final String MESSAGE_RELOAD_CONFIG = Utils.translateKey("message", "reload_config");
+    public final String MESSAGE_RELOAD_CONFIG;
 
-    private static int cache;
+    private int cache;
 
-    protected static ModConfigSpec COMMON;
+    public final ModConfigSpec COMMON;
 
-    protected static final Map<String, ModConfigSpec.BooleanValue> MODULE_TOGGLES = new LinkedHashMap<>();
+    public final LinkedHashSet<Module> MODULES;
+    private final Map<String, ModConfigSpec.BooleanValue> MODULE_TOGGLES = new LinkedHashMap<>();
 
-    public static ModConfigSpec getSpec() {
-        return COMMON;
-    }
-
-    public static boolean isModuleEnabled(String id) {
+    public final boolean isModuleEnabled(String id) {
         return MODULE_TOGGLES.get(id).get();
     }
 
-    public static void setModuleEnabled(String id, boolean enabled) {
+    public final void setModuleEnabled(String id, boolean enabled) {
         MODULE_TOGGLES.get(id).set(enabled);
     }
 
-    public static void init(ModContainer container, Set<IModule> modules) {
+    public ModuleConfig(IEventBus modEventBus, String namespace, ModContainer container, List<Module> modules) {
+        MESSAGE_RELOAD_CONFIG = "message." + namespace + ".reload_config";
+        MODULES = new LinkedHashSet<>(modules);
+
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         modules.forEach(m -> MODULE_TOGGLES.put(
-            m.getId(), builder.define(m.getId(), true)
+            m.ID, builder.define(m.ID, true)
         ));
         COMMON = builder.build();
         container.registerConfig(ModConfig.Type.COMMON, COMMON);
+
+        modEventBus.addListener(this::handleLoadConfig);
+        modEventBus.addListener(this::handleReloadConfig);
     }
 
-    @SubscribeEvent
-    public static void onLoadConfig(final ModConfigEvent.Loading event) {
+    public void handleLoadConfig(final ModConfigEvent.Loading event) {
         IConfigSpec.ILoadedConfig loadedConfig = event.getConfig().getLoadedConfig();
-        if (loadedConfig != null){
+        if (loadedConfig != null) {
             cache = loadedConfig.hashCode();
         }
     }
 
-    @SubscribeEvent
-    public static void onReloadConfig(final ModConfigEvent.Reloading event) {
+    public void handleReloadConfig(final ModConfigEvent.Reloading event) {
         IConfigSpec.ILoadedConfig loadedConfig = event.getConfig().getLoadedConfig();
         if (loadedConfig == null)
             return;
@@ -76,7 +74,9 @@ public class ModuleConfig {
             server.getPlayerList().broadcastSystemMessage(
                 Component.translatable(
                     MESSAGE_RELOAD_CONFIG,
-                    Component.literal(ModMain.MOD_ID).withStyle(ChatFormatting.DARK_AQUA)
+                    Component.translatable(ModMain.MOD_ID)
+                             .withStyle(ChatFormatting.DARK_AQUA)
+                             .withStyle(ChatFormatting.BOLD)
                 ),
                 false
             );
