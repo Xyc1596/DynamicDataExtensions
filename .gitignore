@@ -28,3 +28,4 @@ repo
 examplemod/
 .github
 .cache
+/assets/ref/

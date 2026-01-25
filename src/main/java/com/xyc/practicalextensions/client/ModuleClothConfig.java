@@ -1,5 +1,6 @@
 package com.xyc.practicalextensions.client;
 
+import com.xyc.practicalextensions.ModMain;
 import com.xyc.practicalextensions.ModuleConfig;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -13,15 +14,21 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @OnlyIn(Dist.CLIENT)
 public class ModuleClothConfig implements IExtensionPoint {
-    public final String TITLE_CONFIG, TITLE_MODULES;
+    public final String TITLE_CONFIG;
+    public static final String
+        TITLE_MODULES = "title." + ModMain.MOD_ID + ".modules",
+        TITLE_GENERAL = "title." + ModMain.MOD_ID + ".general",
+        OPTION_AUTO_RELOAD = "option." + ModMain.MOD_ID + ".auto_reload",
+        TOOLTIP_AUTO_RELOAD = "tooltip." + ModMain.MOD_ID + ".auto_reload";
 
     public ConfigBuilder getBuilder(ModuleConfig moduleConfig) {
         ConfigBuilder builder = ConfigBuilder.create()
                                              .setTitle(Component.translatable(TITLE_CONFIG))
                                              .setSavingRunnable(moduleConfig.COMMON::save);
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-        ConfigCategory categoryBuilder = builder.getOrCreateCategory(Component.translatable(TITLE_MODULES));
-        moduleConfig.MODULES.forEach(m -> categoryBuilder.addEntry(
+
+        ConfigCategory modulesBuilder = builder.getOrCreateCategory(Component.translatable(TITLE_MODULES));
+        moduleConfig.MODULES.forEach(m -> modulesBuilder.addEntry(
             entryBuilder
                 .startBooleanToggle(
                     Component.translatable(m.getOptionTranslationKey()),
@@ -32,12 +39,22 @@ public class ModuleClothConfig implements IExtensionPoint {
                 .setDefaultValue(true)
                 .build()
         ));
+
+        ConfigCategory generalBuilder = builder.getOrCreateCategory(Component.translatable(TITLE_GENERAL));
+        generalBuilder.addEntry(
+            entryBuilder
+                .startBooleanToggle(Component.translatable(OPTION_AUTO_RELOAD), moduleConfig.AUTO_RELOAD.get())
+                .setTooltip(Component.translatable(TOOLTIP_AUTO_RELOAD))
+                .setSaveConsumer(moduleConfig.AUTO_RELOAD::set)
+                .setDefaultValue(true)
+                .build()
+        );
+
         return builder;
     }
 
     public ModuleClothConfig(String namespace, ModContainer container, ModuleConfig moduleConfig) {
         TITLE_CONFIG = "title." + namespace + ".config";
-        TITLE_MODULES = "title." + namespace + ".modules";
         container.registerExtensionPoint(
             IConfigScreenFactory.class,
             (c, s) -> getBuilder(moduleConfig).build()

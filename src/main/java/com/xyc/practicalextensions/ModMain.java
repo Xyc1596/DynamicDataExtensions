@@ -27,7 +27,6 @@ public class ModMain {
     public ModMain(IEventBus modEventBus, ModContainer container) {
         ModuleConfig config = new ModuleConfig(
             modEventBus,
-            MOD_ID,
             container,
             List.of(
                 new LeatherFromRottenFlesh(),
@@ -54,10 +53,20 @@ public class ModMain {
                         @Override
                         protected void addTranslations() {
                             add(MOD_ID, "实用配方扩展");
-                            add(config.MESSAGE_RELOAD_CONFIG, "[%s] 重新加载中！");
+                            add(ModuleConfig.MESSAGE_RELOAD_CONFIG, "[%s] 重新加载中！");
+                            add(
+                                ModuleConfig.MESSAGE_AUTO_RELOAD_DISABLED,
+                                "[%s] 自动重新加载已禁用！使用 /reload 命令使模块设置生效。"
+                            );
                             clothConfig.ifPresent(c -> {
                                 add(c.TITLE_CONFIG, "实用配方扩展");
-                                add(c.TITLE_MODULES, "模块");
+                                add(ModuleClothConfig.TITLE_MODULES, "模块设置");
+                                add(ModuleClothConfig.TITLE_GENERAL, "通用设置");
+                                add(ModuleClothConfig.OPTION_AUTO_RELOAD, "自动重新加载");
+                                add(
+                                    ModuleClothConfig.TOOLTIP_AUTO_RELOAD,
+                                    "更改配置后自动重新加载数据\n禁用该选项则需要手动使用 /reload 命令使模块设置生效"
+                                );
                             });
                             config.MODULES.forEach(module -> {
                                 ModuleLang lang = allModuleLang.get(module).get("zh_cn");
@@ -75,10 +84,22 @@ public class ModMain {
                         @Override
                         protected void addTranslations() {
                             add(MOD_ID, "Practical Extensions");
-                            add(config.MESSAGE_RELOAD_CONFIG, "[%s] Reloading!");
+                            add(ModuleConfig.MESSAGE_RELOAD_CONFIG, "[%s] Reloading!");
+                            add(
+                                ModuleConfig.MESSAGE_AUTO_RELOAD_DISABLED,
+                                "[%s] Auto reloading is disabled! Use /reload for the module settings to take effect."
+                            );
                             clothConfig.ifPresent(c -> {
                                 add(c.TITLE_CONFIG, "Practical Extensions");
-                                add(c.TITLE_MODULES, "Modules");
+                                add(ModuleClothConfig.TITLE_MODULES, "Module Settings");
+                                add(ModuleClothConfig.TITLE_GENERAL, "General Settings");
+                                add(ModuleClothConfig.OPTION_AUTO_RELOAD, "Auto Reloading");
+                                add(
+                                    ModuleClothConfig.TOOLTIP_AUTO_RELOAD,
+                                    "Automatically reload data after changing config.\n" +
+                                        "If disabled, you have to use /reload manually " +
+                                        "for the module configs to take effect."
+                                );
                             });
                             config.MODULES.forEach(module -> {
                                 ModuleLang lang = allModuleLang.get(module).get("en_us");

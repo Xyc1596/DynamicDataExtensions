@@ -4,6 +4,7 @@ import com.xyc.practicalextensions.modules.Module;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.players.PlayerList;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.IConfigSpec;
@@ -18,13 +19,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ModuleConfig {
-    public final String MESSAGE_RELOAD_CONFIG;
+    public final static String MESSAGE_RELOAD_CONFIG = "message." + ModMain.MOD_ID + ".reload_config";
+    public final static String MESSAGE_AUTO_RELOAD_DISABLED = "message." + ModMain.MOD_ID + ".auto_reload_disabled";
 
     private int cache;
 
     public final ModConfigSpec COMMON;
 
     public final LinkedHashSet<Module> MODULES;
+    public final ModConfigSpec.BooleanValue AUTO_RELOAD;
     private final Map<String, ModConfigSpec.BooleanValue> MODULE_TOGGLES = new LinkedHashMap<>();
 
     public final boolean isModuleEnabled(String id) {
@@ -35,14 +38,19 @@ public class ModuleConfig {
         MODULE_TOGGLES.get(id).set(enabled);
     }
 
-    public ModuleConfig(IEventBus modEventBus, String namespace, ModContainer container, List<Module> modules) {
-        MESSAGE_RELOAD_CONFIG = "message." + namespace + ".reload_config";
+    public ModuleConfig(IEventBus modEventBus, ModContainer container, List<Module> modules) {
         MODULES = new LinkedHashSet<>(modules);
 
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
+
+        builder.push("Modules");
         modules.forEach(m -> MODULE_TOGGLES.put(
             m.ID, builder.define(m.ID, true)
         ));
+
+        builder.push("General");
+        AUTO_RELOAD = builder.define("autoReload", true);
+
         COMMON = builder.build();
         container.registerConfig(ModConfig.Type.COMMON, COMMON);
 
@@ -69,7 +77,10 @@ public class ModuleConfig {
             return;
 
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        if (server != null) {
+        if (server == null)
+            return;
+
+        if (AUTO_RELOAD.get()) {
             server.reloadResources(server.getPackRepository().getSelectedIds());
             server.getPlayerList().broadcastSystemMessage(
                 Component.translatable(
@@ -80,7 +91,20 @@ public class ModuleConfig {
                 ),
                 false
             );
-            cache = newHash;
+        } else {
+            PlayerList playerList = server.getPlayerList();
+            playerList.getPlayers()
+                      .stream()
+                      .filter(p -> playerList.isOp(p.getGameProfile()))
+                      .forEach(p -> server.sendSystemMessage(
+                          Component.translatable(
+                              MESSAGE_AUTO_RELOAD_DISABLED,
+                              Component.translatable(ModMain.MOD_ID)
+                                       .withStyle(ChatFormatting.DARK_AQUA)
+                                       .withStyle(ChatFormatting.BOLD)
+                          )
+                      ));
         }
+        cache = newHash;
     }
 }
