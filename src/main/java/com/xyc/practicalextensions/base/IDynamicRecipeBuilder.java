@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.utils;
+package com.xyc.practicalextensions.base;
 
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;

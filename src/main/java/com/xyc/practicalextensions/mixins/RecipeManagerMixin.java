@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.xyc.practicalextensions.PracticalExtensionRegistry;
-import com.xyc.practicalextensions.utils.IInjectingRecipe;
+import com.xyc.practicalextensions.base.IInjectingRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;

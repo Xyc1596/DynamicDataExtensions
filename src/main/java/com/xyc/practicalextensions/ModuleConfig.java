@@ -1,6 +1,6 @@
 package com.xyc.practicalextensions;
 
-import com.xyc.practicalextensions.modules.Module;
+import com.xyc.practicalextensions.base.Module;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;

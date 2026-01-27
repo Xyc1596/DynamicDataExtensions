@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.utils;
+package com.xyc.practicalextensions.base;
 
 import org.apache.commons.lang3.tuple.Triple;
 

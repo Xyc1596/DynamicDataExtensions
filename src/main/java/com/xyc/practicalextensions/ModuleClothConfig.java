@@ -1,7 +1,5 @@
-package com.xyc.practicalextensions.client;
+package com.xyc.practicalextensions;
 
-import com.xyc.practicalextensions.ModMain;
-import com.xyc.practicalextensions.ModuleConfig;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;

@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.utils;
+package com.xyc.practicalextensions.base;
 
 import com.xyc.practicalextensions.ModMain;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -12,10 +12,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import java.util.Set;
 
 public final class Utils {
-    public static ResourceLocation resourceLocation(String id) {
-        return ResourceLocation.fromNamespaceAndPath(ModMain.MOD_ID, id);
-    }
-
     public static RecipeHolder<Recipe<?>> createSmelting(
         String id,
         Ingredient ingredient,
@@ -24,7 +20,7 @@ public final class Utils {
         float experience,
         int cookingTime
     ) {
-        ResourceLocation location = resourceLocation(id);
+        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(ModMain.MOD_ID, id);
         return new RecipeHolder<>(
             location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.smelting(
@@ -41,7 +37,7 @@ public final class Utils {
         float experience,
         int cookingTime
     ) {
-        ResourceLocation location = resourceLocation(id);
+        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(ModMain.MOD_ID, id);
         return new RecipeHolder<>(
             location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.smoking(
@@ -58,7 +54,7 @@ public final class Utils {
         float experience,
         int cookingTime
     ) {
-        ResourceLocation location = resourceLocation(id);
+        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(ModMain.MOD_ID, id);
         return new RecipeHolder<>(
             location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.campfireCooking(
@@ -75,7 +71,7 @@ public final class Utils {
         float experience,
         int cookingTime
     ) {
-        ResourceLocation location = resourceLocation(id);
+        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(ModMain.MOD_ID, id);
         return new RecipeHolder<>(
             location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.blasting(

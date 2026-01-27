@@ -1,6 +1,6 @@
 package com.xyc.practicalextensions.mixins;
 
-import com.xyc.practicalextensions.utils.IDynamicRecipeBuilder;
+import com.xyc.practicalextensions.base.IDynamicRecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;

@@ -1,6 +1,6 @@
 package com.xyc.practicalextensions.client;
 
-import com.xyc.practicalextensions.modules.Module;
+import com.xyc.practicalextensions.base.Module;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 

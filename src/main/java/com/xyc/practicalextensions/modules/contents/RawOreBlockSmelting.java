@@ -1,8 +1,10 @@
 package com.xyc.practicalextensions.modules.contents;
 
 import com.xyc.practicalextensions.ModMain;
-import com.xyc.practicalextensions.utils.Utils;
-import com.xyc.practicalextensions.modules.Module;
+import com.xyc.practicalextensions.base.Module;
+import com.xyc.practicalextensions.base.Utils;
+import com.xyc.practicalextensions.lang.ModuleLang;
+import com.xyc.practicalextensions.lang.ModuleLangBuilder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -14,6 +16,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -25,7 +28,7 @@ public class RawOreBlockSmelting extends Module {
     }
 
     @Override
-    public Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
+    public @NotNull Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
         Pattern materialPattern = Pattern.compile("storage_blocks/raw_(.*)");
         Map<String, HolderSet.Named<Block>> materials = new HashMap<>();
 
@@ -71,18 +74,18 @@ public class RawOreBlockSmelting extends Module {
     }
 
     @Override
-    public Map<String, String> getOptionTranslations() {
-        return Map.of(
-            "zh_cn", "粗矿物块烧炼",
-            "en_us", "Raw Ore Block Smelting"
-        );
+    protected @NotNull ModuleLang.TranslatableLang buildOptionLang() {
+        return ModuleLangBuilder.translatable("option", ModMain.MOD_ID, ID)
+                                .translation("zh_cn", "粗矿物块烧炼")
+                                .translation("en_us", "Raw Ore Block Smelting")
+                                .build();
     }
 
     @Override
-    public Map<String, String> getTooltipTranslations() {
-        return Map.of(
-            "zh_cn", "粗矿物块可以直接烧炼成矿物块",
-            "en_us", "Smelt raw mineral blocks directly into mineral blocks."
-        );
+    protected @NotNull ModuleLang.TranslatableLang buildTooltipLang() {
+        return ModuleLangBuilder.translatable("tooltip", ModMain.MOD_ID, ID)
+                                .translation("zh_cn", "粗矿物块可以直接烧炼成矿物块")
+                                .translation("en_us", "Smelt raw mineral blocks directly into mineral blocks.")
+                                .build();
     }
 }

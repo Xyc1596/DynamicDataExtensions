@@ -1,10 +1,10 @@
 package com.xyc.practicalextensions;
 
-import com.xyc.practicalextensions.client.ModuleClothConfig;
 import com.xyc.practicalextensions.client.ModuleLang;
-import com.xyc.practicalextensions.modules.Module;
+import com.xyc.practicalextensions.base.Module;
 import com.xyc.practicalextensions.modules.contents.LeatherFromRottenFlesh;
 import com.xyc.practicalextensions.modules.contents.RawOreBlockSmelting;
+import com.xyc.practicalextensions.modules.contents.WoolToString;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.api.distmarker.Dist;
@@ -30,7 +30,8 @@ public class ModMain {
             container,
             List.of(
                 new LeatherFromRottenFlesh(),
-                new RawOreBlockSmelting()
+                new RawOreBlockSmelting(),
+                new WoolToString()
             )
         );
         PracticalExtensionRegistry.registerConfig(config);
