@@ -34,30 +34,30 @@ public abstract class RecipeManagerMixin implements IInjectingRecipe {
     @Unique
     public Triple<Long, Long, Long> practicalextensions$injectRecipes() {
         long t1 = System.currentTimeMillis();
-        long nByType = byType.size();
+        long nByType = this.byType.size();
         var recipesToUpdate = PracticalExtensionRegistry.getAllRecipesToUpdate();
         Set<RecipeHolder<Recipe<?>>> recipesToAdd = recipesToUpdate.getLeft();
         Set<ResourceLocation> recipesToRemove = recipesToUpdate.getRight();
 
-        var byTypeAfterRem = byType.entries()
-                                   .stream()
-                                   .filter(e -> !recipesToRemove.contains(e.getValue().id()))
-                                   .collect(Collectors.toSet());
+        var byTypeAfterRem = this.byType.entries()
+                                        .parallelStream()
+                                        .filter(e -> !recipesToRemove.contains(e.getValue().id()))
+                                        .collect(Collectors.toSet());
         long nAfterRemove = byTypeAfterRem.size();
 
-        byType = ImmutableMultimap.copyOf(
+        this.byType = ImmutableMultimap.copyOf(
             Stream.concat(
-                byTypeAfterRem.stream(),
-                recipesToAdd.stream().map(h -> Map.entry(h.value().getType(), h))
+                byTypeAfterRem.parallelStream(),
+                recipesToAdd.parallelStream().map(h -> Map.entry(h.value().getType(), h))
             ).collect(Collectors.toSet())
         );
-        byName = ImmutableMap.copyOf(
+        this.byName = ImmutableMap.copyOf(
             Stream.concat(
-                byName.entrySet().stream().filter(e -> !recipesToRemove.contains(e.getKey())),
-                recipesToAdd.stream().map(h -> Map.entry(h.id(), h))
+                this.byName.entrySet().parallelStream().filter(e -> !recipesToRemove.contains(e.getKey())),
+                recipesToAdd.parallelStream().map(h -> Map.entry(h.id(), h))
             ).collect(Collectors.toSet())
         );
-        long nAfterAdd = byType.size();
+        long nAfterAdd = this.byType.size();
 
         return Triple.of(
             nByType - nAfterRemove,

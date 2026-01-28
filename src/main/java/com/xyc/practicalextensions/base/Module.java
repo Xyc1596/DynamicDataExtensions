@@ -1,7 +1,6 @@
 package com.xyc.practicalextensions.base;
 
-import com.xyc.practicalextensions.lang.ModuleLang;
-import net.minecraft.data.recipes.RecipeBuilder;
+import com.xyc.practicalextensions.lang.TranslatableLang;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -10,14 +9,32 @@ import javax.annotation.Nonnull;
 import java.util.Set;
 
 public abstract class Module {
-    public final String ID;
-    public final String NAMESPACE;
-    protected final ModuleLang.TranslatableLang OPTION = buildOptionLang();
-    protected final ModuleLang.TranslatableLang TOOLTIP = buildTooltipLang();
+    protected final String id;
+    protected final String namespace;
+    protected TranslatableLang option;
+    protected TranslatableLang tooltip;
 
     protected Module(String namespace, String id) {
-        ID = id;
-        NAMESPACE = namespace;
+        this.id = id;
+        this.namespace = namespace;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public TranslatableLang getOption() {
+        if (this.option == null) {
+            this.option = buildOptionLang();
+        }
+        return this.option;
+    }
+
+    public TranslatableLang getTooltip() {
+        if (this.tooltip == null) {
+            this.tooltip = buildTooltipLang();
+        }
+        return this.tooltip;
     }
 
     @Nonnull
@@ -30,29 +47,13 @@ public abstract class Module {
         return Set.of();
     }
 
-    public final String getOptionTranslationKey() {
-        return OPTION.getKey();
-    }
-
-    public final String getTooltipTranslationKey() {
-        return TOOLTIP.getKey();
+    @Nonnull
+    protected TranslatableLang buildOptionLang() {
+        return TranslatableLang.of("option", this.namespace, this.id);
     }
 
     @Nonnull
-    protected ModuleLang.TranslatableLang buildOptionLang() {
-        return ModuleLang.TranslatableLang.of("option", NAMESPACE, ID);
+    protected TranslatableLang buildTooltipLang() {
+        return TranslatableLang.of("tooltip", this.namespace, this.id);
     }
-
-    @Nonnull
-    protected ModuleLang.TranslatableLang buildTooltipLang() {
-        return ModuleLang.TranslatableLang.of("tooltip", NAMESPACE, ID);
-    }
-
-    // public final RecipeHolder<Recipe<?>> createRecipeHolder(String recipeId, RecipeBuilder recipeBuilder) {
-    //     ResourceLocation location = ResourceLocation.fromNamespaceAndPath(NAMESPACE, recipeId);
-    //     return new RecipeHolder<>(
-    //         location,
-    //         (IDynamicRecipeBuilder) recipeBuilder
-    //     )
-    // }
 }

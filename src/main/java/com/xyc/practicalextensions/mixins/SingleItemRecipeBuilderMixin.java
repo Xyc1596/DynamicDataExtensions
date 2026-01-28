@@ -1,6 +1,5 @@
 package com.xyc.practicalextensions.mixins;
 
-import com.xyc.practicalextensions.base.IDynamicRecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 @Mixin(SingleItemRecipeBuilder.class)
-public abstract class SingleItemRecipeBuilderMixin implements IDynamicRecipeBuilder {
+public abstract class SingleItemRecipeBuilderMixin implements IRecipeBuilderMixin {
     @Shadow
     @Final
     private SingleItemRecipe.Factory<?> factory;

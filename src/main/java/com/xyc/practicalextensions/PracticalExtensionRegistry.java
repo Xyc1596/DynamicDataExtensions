@@ -2,6 +2,7 @@ package com.xyc.practicalextensions;
 
 import com.mojang.logging.LogUtils;
 import com.xyc.practicalextensions.base.IInjectingRecipe;
+import com.xyc.practicalextensions.base.Module;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -22,26 +23,23 @@ import java.util.Set;
 public final class PracticalExtensionRegistry {
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final Set<ModuleConfig> CONFIGS = new HashSet<>();
+    private static final Set<ModuleConfig> configs = new HashSet<>();
 
     public static void registerConfig(ModuleConfig config) {
-        CONFIGS.add(config);
+        configs.add(config);
     }
 
     public static Pair<Set<RecipeHolder<Recipe<?>>>, Set<ResourceLocation>> getAllRecipesToUpdate() {
         Set<RecipeHolder<Recipe<?>>> recipesToAdd = new HashSet<>();
         Set<ResourceLocation> recipesToRemove = new HashSet<>();
-        CONFIGS.forEach(
-            config -> config.MODULES
-                .stream()
-                .filter(module -> config.isModuleEnabled(module.ID))
-                .forEach(
-                    module -> {
-                        recipesToAdd.addAll(module.gatherRecipesToAdd());
-                        recipesToRemove.addAll(module.gatherRecipesToRemove());
-                    }
-                )
-        );
+        for (ModuleConfig config : configs) {
+            for (Module module : config.getModules()) {
+                if (config.isModuleEnabled(module.getId())) {
+                    recipesToAdd.addAll(module.gatherRecipesToAdd());
+                    recipesToRemove.addAll(module.gatherRecipesToRemove());
+                }
+            }
+        }
         return Pair.of(recipesToAdd, recipesToRemove);
     }
 

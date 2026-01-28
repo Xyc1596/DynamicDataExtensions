@@ -2,6 +2,7 @@
   "required": true,
   "package": "com.xyc.practicalextensions.mixins",
   "mixins": [
+    "IRecipeBuilderMixin",
     "RecipeManagerMixin",
     "ShapedRecipeBuilderMixin",
     "ShapelessRecipeBuilderMixin",

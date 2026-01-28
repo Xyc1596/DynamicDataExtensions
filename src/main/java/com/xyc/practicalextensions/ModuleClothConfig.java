@@ -1,5 +1,6 @@
 package com.xyc.practicalextensions;
 
+import com.xyc.practicalextensions.base.Module;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -26,17 +27,16 @@ public class ModuleClothConfig implements IExtensionPoint {
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         ConfigCategory modulesBuilder = builder.getOrCreateCategory(Component.translatable(TITLE_MODULES));
-        moduleConfig.MODULES.forEach(m -> modulesBuilder.addEntry(
-            entryBuilder
-                .startBooleanToggle(
-                    Component.translatable(m.getOptionTranslationKey()),
-                    moduleConfig.isModuleEnabled(m.ID)
-                )
-                .setTooltip(Component.translatable(m.getTooltipTranslationKey()))
-                .setSaveConsumer(newVal -> moduleConfig.setModuleEnabled(m.ID, newVal))
-                .setDefaultValue(true)
-                .build()
-        ));
+        for (Module module : moduleConfig.getModules()) {
+            modulesBuilder.addEntry(
+                entryBuilder
+                    .startBooleanToggle(module.getOption().toComponent(), moduleConfig.isModuleEnabled(module.getId()))
+                    .setTooltip(module.getTooltip().toComponent())
+                    .setSaveConsumer(newVal -> moduleConfig.setModuleEnabled(module.getId(), newVal))
+                    .setDefaultValue(true)
+                    .build()
+            );
+        }
 
         ConfigCategory generalBuilder = builder.getOrCreateCategory(Component.translatable(TITLE_GENERAL));
         generalBuilder.addEntry(

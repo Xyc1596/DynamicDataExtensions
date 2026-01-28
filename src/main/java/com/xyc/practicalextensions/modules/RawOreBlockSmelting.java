@@ -1,10 +1,10 @@
-package com.xyc.practicalextensions.modules.contents;
+package com.xyc.practicalextensions.modules;
 
 import com.xyc.practicalextensions.ModMain;
 import com.xyc.practicalextensions.base.Module;
-import com.xyc.practicalextensions.base.Utils;
-import com.xyc.practicalextensions.lang.ModuleLang;
+import com.xyc.practicalextensions.base.ModuleUtils;
 import com.xyc.practicalextensions.lang.ModuleLangBuilder;
+import com.xyc.practicalextensions.lang.TranslatableLang;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -18,7 +18,10 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,48 +47,45 @@ public class RawOreBlockSmelting extends Module {
         );
 
         Set<RecipeHolder<Recipe<?>>> output = new HashSet<>();
-        materials.forEach(
-            (material, holders) -> {
-                String id = "raw_" + material + "_block";
-                TagKey<Item> resultKey = TagKey.create(
-                    Registries.ITEM,
-                    ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/" + material)
-                );
-                Optional<HolderSet.Named<Item>> resultHolders = BuiltInRegistries.ITEM.getTag(resultKey);
-                if (resultHolders.isEmpty())
-                    return;
-
-                Item result = resultHolders.get().get(0).value();
-                holders.forEach(
+        for (Map.Entry<String, HolderSet.Named<Block>> entry : materials.entrySet()) {
+            String material = entry.getKey();
+            String recipeId = "raw_" + material + "_block";
+            TagKey<Item> resultKey = TagKey.create(
+                Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath("c", "storage_blocks/" + material)
+            );
+            BuiltInRegistries.ITEM.getTag(resultKey).ifPresent(
+                resultHolders -> entry.getValue().forEach(
                     h -> output.addAll(
-                        Utils.createBlastingAll(
-                            id,
+                        ModuleUtils.createBlastingAll(
+                            this.namespace,
+                            recipeId,
                             Ingredient.of(h.value()),
                             RecipeCategory.MISC,
-                            result,
+                            resultHolders.get(0).value(),
                             6.3f,
                             1800
                         )
                     )
-                );
-            }
-        );
+                )
+            );
+        }
         return output;
     }
 
     @Override
-    protected @NotNull ModuleLang.TranslatableLang buildOptionLang() {
-        return ModuleLangBuilder.translatable("option", ModMain.MOD_ID, ID)
+    protected @NotNull TranslatableLang buildOptionLang() {
+        return ModuleLangBuilder.translatable("option", this.namespace, this.id)
                                 .translation("zh_cn", "粗矿物块烧炼")
                                 .translation("en_us", "Raw Ore Block Smelting")
                                 .build();
     }
 
     @Override
-    protected @NotNull ModuleLang.TranslatableLang buildTooltipLang() {
-        return ModuleLangBuilder.translatable("tooltip", ModMain.MOD_ID, ID)
+    protected @NotNull TranslatableLang buildTooltipLang() {
+        return ModuleLangBuilder.translatable("tooltip", this.namespace, this.id)
                                 .translation("zh_cn", "粗矿物块可以直接烧炼成矿物块")
-                                .translation("en_us", "Smelt raw mineral blocks directly into mineral blocks.")
+                                .translation("en_us", "Smelt raw mineral blocks directly into mineral blocks")
                                 .build();
     }
 }

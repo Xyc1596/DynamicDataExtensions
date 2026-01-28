@@ -2,7 +2,7 @@
 
 **简体中文** | [English](README.md)
 
-**Modrinth**：[Practical Extensions]()
+[//]: # (**Modrinth**：[Practical Extensions]&#40;&#41;)
 
 <div align="center">
 <img src="src/main/resources/icon_256x.png" alt="icon_256x.png"/>
@@ -12,9 +12,11 @@
 
 本模组旨在使用一种更加灵活的方案，替代仅包含配方、标签等修改的轻度魔改数据包。
 
+推荐与 JEI 和 Cloth Config API 一同使用。
+
 * **适用版本：** Minecraft 1.21.1 NeoForge
 
-* **运行环境：** 客户端需装，服务端需装
+* **运行环境：** 客户端可选，服务端需装
 
 ## 特性
 

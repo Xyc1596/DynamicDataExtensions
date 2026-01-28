@@ -4,11 +4,14 @@
   "option.practicalextensions.auto_reload": "自动重新加载",
   "option.practicalextensions.leather_from_rotten_flesh": "腐肉换皮革",
   "option.practicalextensions.raw_ore_block_smelting": "粗矿物块烧炼",
+  "option.practicalextensions.wool_and_carpet_to_string": "羊毛 & 地毯制线",
   "practicalextensions": "实用配方扩展",
   "title.practicalextensions.config": "实用配方扩展",
   "title.practicalextensions.general": "通用设置",
   "title.practicalextensions.modules": "模块设置",
   "tooltip.practicalextensions.auto_reload": "更改配置后自动重新加载数据\n禁用该选项则需要手动使用 /reload 命令使模块设置生效",
   "tooltip.practicalextensions.leather_from_rotten_flesh": "让腐肉变得更有用",
-  "tooltip.practicalextensions.raw_ore_block_smelting": "粗矿物块可以直接烧炼成矿物块"
+  "tooltip.practicalextensions.raw_ore_block_smelting": "粗矿物块可以直接烧炼成矿物块",
+  "tooltip.practicalextensions.wool_and_carpet_to_string": "4 羊毛 / 6 地毯 + 1 燧石合成 4 根线\n%s",
+  "tooltip.practicalextensions.wool_and_carpet_to_string_1": "灵感来源：不记得了 :("
 }

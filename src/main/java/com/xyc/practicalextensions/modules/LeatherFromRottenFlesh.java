@@ -1,10 +1,10 @@
-package com.xyc.practicalextensions.modules.contents;
+package com.xyc.practicalextensions.modules;
 
 import com.xyc.practicalextensions.ModMain;
 import com.xyc.practicalextensions.base.Module;
-import com.xyc.practicalextensions.base.Utils;
-import com.xyc.practicalextensions.lang.ModuleLang;
+import com.xyc.practicalextensions.base.ModuleUtils;
 import com.xyc.practicalextensions.lang.ModuleLangBuilder;
+import com.xyc.practicalextensions.lang.TranslatableLang;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -12,7 +12,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
 import java.util.Set;
 
 public class LeatherFromRottenFlesh extends Module {
@@ -22,8 +21,9 @@ public class LeatherFromRottenFlesh extends Module {
 
     @Override
     public @NotNull Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
-        return Utils.createSmokingAll(
-            ID,
+        return ModuleUtils.createSmokingAll(
+            this.namespace,
+            this.id,
             Ingredient.of(Items.ROTTEN_FLESH),
             RecipeCategory.MISC,
             Items.LEATHER,
@@ -33,18 +33,18 @@ public class LeatherFromRottenFlesh extends Module {
     }
 
     @Override
-    protected ModuleLang.@NotNull TranslatableLang buildOptionLang() {
-        return ModuleLangBuilder.translatable("option", ModMain.MOD_ID, ID)
+    protected @NotNull TranslatableLang buildOptionLang() {
+        return ModuleLangBuilder.translatable("option", this.namespace, this.id)
                                 .translation("zh_cn", "腐肉换皮革")
                                 .translation("en_us", "Leather from Rotten Flesh")
                                 .build();
     }
 
     @Override
-    protected @NotNull ModuleLang.TranslatableLang buildTooltipLang() {
-        return ModuleLangBuilder.translatable("tooltip", ModMain.MOD_ID, ID)
+    protected @NotNull TranslatableLang buildTooltipLang() {
+        return ModuleLangBuilder.translatable("tooltip", this.namespace, this.id)
                                 .translation("zh_cn", "让腐肉变得更有用")
-                                .translation("en_us", "Make rotten flesh more useful.")
+                                .translation("en_us", "Make rotten flesh more useful")
                                 .build();
     }
 }

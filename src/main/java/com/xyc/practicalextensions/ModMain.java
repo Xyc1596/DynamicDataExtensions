@@ -1,10 +1,9 @@
 package com.xyc.practicalextensions;
 
-import com.xyc.practicalextensions.client.ModuleLang;
-import com.xyc.practicalextensions.base.Module;
-import com.xyc.practicalextensions.modules.contents.LeatherFromRottenFlesh;
-import com.xyc.practicalextensions.modules.contents.RawOreBlockSmelting;
-import com.xyc.practicalextensions.modules.contents.WoolToString;
+import com.xyc.practicalextensions.lang.LanguageProviderWrapper;
+import com.xyc.practicalextensions.modules.LeatherFromRottenFlesh;
+import com.xyc.practicalextensions.modules.RawOreBlockSmelting;
+import com.xyc.practicalextensions.modules.WoolToString;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.api.distmarker.Dist;
@@ -13,11 +12,9 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Mod(ModMain.MOD_ID)
@@ -45,12 +42,11 @@ public class ModMain {
             modEventBus.addListener((final GatherDataEvent event) -> {
                 DataGenerator generator = event.getGenerator();
                 PackOutput output = generator.getPackOutput();
-                Map<Module, Map<String, ModuleLang>> allModuleLang = ModuleLang.getAllModuleLang(config.MODULES);
 
                 // zh_cn
                 generator.addProvider(
                     event.includeClient(),
-                    new LanguageProvider(output, MOD_ID, "zh_cn") {
+                    new LanguageProviderWrapper(output, MOD_ID, "zh_cn") {
                         @Override
                         protected void addTranslations() {
                             add(MOD_ID, "实用配方扩展");
@@ -69,11 +65,7 @@ public class ModMain {
                                     "更改配置后自动重新加载数据\n禁用该选项则需要手动使用 /reload 命令使模块设置生效"
                                 );
                             });
-                            config.MODULES.forEach(module -> {
-                                ModuleLang lang = allModuleLang.get(module).get("zh_cn");
-                                lang.option().ifPresent(s -> add(lang.optionKey(), s));
-                                lang.tooltip().ifPresent(s -> add(lang.tooltipKey(), s));
-                            });
+                            config.getModules().forEach(this::addModuleTranslations);
                         }
                     }
                 );
@@ -81,7 +73,7 @@ public class ModMain {
                 // en_us
                 generator.addProvider(
                     event.includeClient(),
-                    new LanguageProvider(output, MOD_ID, "en_us") {
+                    new LanguageProviderWrapper(output, MOD_ID, "en_us") {
                         @Override
                         protected void addTranslations() {
                             add(MOD_ID, "Practical Extensions");
@@ -102,11 +94,7 @@ public class ModMain {
                                         "for the module configs to take effect."
                                 );
                             });
-                            config.MODULES.forEach(module -> {
-                                ModuleLang lang = allModuleLang.get(module).get("en_us");
-                                lang.option().ifPresent(s -> add(lang.optionKey(), s));
-                                lang.tooltip().ifPresent(s -> add(lang.tooltipKey(), s));
-                            });
+                            config.getModules().forEach(this::addModuleTranslations);
                         }
                     }
                 );

@@ -4,6 +4,7 @@ import com.xyc.practicalextensions.base.Module;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -14,7 +15,6 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -26,26 +26,31 @@ public class ModuleConfig {
 
     public final ModConfigSpec COMMON;
 
-    public final LinkedHashSet<Module> MODULES;
     public final ModConfigSpec.BooleanValue AUTO_RELOAD;
-    private final Map<String, ModConfigSpec.BooleanValue> MODULE_TOGGLES = new LinkedHashMap<>();
+
+    private final List<Module> modules;
+    private final Map<String, ModConfigSpec.BooleanValue> moduleToggles = new LinkedHashMap<>();
+
+    public List<Module> getModules() {
+        return modules;
+    }
 
     public final boolean isModuleEnabled(String id) {
-        return MODULE_TOGGLES.get(id).get();
+        return moduleToggles.get(id).get();
     }
 
     public final void setModuleEnabled(String id, boolean enabled) {
-        MODULE_TOGGLES.get(id).set(enabled);
+        moduleToggles.get(id).set(enabled);
     }
 
     public ModuleConfig(IEventBus modEventBus, ModContainer container, List<Module> modules) {
-        MODULES = new LinkedHashSet<>(modules);
+        this.modules = modules.stream().distinct().toList();
 
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
         builder.push("Modules");
-        modules.forEach(m -> MODULE_TOGGLES.put(
-            m.ID, builder.define(m.ID, true)
+        modules.forEach(m -> moduleToggles.put(
+            m.getId(), builder.define(m.getId(), true)
         ));
 
         builder.push("General");
@@ -93,17 +98,18 @@ public class ModuleConfig {
             );
         } else {
             PlayerList playerList = server.getPlayerList();
-            playerList.getPlayers()
-                      .stream()
-                      .filter(p -> playerList.isOp(p.getGameProfile()))
-                      .forEach(p -> server.sendSystemMessage(
-                          Component.translatable(
-                              MESSAGE_AUTO_RELOAD_DISABLED,
-                              Component.translatable(ModMain.MOD_ID)
-                                       .withStyle(ChatFormatting.DARK_AQUA)
-                                       .withStyle(ChatFormatting.BOLD)
-                          )
-                      ));
+            for (ServerPlayer player : playerList.getPlayers()) {
+                if (playerList.isOp(player.getGameProfile())) {
+                    server.sendSystemMessage(
+                        Component.translatable(
+                            MESSAGE_AUTO_RELOAD_DISABLED,
+                            Component.translatable(ModMain.MOD_ID)
+                                     .withStyle(ChatFormatting.DARK_AQUA)
+                                     .withStyle(ChatFormatting.BOLD)
+                        )
+                    );
+                }
+            }
         }
         cache = newHash;
     }

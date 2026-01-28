@@ -4,11 +4,14 @@
   "option.practicalextensions.auto_reload": "Auto Reloading",
   "option.practicalextensions.leather_from_rotten_flesh": "Leather from Rotten Flesh",
   "option.practicalextensions.raw_ore_block_smelting": "Raw Ore Block Smelting",
+  "option.practicalextensions.wool_and_carpet_to_string": "Wool & Carpet to String",
   "practicalextensions": "Practical Extensions",
   "title.practicalextensions.config": "Practical Extensions",
   "title.practicalextensions.general": "General Settings",
   "title.practicalextensions.modules": "Module Settings",
   "tooltip.practicalextensions.auto_reload": "Automatically reload data after changing config.\nIf disabled, you have to use /reload manually for the module configs to take effect.",
-  "tooltip.practicalextensions.leather_from_rotten_flesh": "Make rotten flesh more useful.",
-  "tooltip.practicalextensions.raw_ore_block_smelting": "Smelt raw mineral blocks directly into mineral blocks."
+  "tooltip.practicalextensions.leather_from_rotten_flesh": "Make rotten flesh more useful",
+  "tooltip.practicalextensions.raw_ore_block_smelting": "Smelt raw mineral blocks directly into mineral blocks",
+  "tooltip.practicalextensions.wool_and_carpet_to_string": "Craft 4 strings with 4 wools / 6 carpets and 1 flint\n%s",
+  "tooltip.practicalextensions.wool_and_carpet_to_string_1": "Inspired by: I don't remember :("
 }
