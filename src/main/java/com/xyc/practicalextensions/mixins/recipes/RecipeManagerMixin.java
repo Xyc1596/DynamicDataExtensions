@@ -11,7 +11,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import org.apache.commons.lang3.tuple.Triple;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -33,9 +32,9 @@ public abstract class RecipeManagerMixin implements IInjectingRecipe {
      */
     @Unique
     @Override
-    public Triple<Long, Long, Long> practicalextensions$injectRecipes() {
+    public int[] practicalextensions$injectRecipes() {
         long t1 = System.currentTimeMillis();
-        long nByType = this.byType.size();
+        int nByType = this.byType.size();
         var recipesToUpdate = PracticalExtensionRegistry.getAllRecipesToUpdate();
         Set<RecipeHolder<Recipe<?>>> recipesToAdd = recipesToUpdate.getLeft();
         Set<ResourceLocation> recipesToRemove = recipesToUpdate.getRight();
@@ -44,7 +43,7 @@ public abstract class RecipeManagerMixin implements IInjectingRecipe {
                                         .parallelStream()
                                         .filter(e -> !recipesToRemove.contains(e.getValue().id()))
                                         .collect(Collectors.toSet());
-        long nAfterRemove = byTypeAfterRem.size();
+        int nAfterRemove = byTypeAfterRem.size();
 
         this.byType = ImmutableMultimap.copyOf(
             Stream.concat(
@@ -58,12 +57,8 @@ public abstract class RecipeManagerMixin implements IInjectingRecipe {
                 recipesToAdd.parallelStream().map(h -> Map.entry(h.id(), h))
             ).collect(Collectors.toSet())
         );
-        long nAfterAdd = this.byType.size();
+        int nAfterAdd = this.byType.size();
 
-        return Triple.of(
-            nByType - nAfterRemove,
-            nAfterAdd - nAfterRemove,
-            System.currentTimeMillis() - t1
-        );
+        return new int[]{nByType - nAfterRemove, nAfterAdd - nAfterRemove, (int) (System.currentTimeMillis() - t1)};
     }
 }

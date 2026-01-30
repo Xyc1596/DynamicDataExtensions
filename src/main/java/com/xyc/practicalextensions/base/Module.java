@@ -2,6 +2,7 @@ package com.xyc.practicalextensions.base;
 
 import com.xyc.practicalextensions.lang.TranslatableLang;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.crafting.Recipe;
@@ -54,9 +55,7 @@ public abstract class Module {
      * HolderSet为空时表示移除整个标签，否则只移除该标签中HolderSet所包含的元素
      */
     @Nonnull
-    public Map<TagKey<?>, Set<TagKey<?>>> gatherTagsToRemove() {
-        // TagKey<?> key = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("aaa"));
-        // BuiltInRegistries.ITEM.getTags()
+    public Map<TagKey<?>, Set<ResourceKey<?>>> gatherTagsToRemove() {
         return Map.of();
     }
 

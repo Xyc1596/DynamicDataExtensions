@@ -5,6 +5,7 @@ import com.xyc.practicalextensions.base.IInjectingRecipe;
 import com.xyc.practicalextensions.base.IInjectingTags;
 import com.xyc.practicalextensions.base.Module;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
@@ -12,10 +13,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -50,9 +49,9 @@ public final class PracticalExtensionRegistry {
         return Pair.of(recipesToAdd, recipesToRemove);
     }
 
-    public static Pair<Map<TagKey<?>, Set<Holder<?>>>, Map<TagKey<?>, Set<TagKey<?>>>> getAllTagsToUpdate() {
+    public static Pair<Map<TagKey<?>, Set<Holder<?>>>, Map<TagKey<?>, Set<ResourceKey<?>>>> getAllTagsToUpdate() {
         Map<TagKey<?>, Set<Holder<?>>> tagsToAdd = new HashMap<>();
-        Map<TagKey<?>, Set<TagKey<?>>> tagsToRemove = new HashMap<>();
+        Map<TagKey<?>, Set<ResourceKey<?>>> tagsToRemove = new HashMap<>();
         for (ModuleConfig config : configs) {
             for (Module module : config.getModules()) {
                 if (config.isModuleEnabled(module.getId())) {
@@ -64,15 +63,22 @@ public final class PracticalExtensionRegistry {
         return Pair.of(tagsToAdd, tagsToRemove);
     }
 
-    @SubscribeEvent
-    public static void onTagsUpdate(final TagsUpdatedEvent event) {
+    public static void update(final MinecraftServer server) {
+        int[] tagsResults = ((IInjectingTags) server.registryAccess()).practicalextensions$injectTags();
+        LOGGER.info(
+            "{} tag(s) added, {} tag(s) removed and {} tag(s) modified in {} ms",
+            tagsResults[0], tagsResults[1], tagsResults[2], tagsResults[3]
+        );
+
+        int[] recipeResults = ((IInjectingRecipe) server.getRecipeManager()).practicalextensions$injectRecipes();
+        LOGGER.info(
+            "{} recipe(s) removed and {} recipe(s) added in {} ms",
+            recipeResults[0], recipeResults[1], recipeResults[2]
+        );
     }
 
     @SubscribeEvent
     public static void onServerStarting(final ServerStartingEvent event) {
-        MinecraftServer server = event.getServer();
-        ((IInjectingTags) server.registryAccess()).practicalextensions$injectTags(); //TODO:把原有标签顶了
-
         /*
         起初考虑在 RecipeManager#apply 末尾注入配方，
         但配方载入早于非 Minecraft 内置的标签的注册，
@@ -81,12 +87,6 @@ public final class PracticalExtensionRegistry {
         但在专用服务器（Dedicated Server）中此时 ServerLifecycleHooks.getCurrentServer() 获取到的服务器实例仍是 null
         因此进一步改为在服务器启动后（ServerStartingEvent）注入配方
         */
-
-        Triple<Long, Long, Long> result =
-            ((IInjectingRecipe) server.getRecipeManager()).practicalextensions$injectRecipes();
-        LOGGER.info(
-            "{} recipe(s) removed and {} recipe(s) added in {} ms",
-            result.getLeft(), result.getMiddle(), result.getRight()
-        );
+        update(event.getServer());
     }
 }

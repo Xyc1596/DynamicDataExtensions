@@ -17,9 +17,6 @@ public class TagsTest extends Module {
         super(ModMain.MOD_ID, "tags_test");
     }
 
-    /**
-     * TagKey存在时表示向已有标签追加元素，否则新建标签
-     */
     @Override
     public @NotNull Map<TagKey<?>, Set<Holder<?>>> gatherTagsToAdd() {
         return Map.of(
