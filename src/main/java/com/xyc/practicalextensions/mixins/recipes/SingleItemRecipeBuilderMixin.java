@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.mixins;
+package com.xyc.practicalextensions.mixins.recipes;
 
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 @Mixin(SingleItemRecipeBuilder.class)
-public abstract class SingleItemRecipeBuilderMixin implements IRecipeBuilderMixin {
+public abstract class SingleItemRecipeBuilderMixin implements RecipeBuilderMixin {
     @Shadow
     @Final
     private SingleItemRecipe.Factory<?> factory;

@@ -2,13 +2,14 @@
   "required": true,
   "package": "com.xyc.practicalextensions.mixins",
   "mixins": [
-    "IRecipeBuilderMixin",
-    "RecipeManagerMixin",
-    "ShapedRecipeBuilderMixin",
-    "ShapelessRecipeBuilderMixin",
-    "SimpleCookingRecipeBuilderMixin",
-    "SingleItemRecipeBuilderMixin",
-    "SpecialRecipeBuilderMixin"
+    "recipes.RecipeBuilderMixin",
+    "recipes.RecipeManagerMixin",
+    "recipes.ShapedRecipeBuilderMixin",
+    "recipes.ShapelessRecipeBuilderMixin",
+    "recipes.SimpleCookingRecipeBuilderMixin",
+    "recipes.SingleItemRecipeBuilderMixin",
+    "recipes.SpecialRecipeBuilderMixin",
+    "tags.RegistryAccessMixin"
   ],
   "client": [
   ],

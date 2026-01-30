@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.mixins;
+package com.xyc.practicalextensions.mixins.recipes;
 
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Objects;
 
 @Mixin(SimpleCookingRecipeBuilder.class)
-public abstract class SimpleCookingRecipeBuilderMixin implements IRecipeBuilderMixin {
+public abstract class SimpleCookingRecipeBuilderMixin implements RecipeBuilderMixin {
     @Shadow
     @Final
     private AbstractCookingRecipe.Factory<?> factory;

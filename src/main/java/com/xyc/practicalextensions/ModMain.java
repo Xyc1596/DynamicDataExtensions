@@ -3,6 +3,7 @@ package com.xyc.practicalextensions;
 import com.xyc.practicalextensions.lang.LanguageProviderWrapper;
 import com.xyc.practicalextensions.modules.LeatherFromRottenFlesh;
 import com.xyc.practicalextensions.modules.RawOreBlockSmelting;
+import com.xyc.practicalextensions.modules.TagsTest;
 import com.xyc.practicalextensions.modules.WoolToString;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -28,7 +29,8 @@ public class ModMain {
             List.of(
                 new LeatherFromRottenFlesh(),
                 new RawOreBlockSmelting(),
-                new WoolToString()
+                new WoolToString(),
+                new TagsTest()
             )
         );
         PracticalExtensionRegistry.registerConfig(config);

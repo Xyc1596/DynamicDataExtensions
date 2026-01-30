@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.mixins;
+package com.xyc.practicalextensions.mixins.recipes;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
@@ -32,6 +32,7 @@ public abstract class RecipeManagerMixin implements IInjectingRecipe {
      * @see PracticalExtensionRegistry#onServerStarting(ServerStartingEvent)
      */
     @Unique
+    @Override
     public Triple<Long, Long, Long> practicalextensions$injectRecipes() {
         long t1 = System.currentTimeMillis();
         long nByType = this.byType.size();

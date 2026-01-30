@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.mixins;
+package com.xyc.practicalextensions.mixins.recipes;
 
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 @Mixin(ShapedRecipeBuilder.class)
-public abstract class ShapedRecipeBuilderMixin implements IRecipeBuilderMixin {
+public abstract class ShapedRecipeBuilderMixin implements RecipeBuilderMixin {
     @Shadow
     @Nullable
     private String group;

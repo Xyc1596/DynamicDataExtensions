@@ -1,4 +1,4 @@
-package com.xyc.practicalextensions.mixins;
+package com.xyc.practicalextensions.mixins.recipes;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 @Mixin(ShapelessRecipeBuilder.class)
-public abstract class ShapelessRecipeBuilderMixin implements IRecipeBuilderMixin {
+public abstract class ShapelessRecipeBuilderMixin implements RecipeBuilderMixin {
     @Shadow
     @Nullable
     private String group;
