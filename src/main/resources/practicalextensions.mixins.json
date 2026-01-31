@@ -10,7 +10,6 @@
     "recipes.SingleItemRecipeBuilderMixin",
     "recipes.SpecialRecipeBuilderMixin",
     "MinecraftServerMixin",
-    "tags.RegistryAccessMixin",
     "ReloadableServerResourcesMixin",
     "tags.TagManagerMixin"
   ],

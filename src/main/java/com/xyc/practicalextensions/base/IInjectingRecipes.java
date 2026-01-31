@@ -1,5 +1,5 @@
 package com.xyc.practicalextensions.base;
 
-public interface IInjectingRecipe {
+public interface IInjectingRecipes {
     int[] practicalextensions$injectRecipes();
 }

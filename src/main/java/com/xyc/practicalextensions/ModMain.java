@@ -58,7 +58,7 @@ public class ModMain {
                                 "[%s] 自动重新加载已禁用！使用 /reload 命令使模块设置生效。"
                             );
                             clothConfig.ifPresent(c -> {
-                                add(c.TITLE_CONFIG, "实用配方扩展");
+                                add(c.TITLE_CONFIG, "实用扩展");
                                 add(ModuleClothConfig.TITLE_MODULES, "模块设置");
                                 add(ModuleClothConfig.TITLE_GENERAL, "通用设置");
                                 add(ModuleClothConfig.OPTION_AUTO_RELOAD, "自动重新加载");

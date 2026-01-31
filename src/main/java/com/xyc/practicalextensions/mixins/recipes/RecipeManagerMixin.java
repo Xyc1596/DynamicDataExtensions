@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.xyc.practicalextensions.PracticalExtensionRegistry;
-import com.xyc.practicalextensions.base.IInjectingRecipe;
+import com.xyc.practicalextensions.base.IInjectingRecipes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Mixin(RecipeManager.class)
-public abstract class RecipeManagerMixin implements IInjectingRecipe {
+public abstract class RecipeManagerMixin implements IInjectingRecipes {
     @Shadow
     private Multimap<RecipeType<?>, RecipeHolder<?>> byType = ImmutableMultimap.of();
     @Shadow
@@ -33,7 +33,6 @@ public abstract class RecipeManagerMixin implements IInjectingRecipe {
     @Unique
     @Override
     public int[] practicalextensions$injectRecipes() {
-        long t1 = System.currentTimeMillis();
         int nByType = this.byType.size();
         var recipesToUpdate = PracticalExtensionRegistry.getAllRecipesToUpdate();
         Set<RecipeHolder<Recipe<?>>> recipesToAdd = recipesToUpdate.getLeft();
@@ -59,6 +58,6 @@ public abstract class RecipeManagerMixin implements IInjectingRecipe {
         );
         int nAfterAdd = this.byType.size();
 
-        return new int[]{nByType - nAfterRemove, nAfterAdd - nAfterRemove, (int) (System.currentTimeMillis() - t1)};
+        return new int[]{nAfterAdd - nAfterRemove, nByType - nAfterRemove};
     }
 }

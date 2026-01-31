@@ -100,7 +100,7 @@ public class ModuleConfig {
             PlayerList playerList = server.getPlayerList();
             for (ServerPlayer player : playerList.getPlayers()) {
                 if (playerList.isOp(player.getGameProfile())) {
-                    server.sendSystemMessage(
+                    player.sendSystemMessage(
                         Component.translatable(
                             MESSAGE_AUTO_RELOAD_DISABLED,
                             Component.translatable(ModMain.MOD_ID)

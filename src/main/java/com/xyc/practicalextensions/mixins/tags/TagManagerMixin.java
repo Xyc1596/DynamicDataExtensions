@@ -19,7 +19,6 @@ public abstract class TagManagerMixin implements IInjectingTags {
 
     @Override
     public int[] practicalextensions$injectTags() {
-        long t1 = System.currentTimeMillis();
         var allTagsToUpdate = PracticalExtensionRegistry.getAllTagsToUpdate();
         Set<ResourceKey<? extends Registry<?>>> allResourceKeys = new HashSet<>();
         Map<ResourceKey<? extends Registry<?>>, Map<TagKey<?>, Set<Holder<?>>>> allTagsToAddInRegistry =
@@ -43,7 +42,7 @@ public abstract class TagManagerMixin implements IInjectingTags {
             allTagsToRemoveInRegistry.get(resourceKey).put(key, entry.getValue());
         }
 
-        int[] i = {0, 0, 0, 0};
+        int[] i = {0, 0, 0};
         List<TagManager.LoadResult<?>> newResults = new ArrayList<>();
         for (TagManager.LoadResult<?> result : results) {
             ResourceKey<? extends Registry<?>> resourceKey = result.key();
@@ -63,7 +62,6 @@ public abstract class TagManagerMixin implements IInjectingTags {
             }
         }
         this.results = newResults.stream().toList();
-        i[3] = (int) (System.currentTimeMillis() - t1);
         return i;
     }
 }

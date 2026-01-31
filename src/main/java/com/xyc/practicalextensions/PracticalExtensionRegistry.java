@@ -1,8 +1,5 @@
 package com.xyc.practicalextensions;
 
-import com.mojang.logging.LogUtils;
-import com.xyc.practicalextensions.base.IInjectingRecipe;
-import com.xyc.practicalextensions.base.IInjectingTags;
 import com.xyc.practicalextensions.base.Module;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +11,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,8 +22,6 @@ import java.util.Set;
  */
 @EventBusSubscriber(modid = ModMain.MOD_ID)
 public final class PracticalExtensionRegistry {
-    public static final Logger LOGGER = LogUtils.getLogger();
-
     private static final Set<ModuleConfig> configs = new HashSet<>();
 
     public static void registerConfig(ModuleConfig config) {
