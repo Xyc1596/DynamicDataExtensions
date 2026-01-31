@@ -5,7 +5,6 @@ import com.xyc.practicalextensions.base.IInjectingRecipe;
 import com.xyc.practicalextensions.base.IInjectingTags;
 import com.xyc.practicalextensions.base.Module;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
@@ -49,9 +48,9 @@ public final class PracticalExtensionRegistry {
         return Pair.of(recipesToAdd, recipesToRemove);
     }
 
-    public static Pair<Map<TagKey<?>, Set<Holder<?>>>, Map<TagKey<?>, Set<ResourceKey<?>>>> getAllTagsToUpdate() {
+    public static Pair<Map<TagKey<?>, Set<Holder<?>>>, Map<TagKey<?>, Set<Holder<?>>>> getAllTagsToUpdate() {
         Map<TagKey<?>, Set<Holder<?>>> tagsToAdd = new HashMap<>();
-        Map<TagKey<?>, Set<ResourceKey<?>>> tagsToRemove = new HashMap<>();
+        Map<TagKey<?>, Set<Holder<?>>> tagsToRemove = new HashMap<>();
         for (ModuleConfig config : configs) {
             for (Module module : config.getModules()) {
                 if (config.isModuleEnabled(module.getId())) {
@@ -64,24 +63,25 @@ public final class PracticalExtensionRegistry {
     }
 
     public static void update(final MinecraftServer server) {
-        int[] tagsResults = ((IInjectingTags) server.registryAccess()).practicalextensions$injectTags();
-        LOGGER.info(
-            "{} tag(s) added, {} tag(s) removed and {} tag(s) modified in {} ms",
-            tagsResults[0], tagsResults[1], tagsResults[2], tagsResults[3]
-        );
+        // int[] tagsResults = ((IInjectingTags) server.registryAccess()).practicalextensions$injectTags();
+        // int[] tagsResults = ((IInjectingTags) server)
+        // LOGGER.info(
+        //     "{} tag(s) added, {} tag(s) removed and {} tag(s) modified in {} ms",
+        //     tagsResults[0], tagsResults[1], tagsResults[2], tagsResults[3]
+        // );
 
-        int[] recipeResults = ((IInjectingRecipe) server.getRecipeManager()).practicalextensions$injectRecipes();
-        LOGGER.info(
-            "{} recipe(s) removed and {} recipe(s) added in {} ms",
-            recipeResults[0], recipeResults[1], recipeResults[2]
-        );
+        // int[] recipeResults = ((IInjectingRecipe) server.getRecipeManager()).practicalextensions$injectRecipes();
+        // LOGGER.info(
+        //     "{} recipe(s) removed and {} recipe(s) added in {} ms",
+        //     recipeResults[0], recipeResults[1], recipeResults[2]
+        // );
     }
 
     @SubscribeEvent
     public static void onServerStarting(final ServerStartingEvent event) {
         /*
         起初考虑在 RecipeManager#apply 末尾注入配方，
-        但配方载入早于非 Minecraft 内置的标签的注册，
+        但配方载入 (RecipeManager#apply) 早于非 Minecraft 内置的标签的注册 (TagManager#reload)，
         因此在每次启动后重新加载一次资源前可用标签只有少量内置标签，导致使用标签的动态配方无法生成
         改为在标签更新（TagsUpdatedEvent）后再注入配方可以在集成服务器中解决这一问题，
         但在专用服务器（Dedicated Server）中此时 ServerLifecycleHooks.getCurrentServer() 获取到的服务器实例仍是 null

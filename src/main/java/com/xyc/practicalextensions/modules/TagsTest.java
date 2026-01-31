@@ -20,8 +20,16 @@ public class TagsTest extends Module {
     @Override
     public @NotNull Map<TagKey<?>, Set<Holder<?>>> gatherTagsToAdd() {
         return Map.of(
-            TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("pig_food")),
+            TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("wool")),
             Set.of(Items.ROTTEN_FLESH.getDefaultInstance().getItemHolder())
+        );
+    }
+
+    @Override
+    public @NotNull Map<TagKey<?>, Set<Holder<?>>> gatherTagsToRemove() {
+        return Map.of(
+            TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("pig_food")),
+            Set.of(Items.CARROT.getDefaultInstance().getItemHolder())
         );
     }
 }

@@ -9,7 +9,10 @@
     "recipes.SimpleCookingRecipeBuilderMixin",
     "recipes.SingleItemRecipeBuilderMixin",
     "recipes.SpecialRecipeBuilderMixin",
-    "tags.RegistryAccessMixin"
+    "MinecraftServerMixin",
+    "tags.RegistryAccessMixin",
+    "ReloadableServerResourcesMixin",
+    "tags.TagManagerMixin"
   ],
   "client": [
   ],

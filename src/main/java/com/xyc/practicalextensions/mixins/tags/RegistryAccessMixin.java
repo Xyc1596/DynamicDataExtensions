@@ -42,28 +42,28 @@ public interface RegistryAccessMixin extends IInjectingTags {
             allTagsToAddInRegistry.get(registry).put(key, entry.getValue());
         }
 
-        for (Map.Entry<TagKey<?>, Set<ResourceKey<?>>> entry : allTagsToUpdate.getRight().entrySet()) {
-            TagKey<?> key = entry.getKey();
-            ResourceKey<? extends Registry<?>> resourceKey = key.registry();
-            allResourceKeys.add(resourceKey);
-            allTagsToRemoveInRegistry.putIfAbsent(resourceKey, new HashMap<>());
-            allTagsToRemoveInRegistry.get(resourceKey).put(key, entry.getValue());
-        }
+        // for (Map.Entry<TagKey<?>, Set<ResourceKey<?>>> entry : allTagsToUpdate.getRight().entrySet()) {
+        //     TagKey<?> key = entry.getKey();
+        //     ResourceKey<? extends Registry<?>> resourceKey = key.registry();
+        //     allResourceKeys.add(resourceKey);
+        //     allTagsToRemoveInRegistry.putIfAbsent(resourceKey, new HashMap<>());
+        //     allTagsToRemoveInRegistry.get(resourceKey).put(key, entry.getValue());
+        // }
 
         int[] results = {0, 0, 0, 0};   // added, removed, modified, time
-        this.registries()
-            .filter(registryEntry -> allResourceKeys.contains(registryEntry.key()))
-            .forEach(registryEntry -> {
-                ResourceKey<? extends Registry<?>> resourceKey = registryEntry.key();
-                int[] r = IInjectingTags.injectTagsIntoRegistry(
-                    registryEntry,
-                    allTagsToAddInRegistry.getOrDefault(resourceKey, Map.of()),
-                    allTagsToRemoveInRegistry.getOrDefault(resourceKey, Map.of())
-                );
-                results[0] += r[0];
-                results[1] += r[1];
-                results[2] += r[2];
-            });
+        // this.registries()
+        //     .filter(registryEntry -> allResourceKeys.contains(registryEntry.key()))
+        //     .forEach(registryEntry -> {
+        //         ResourceKey<? extends Registry<?>> resourceKey = registryEntry.key();
+        //         int[] r = IInjectingTags.injectTagsIntoRegistry(
+        //             registryEntry,
+        //             allTagsToAddInRegistry.getOrDefault(resourceKey, Map.of()),
+        //             allTagsToRemoveInRegistry.getOrDefault(resourceKey, Map.of())
+        //         );
+        //         results[0] += r[0];
+        //         results[1] += r[1];
+        //         results[2] += r[2];
+        //     });
 
         results[3] = (int) (System.currentTimeMillis() - t1);
         return results;
