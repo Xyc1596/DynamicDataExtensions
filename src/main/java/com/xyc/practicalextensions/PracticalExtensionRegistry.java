@@ -1,14 +1,15 @@
 package com.xyc.practicalextensions;
 
+import com.xyc.practicalextensions.base.IUpdatingRegistryTags;
 import com.xyc.practicalextensions.base.Module;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -56,19 +57,9 @@ public final class PracticalExtensionRegistry {
         return Pair.of(tagsToAdd, tagsToRemove);
     }
 
-    public static void update(final MinecraftServer server) {
-        // int[] tagsResults = ((IInjectingTags) server.registryAccess()).practicalextensions$injectTags();
-        // int[] tagsResults = ((IInjectingTags) server)
-        // LOGGER.info(
-        //     "{} tag(s) added, {} tag(s) removed and {} tag(s) modified in {} ms",
-        //     tagsResults[0], tagsResults[1], tagsResults[2], tagsResults[3]
-        // );
-
-        // int[] recipeResults = ((IInjectingRecipe) server.getRecipeManager()).practicalextensions$injectRecipes();
-        // LOGGER.info(
-        //     "{} recipe(s) removed and {} recipe(s) added in {} ms",
-        //     recipeResults[0], recipeResults[1], recipeResults[2]
-        // );
+    @SubscribeEvent
+    public static void onTagsUpdate(final TagsUpdatedEvent event) {
+        event.getRegistryAccess();
     }
 
     @SubscribeEvent
@@ -81,6 +72,6 @@ public final class PracticalExtensionRegistry {
         但在专用服务器（Dedicated Server）中此时 ServerLifecycleHooks.getCurrentServer() 获取到的服务器实例仍是 null
         因此进一步改为在服务器启动后（ServerStartingEvent）注入配方
         */
-        update(event.getServer());
+        // ((IUpdatingRegistryTags) event.getServer()).practicalextensions$updateRegistryTags();
     }
 }

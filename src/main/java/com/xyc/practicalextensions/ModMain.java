@@ -57,6 +57,10 @@ public class ModMain {
                                 ModuleConfig.MESSAGE_AUTO_RELOAD_DISABLED,
                                 "[%s] 自动重新加载已禁用！使用 /reload 命令使模块设置生效。"
                             );
+                            add(
+                                ModuleConfig.MESSAGE_NO_PERMISSION,
+                                "[%s] 你没有更新服务端配置的权限！配置变更已保存到本地但不会同步到服务端。"
+                            );
                             clothConfig.ifPresent(c -> {
                                 add(c.TITLE_CONFIG, "实用扩展");
                                 add(ModuleClothConfig.TITLE_MODULES, "模块设置");
@@ -83,6 +87,11 @@ public class ModMain {
                             add(
                                 ModuleConfig.MESSAGE_AUTO_RELOAD_DISABLED,
                                 "[%s] Auto reloading is disabled! Use /reload for the module settings to take effect."
+                            );
+                            add(
+                                ModuleConfig.MESSAGE_NO_PERMISSION,
+                                "[%s] You have no permission to update the server configs! Your changes have been " +
+                                    "saved locally but will not be synchronized to the server."
                             );
                             clothConfig.ifPresent(c -> {
                                 add(c.TITLE_CONFIG, "Practical Extensions");

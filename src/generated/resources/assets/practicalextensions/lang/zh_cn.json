@@ -1,5 +1,6 @@
 {
   "message.practicalextensions.auto_reload_disabled": "[%s] 自动重新加载已禁用！使用 /reload 命令使模块设置生效。",
+  "message.practicalextensions.no_permission": "[%s] 你没有更新服务端配置的权限！配置变更已保存到本地但不会同步到服务端。",
   "message.practicalextensions.reload_config": "[%s] 重新加载中！",
   "option.practicalextensions.auto_reload": "自动重新加载",
   "option.practicalextensions.leather_from_rotten_flesh": "腐肉换皮革",

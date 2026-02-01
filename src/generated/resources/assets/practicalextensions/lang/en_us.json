@@ -1,5 +1,6 @@
 {
   "message.practicalextensions.auto_reload_disabled": "[%s] Auto reloading is disabled! Use /reload for the module settings to take effect.",
+  "message.practicalextensions.no_permission": "[%s] You have no permission to update the server configs! Your changes have been saved locally but will not be synchronized to the server.",
   "message.practicalextensions.reload_config": "[%s] Reloading!",
   "option.practicalextensions.auto_reload": "Auto Reloading",
   "option.practicalextensions.leather_from_rotten_flesh": "Leather from Rotten Flesh",

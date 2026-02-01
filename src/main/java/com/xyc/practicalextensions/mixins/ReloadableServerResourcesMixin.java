@@ -26,21 +26,59 @@ public abstract class ReloadableServerResourcesMixin implements IInjectingReload
     private static final Logger practicalExtensions$LOGGER = LogUtils.getLogger();
 
     @Unique
-    public void practicalExtensions$injectDataIntoManagers() {
-        long tTags1 = System.currentTimeMillis();
+    @Override
+    public void practicalExtensions$injectTags() {
+        long t1 = System.currentTimeMillis();
         int[] tagResults = ((IInjectingTags) this.tagManager).practicalextensions$injectTags();
-        long tTags2 = System.currentTimeMillis();
+        long t2 = System.currentTimeMillis();
         practicalExtensions$LOGGER.info(
             "Tag(s) injected in {} ms: {} added, {} removed, {} modified",
-            tTags2 - tTags1, tagResults[0], tagResults[1], tagResults[2]
-        );
-
-        long tRecipes1 = System.currentTimeMillis();
-        int[] recipeResults = ((IInjectingRecipes) this.recipes).practicalextensions$injectRecipes();
-        long tRecipes2 = System.currentTimeMillis();
-        practicalExtensions$LOGGER.info(
-            "Recipe(s) injected in {} ms: {} added, {} removed",
-            tRecipes2 - tRecipes1, recipeResults[0], recipeResults[1]
+            t2 - t1, tagResults[0], tagResults[1], tagResults[2]
         );
     }
+
+    @Unique
+    @Override
+    public void practicalExtensions$injectRecipes() {
+        long t1 = System.currentTimeMillis();
+        int[] recipeResults = ((IInjectingRecipes) this.recipes).practicalextensions$injectRecipes();
+        long t2 = System.currentTimeMillis();
+        practicalExtensions$LOGGER.info(
+            "Recipe(s) injected in {} ms: {} added, {} removed",
+            t2 - t1, recipeResults[0], recipeResults[1]
+        );
+    }
+
+    @Unique
+    @Override
+    public void practicalExtensions$injectData() {
+        this.practicalExtensions$injectTags();
+        this.practicalExtensions$injectRecipes();
+    }
+
+    // @Inject(
+    //     method = "<init>",
+    //     at = @At(
+    //         value = "FIELD",
+    //         target = "Lnet/minecraft/server/ReloadableServerResources;commands:Lnet/minecraft/commands/Commands;")
+    // )
+    // private void onInitInjectDataIntoManagers(
+    //     RegistryAccess.Frozen registryAccess,
+    //     FeatureFlagSet enabledFeatures,
+    //     Commands.CommandSelection commandSelection,
+    //     int functionCompilationLevel,
+    //     CallbackInfo ci
+    // ) {
+    //     practicalExtensions$injectDataIntoManagers();
+    // }    // 没用
+
+    // @ModifyVariable(
+    //     method = "lambda$loadResources$5",
+    //     at = @At("STORE"),
+    //     name = "reloadableserverresources"
+    // )
+    // private static ReloadableServerResources onLoadResourcesInjectDataIntoManagers(ReloadableServerResources r) {
+    //     ((IInjectingReloadableServerResources) r).practicalExtensions$injectDataIntoManagers();
+    //     return r;
+    // }    // 没用
 }

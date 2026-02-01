@@ -2,6 +2,9 @@
   "required": true,
   "package": "com.xyc.practicalextensions.mixins",
   "mixins": [
+    "MinecraftServerMixin",
+    "ReloadableServerResourcesMixin",
+    "WorldLoaderMixin",
     "recipes.RecipeBuilderMixin",
     "recipes.RecipeManagerMixin",
     "recipes.ShapedRecipeBuilderMixin",
@@ -9,8 +12,6 @@
     "recipes.SimpleCookingRecipeBuilderMixin",
     "recipes.SingleItemRecipeBuilderMixin",
     "recipes.SpecialRecipeBuilderMixin",
-    "MinecraftServerMixin",
-    "ReloadableServerResourcesMixin",
     "tags.TagManagerMixin"
   ],
   "client": [
