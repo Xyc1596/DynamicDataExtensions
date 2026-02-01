@@ -1,16 +1,12 @@
 package com.xyc.practicalextensions;
 
-import com.xyc.practicalextensions.base.IUpdatingRegistryTags;
 import com.xyc.practicalextensions.base.Module;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.TagsUpdatedEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
@@ -55,23 +51,5 @@ public final class PracticalExtensionRegistry {
             }
         }
         return Pair.of(tagsToAdd, tagsToRemove);
-    }
-
-    @SubscribeEvent
-    public static void onTagsUpdate(final TagsUpdatedEvent event) {
-        event.getRegistryAccess();
-    }
-
-    @SubscribeEvent
-    public static void onServerStarting(final ServerStartingEvent event) {
-        /*
-        起初考虑在 RecipeManager#apply 末尾注入配方，
-        但配方载入 (RecipeManager#apply) 早于非 Minecraft 内置的标签的注册 (TagManager#reload)，
-        因此在每次启动后重新加载一次资源前可用标签只有少量内置标签，导致使用标签的动态配方无法生成
-        改为在标签更新（TagsUpdatedEvent）后再注入配方可以在集成服务器中解决这一问题，
-        但在专用服务器（Dedicated Server）中此时 ServerLifecycleHooks.getCurrentServer() 获取到的服务器实例仍是 null
-        因此进一步改为在服务器启动后（ServerStartingEvent）注入配方
-        */
-        // ((IUpdatingRegistryTags) event.getServer()).practicalextensions$updateRegistryTags();
     }
 }

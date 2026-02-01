@@ -55,30 +55,4 @@ public abstract class ReloadableServerResourcesMixin implements IInjectingReload
         this.practicalExtensions$injectTags();
         this.practicalExtensions$injectRecipes();
     }
-
-    // @Inject(
-    //     method = "<init>",
-    //     at = @At(
-    //         value = "FIELD",
-    //         target = "Lnet/minecraft/server/ReloadableServerResources;commands:Lnet/minecraft/commands/Commands;")
-    // )
-    // private void onInitInjectDataIntoManagers(
-    //     RegistryAccess.Frozen registryAccess,
-    //     FeatureFlagSet enabledFeatures,
-    //     Commands.CommandSelection commandSelection,
-    //     int functionCompilationLevel,
-    //     CallbackInfo ci
-    // ) {
-    //     practicalExtensions$injectDataIntoManagers();
-    // }    // 没用
-
-    // @ModifyVariable(
-    //     method = "lambda$loadResources$5",
-    //     at = @At("STORE"),
-    //     name = "reloadableserverresources"
-    // )
-    // private static ReloadableServerResources onLoadResourcesInjectDataIntoManagers(ReloadableServerResources r) {
-    //     ((IInjectingReloadableServerResources) r).practicalExtensions$injectDataIntoManagers();
-    //     return r;
-    // }    // 没用
 }
