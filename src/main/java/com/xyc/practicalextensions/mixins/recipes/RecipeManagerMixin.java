@@ -10,7 +10,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,9 +26,6 @@ public abstract class RecipeManagerMixin implements IInjectingRecipes {
     @Shadow
     private Map<ResourceLocation, RecipeHolder<?>> byName = ImmutableMap.of();
 
-    /**
-     * @see PracticalExtensionRegistry#onServerStarting(ServerStartingEvent)
-     */
     @Unique
     @Override
     public int[] practicalextensions$injectRecipes() {

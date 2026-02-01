@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.neoforged.fml.common.EventBusSubscriber;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import java.util.Set;
 /**
  * 所有扩展模组共享
  */
-@EventBusSubscriber(modid = ModMain.MOD_ID)
 public final class PracticalExtensionRegistry {
     private static final Set<ModuleConfig> configs = new HashSet<>();
 
