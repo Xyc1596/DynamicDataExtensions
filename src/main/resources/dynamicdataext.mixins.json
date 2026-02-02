@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "package": "com.xyc.dynamicdataext.mixins",
+  "mixins": [
+    "MinecraftServerMixin",
+    "ReloadableServerResourcesMixin",
+    "WorldLoaderMixin",
+    "recipes.RecipeBuilderMixin",
+    "recipes.RecipeManagerMixin",
+    "recipes.ShapedRecipeBuilderMixin",
+    "recipes.ShapelessRecipeBuilderMixin",
+    "recipes.SimpleCookingRecipeBuilderMixin",
+    "recipes.SingleItemRecipeBuilderMixin",
+    "recipes.SpecialRecipeBuilderMixin",
+    "tags.TagManagerMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "compatibilityLevel": "JAVA_21",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
