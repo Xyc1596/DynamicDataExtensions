@@ -2,9 +2,9 @@ package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.ModMain;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.crafting.Ingredient;

@@ -31,6 +31,7 @@ public class ModMain {
                 new WoolToString(),
                 new ConvenientCrafting(),
                 new AllStones(),
+                new SlabRecycling(),
                 new TagsTest()
             )
         );
