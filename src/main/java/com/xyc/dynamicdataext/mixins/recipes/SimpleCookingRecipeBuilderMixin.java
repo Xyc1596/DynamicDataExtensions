@@ -37,11 +37,14 @@ public abstract class SimpleCookingRecipeBuilderMixin implements RecipeBuilderMi
     @Final
     private int cookingTime;
 
+    @Shadow protected abstract void ensureValid(ResourceLocation id);
+
     /**
      * @see SimpleCookingRecipeBuilder#save(RecipeOutput, ResourceLocation)
      */
     @Override
     public Recipe<?> dynamicdataext$toRecipe(ResourceLocation location) {
+        this.ensureValid(location);
         return factory.create(
             Objects.requireNonNullElse(this.group, ""),
             this.bookCategory,

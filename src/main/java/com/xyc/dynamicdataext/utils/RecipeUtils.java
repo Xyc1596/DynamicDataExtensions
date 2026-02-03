@@ -1,10 +1,13 @@
-package com.xyc.dynamicdataext.base;
+package com.xyc.dynamicdataext.utils;
 
+import com.xyc.dynamicdataext.base.IDynamicRecipeBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -14,7 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public final class ModuleUtils {
+public final class RecipeUtils {
     @ParametersAreNonnullByDefault
     public static RecipeHolder<Recipe<?>> createSmelting(
         String namespace,
@@ -46,9 +49,10 @@ public final class ModuleUtils {
     ) {
         return new RecipeHolder<>(
             location,
-            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.smelting(
-                ingredient, category, result, experience, cookingTime
-            )).dynamicdataext$toRecipe(location)
+            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
+                .smelting(ingredient, category, result, experience, cookingTime)
+                .unlockedBy("has_ingredient", CriterionUtils.hasSingleIngredient(ingredient))
+            ).dynamicdataext$toRecipe(location)
         );
     }
 
@@ -83,9 +87,10 @@ public final class ModuleUtils {
     ) {
         return new RecipeHolder<>(
             location,
-            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.smoking(
-                ingredient, category, result, experience, cookingTime
-            )).dynamicdataext$toRecipe(location)
+            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
+                .smoking(ingredient, category, result, experience, cookingTime)
+                .unlockedBy("has_ingredient", CriterionUtils.hasSingleIngredient(ingredient))
+            ).dynamicdataext$toRecipe(location)
         );
     }
 
@@ -120,9 +125,10 @@ public final class ModuleUtils {
     ) {
         return new RecipeHolder<>(
             location,
-            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.campfireCooking(
-                ingredient, category, result, experience, cookingTime
-            )).dynamicdataext$toRecipe(location)
+            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
+                .campfireCooking(ingredient, category, result, experience, cookingTime)
+                .unlockedBy("has_ingredient", CriterionUtils.hasSingleIngredient(ingredient))
+            ).dynamicdataext$toRecipe(location)
         );
     }
 
@@ -157,9 +163,10 @@ public final class ModuleUtils {
     ) {
         return new RecipeHolder<>(
             location,
-            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder.blasting(
-                ingredient, category, result, experience, cookingTime
-            )).dynamicdataext$toRecipe(location)
+            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
+                .blasting(ingredient, category, result, experience, cookingTime)
+                .unlockedBy("has_ingredient", CriterionUtils.hasSingleIngredient(ingredient))
+            ).dynamicdataext$toRecipe(location)
         );
     }
 
@@ -237,5 +244,20 @@ public final class ModuleUtils {
             recipeLocation,
             ((IDynamicRecipeBuilder) builder).dynamicdataext$toRecipe(recipeLocation)
         );
+    }
+
+    @ParametersAreNonnullByDefault
+    public static ResourceLocation withCommonNamespace(String id) {
+        return ResourceLocation.fromNamespaceAndPath("c", id);
+    }
+
+    @ParametersAreNonnullByDefault
+    public static TagKey<Item> createItemTagKey(ResourceLocation location) {
+        return TagKey.create(Registries.ITEM, location);
+    }
+
+    @ParametersAreNonnullByDefault
+    public static TagKey<Item> createItemTagKey(String namespace, String path) {
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(namespace, path));
     }
 }

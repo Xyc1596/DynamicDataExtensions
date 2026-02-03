@@ -1,7 +1,7 @@
 package com.xyc.dynamicdataext.lang;
 
 @SuppressWarnings("unused")
-public class LiteralBuilder extends ModuleLangBuilder<TranslatableBuilder> {
+public class LiteralBuilder extends ModuleLangBuilder<LiteralBuilder> {
     protected final String text;
 
     public LiteralBuilder(String text) {

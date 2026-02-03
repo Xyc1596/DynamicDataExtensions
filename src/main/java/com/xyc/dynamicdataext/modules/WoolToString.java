@@ -2,15 +2,16 @@ package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.ModMain;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.base.ModuleUtils;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.utils.CriterionUtils;
+import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -26,31 +27,30 @@ public class WoolToString extends Module {
 
     @Override
     public @NotNull Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
+        final TagKey<Item>
+            WOOLS = RecipeUtils.createItemTagKey(ResourceLocation.withDefaultNamespace("wools")),
+            CARPETS = RecipeUtils.createItemTagKey(ResourceLocation.withDefaultNamespace("wool_carpets"));
+
         return Set.of(
-            ModuleUtils.createRecipeHolder(
+            RecipeUtils.createRecipeHolder(
                 this.namespace,
                 "wool_to_string",
                 ShapelessRecipeBuilder
                     .shapeless(RecipeCategory.MISC, Items.STRING, 4)
-                    .requires(
-                        Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("wool"))),
-                        4
-                    )
+                    .requires(Ingredient.of(WOOLS), 4)
                     .requires(Items.FLINT)
+                    .unlockedBy("has_wools", CriterionUtils.hasTag(WOOLS))
+                    .unlockedBy("has_flint", CriterionUtils.hasItems(Items.FLINT))
             ),
-            ModuleUtils.createRecipeHolder(
+            RecipeUtils.createRecipeHolder(
                 this.namespace,
                 "carpet_to_string",
                 ShapelessRecipeBuilder
                     .shapeless(RecipeCategory.MISC, Items.STRING, 4)
-                    .requires(
-                        Ingredient.of(TagKey.create(
-                            Registries.ITEM,
-                            ResourceLocation.withDefaultNamespace("wool_carpets"))
-                        ),
-                        6
-                    )
+                    .requires(Ingredient.of(CARPETS), 6)
                     .requires(Items.FLINT)
+                    .unlockedBy("has_wools", CriterionUtils.hasTag(CARPETS))
+                    .unlockedBy("has_flint", CriterionUtils.hasItems(Items.FLINT))
             )
         );
     }
@@ -65,16 +65,18 @@ public class WoolToString extends Module {
 
     @Override
     protected @NotNull TranslatableLang buildTooltipLang() {
-        return ModuleLangBuilder.translatable("tooltip", this.namespace, this.id)
-                                .translation("zh_cn", "4 羊毛 / 6 地毯 + 1 燧石合成 4 根线\n%s")
-                                .translation("en_us", "Craft 4 strings with 4 wools / 6 carpets and 1 flint\n%s")
-                                .child(
-                                    ModuleLangBuilder.translatable("tooltip", this.namespace, this.id + "_1")
-                                                     .translation("zh_cn", "灵感来源：不记得了 :(")
-                                                     .translation("en_us", "Inspired by: I don't remember :(")
-                                                     .format(ChatFormatting.ITALIC)
-                                                     .build()
-                                )
-                                .build();
+        return ModuleLangBuilder
+            .translatable("tooltip", this.namespace, this.id)
+            .translation("zh_cn", "4 羊毛 / 6 地毯 + 1 燧石 -> 4 根线\n%s")
+            .translation("en_us", "4 wools / 6 carpets + 1 flint -> 4 strings\n%s")
+            .child(
+                ModuleLangBuilder
+                    .translatable("tooltip", this.namespace, this.id + "_1")
+                    .translation("zh_cn", "灵感来源：不记得了 :(")
+                    .translation("en_us", "Inspired by: I don't remember :(")
+                    .format(ChatFormatting.ITALIC)
+                    .build()
+            )
+            .build();
     }
 }

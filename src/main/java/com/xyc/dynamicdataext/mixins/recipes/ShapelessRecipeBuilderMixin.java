@@ -32,11 +32,14 @@ public abstract class ShapelessRecipeBuilderMixin implements RecipeBuilderMixin 
     @Final
     private NonNullList<Ingredient> ingredients;
 
+    @Shadow protected abstract void ensureValid(ResourceLocation id);
+
     /**
      * @see ShapelessRecipeBuilder#save(RecipeOutput, ResourceLocation)
      */
     @Override
     public Recipe<?> dynamicdataext$toRecipe(ResourceLocation location) {
+        this.ensureValid(location);
         return new ShapelessRecipe(
             Objects.requireNonNullElse(this.group, ""),
             RecipeBuilder.determineBookCategory(this.category),

@@ -15,7 +15,7 @@ public abstract class ModuleLangBuilder<T extends ModuleLangBuilder<T>> {
     }
 
     public T format(ChatFormatting format) {
-        formats.add(format);
+        this.formats.add(format);
         return self();
     }
 

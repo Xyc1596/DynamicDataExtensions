@@ -1,10 +1,7 @@
 package com.xyc.dynamicdataext;
 
 import com.xyc.dynamicdataext.lang.LanguageProviderWrapper;
-import com.xyc.dynamicdataext.modules.LeatherFromRottenFlesh;
-import com.xyc.dynamicdataext.modules.RawOreBlockSmelting;
-import com.xyc.dynamicdataext.modules.TagsTest;
-import com.xyc.dynamicdataext.modules.WoolToString;
+import com.xyc.dynamicdataext.modules.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.api.distmarker.Dist;
@@ -22,22 +19,26 @@ import java.util.Optional;
 public class ModMain {
     public static final String MOD_ID = "dynamicdataext";
 
+    public static ModuleConfig CONFIG;
+
     public ModMain(IEventBus modEventBus, ModContainer container) {
-        ModuleConfig config = new ModuleConfig(
+        CONFIG = new ModuleConfig(
             modEventBus,
             container,
             List.of(
                 new LeatherFromRottenFlesh(),
                 new RawOreBlockSmelting(),
                 new WoolToString(),
+                new ConvenientCrafting(),
+                new AllStones(),
                 new TagsTest()
             )
         );
-        DynamicDataRegistry.registerConfig(config);
+        DynamicDataRegistry.registerConfig(CONFIG);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             Optional<ModuleClothConfig> clothConfig = ModList.get().isLoaded("cloth_config")
-                ? Optional.of(new ModuleClothConfig(MOD_ID, container, config))
+                ? Optional.of(new ModuleClothConfig(MOD_ID, container, CONFIG))
                 : Optional.empty();
 
             // DataGen
@@ -51,7 +52,7 @@ public class ModMain {
                     new LanguageProviderWrapper(output, MOD_ID, "zh_cn") {
                         @Override
                         protected void addTranslations() {
-                            add(MOD_ID, "实用配方扩展");
+                            add(MOD_ID, "动态数据扩展");
                             add(ModuleConfig.MESSAGE_RELOAD_CONFIG, "[%s] 重新加载中！");
                             add(
                                 ModuleConfig.MESSAGE_AUTO_RELOAD_DISABLED,
@@ -62,7 +63,7 @@ public class ModMain {
                                 "[%s] 你没有更新服务端配置的权限！配置变更已保存到本地但不会同步到服务端。"
                             );
                             clothConfig.ifPresent(c -> {
-                                add(c.TITLE_CONFIG, "实用扩展");
+                                add(c.TITLE_CONFIG, "动态数据扩展");
                                 add(ModuleClothConfig.TITLE_MODULES, "模块设置");
                                 add(ModuleClothConfig.TITLE_GENERAL, "通用设置");
                                 add(ModuleClothConfig.OPTION_AUTO_RELOAD, "自动重新加载");
@@ -71,7 +72,7 @@ public class ModMain {
                                     "更改配置后自动重新加载数据\n禁用该选项则需要手动使用 /reload 命令使模块设置生效"
                                 );
                             });
-                            config.getModules().forEach(this::addModuleTranslations);
+                            CONFIG.getModules().forEach(this::addModuleTranslations);
                         }
                     }
                 );
@@ -82,7 +83,7 @@ public class ModMain {
                     new LanguageProviderWrapper(output, MOD_ID, "en_us") {
                         @Override
                         protected void addTranslations() {
-                            add(MOD_ID, "Practical Extensions");
+                            add(MOD_ID, "Dynamic Data Extensions");
                             add(ModuleConfig.MESSAGE_RELOAD_CONFIG, "[%s] Reloading!");
                             add(
                                 ModuleConfig.MESSAGE_AUTO_RELOAD_DISABLED,
@@ -94,7 +95,7 @@ public class ModMain {
                                     "saved locally but will not be synchronized to the server."
                             );
                             clothConfig.ifPresent(c -> {
-                                add(c.TITLE_CONFIG, "Practical Extensions");
+                                add(c.TITLE_CONFIG, "Dynamic Data Extensions");
                                 add(ModuleClothConfig.TITLE_MODULES, "Module Settings");
                                 add(ModuleClothConfig.TITLE_GENERAL, "General Settings");
                                 add(ModuleClothConfig.OPTION_AUTO_RELOAD, "Auto Reloading");
@@ -105,7 +106,7 @@ public class ModMain {
                                         "for the module configs to take effect."
                                 );
                             });
-                            config.getModules().forEach(this::addModuleTranslations);
+                            CONFIG.getModules().forEach(this::addModuleTranslations);
                         }
                     }
                 );

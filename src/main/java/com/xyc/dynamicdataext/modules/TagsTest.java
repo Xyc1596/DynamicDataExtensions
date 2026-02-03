@@ -2,9 +2,9 @@ package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.ModMain;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.base.ModuleUtils;
+import com.xyc.dynamicdataext.utils.CriterionUtils;
+import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -24,8 +24,7 @@ public class TagsTest extends Module {
         super(ModMain.MOD_ID, "tags_test");
     }
 
-    private static final TagKey<Item> TEST_TAG = TagKey.create(
-        Registries.ITEM,
+    private static final TagKey<Item> TEST_TAG = RecipeUtils.createItemTagKey(
         ResourceLocation.fromNamespaceAndPath(ModMain.MOD_ID, "test_tag")
     );
 
@@ -40,14 +39,13 @@ public class TagsTest extends Module {
     @Override
     public @NotNull Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
         return Set.of(
-            ModuleUtils.createRecipeHolder(
+            RecipeUtils.createRecipeHolder(
                 this.namespace,
                 "test_tag_recipe",
-                ShapelessRecipeBuilder.shapeless(
-                    RecipeCategory.MISC,
-                    Items.ROTTEN_FLESH,
-                    3
-                ).requires(Ingredient.of(TEST_TAG), 3)
+                ShapelessRecipeBuilder
+                    .shapeless(RecipeCategory.MISC, Items.ROTTEN_FLESH, 3)
+                    .requires(Ingredient.of(TEST_TAG), 3)
+                    .unlockedBy("has_rotten_flesh", CriterionUtils.hasItems(Items.ROTTEN_FLESH))
             )
         );
     }

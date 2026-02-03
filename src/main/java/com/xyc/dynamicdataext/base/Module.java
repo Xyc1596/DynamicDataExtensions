@@ -23,18 +23,18 @@ public abstract class Module {
         this.namespace = namespace;
     }
 
-    public String getId() {
+    public final String getId() {
         return id;
     }
 
-    public TranslatableLang getOption() {
+    public final TranslatableLang getOption() {
         if (this.option == null) {
             this.option = buildOptionLang();
         }
         return this.option;
     }
 
-    public TranslatableLang getTooltip() {
+    public final TranslatableLang getTooltip() {
         if (this.tooltip == null) {
             this.tooltip = buildTooltipLang();
         }

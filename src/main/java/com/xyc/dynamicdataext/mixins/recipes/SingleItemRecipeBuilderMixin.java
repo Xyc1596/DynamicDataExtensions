@@ -33,11 +33,14 @@ public abstract class SingleItemRecipeBuilderMixin implements RecipeBuilderMixin
     @Final
     private int count;
 
+    @Shadow protected abstract void ensureValid(ResourceLocation id);
+
     /**
      * @see SingleItemRecipeBuilder#save(RecipeOutput, ResourceLocation)
      */
     @Override
     public Recipe<?> dynamicdataext$toRecipe(ResourceLocation location) {
+        this.ensureValid(location);
         return this.factory.create(
             Objects.requireNonNullElse(this.group, ""),
             this.ingredient,
