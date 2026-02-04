@@ -51,7 +51,7 @@ neoForge {
     runs {
         client1 {
             client()
-            gameDirectory = project.file('runs/client1')
+            gameDirectory = project.file('run/client1')
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
@@ -59,7 +59,7 @@ neoForge {
 
         client2 {
             client()
-            gameDirectory = project.file('runs/client2')
+            gameDirectory = project.file('run/client2')
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
