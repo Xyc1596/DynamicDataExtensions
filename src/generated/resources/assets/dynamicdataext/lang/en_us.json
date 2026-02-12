@@ -19,7 +19,7 @@
   "tooltip.dynamicdataext.convenient_crafting": "Omit some intermediate products / add routes with intermediate products\n%s\n%s",
   "tooltip.dynamicdataext.convenient_crafting_1": "Inspired by: Quark",
   "tooltip.dynamicdataext.convenient_crafting_2": "E.g. 8 Logs -> 4 chests, dropper + bow -> dispenser",
-  "tooltip.dynamicdataext.leather_from_rotten_flesh": "Make rotten flesh more useful",
+  "tooltip.dynamicdataext.leather_from_rotten_flesh": "Smelt / smoke / campfire cook rotten flesh into leather",
   "tooltip.dynamicdataext.raw_ore_block_smelting": "Smelt raw mineral blocks directly into mineral blocks",
   "tooltip.dynamicdataext.slab_recycling": "2 slabs of same material -> original block",
   "tooltip.dynamicdataext.wool_and_carpet_to_string": "4 wools / 6 carpets + 1 flint -> 4 strings\n%s",

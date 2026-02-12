@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.xyc.dynamicdataext.DynamicDataRegistry;
 import com.xyc.dynamicdataext.base.IInjectingRecipes;
+import com.xyc.dynamicdataext.base.RecipeEntry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -31,25 +31,25 @@ public abstract class RecipeManagerMixin implements IInjectingRecipes {
     public int[] dynamicdataext$injectRecipes() {
         int nByType = this.byType.size();
         var recipesToUpdate = DynamicDataRegistry.getAllRecipesToUpdate();
-        Set<RecipeHolder<Recipe<?>>> recipesToAdd = recipesToUpdate.getLeft();
+        Set<RecipeEntry> recipesToAdd = recipesToUpdate.getLeft();
         Set<ResourceLocation> recipesToRemove = recipesToUpdate.getRight();
 
         var byTypeAfterRem = this.byType.entries()
-                                        .parallelStream()
+                                        .stream()
                                         .filter(e -> !recipesToRemove.contains(e.getValue().id()))
                                         .collect(Collectors.toSet());
         int nAfterRemove = byTypeAfterRem.size();
 
         this.byType = ImmutableMultimap.copyOf(
             Stream.concat(
-                byTypeAfterRem.parallelStream(),
-                recipesToAdd.parallelStream().map(h -> Map.entry(h.value().getType(), h))
+                byTypeAfterRem.stream(),
+                recipesToAdd.stream().map(RecipeEntry::toMapEntryByType)
             ).collect(Collectors.toSet())
         );
         this.byName = ImmutableMap.copyOf(
             Stream.concat(
-                this.byName.entrySet().parallelStream().filter(e -> !recipesToRemove.contains(e.getKey())),
-                recipesToAdd.parallelStream().map(h -> Map.entry(h.id(), h))
+                this.byName.entrySet().stream().filter(e -> !recipesToRemove.contains(e.getKey())),
+                recipesToAdd.stream().map(RecipeEntry::toMapEntryByName)
             ).collect(Collectors.toSet())
         );
         int nAfterAdd = this.byType.size();

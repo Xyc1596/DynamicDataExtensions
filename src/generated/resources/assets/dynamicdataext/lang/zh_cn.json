@@ -19,7 +19,7 @@
   "tooltip.dynamicdataext.convenient_crafting": "省略部分中间产物 / 添加包含中间产物的合成路线\n%s\n%s",
   "tooltip.dynamicdataext.convenient_crafting_1": "灵感来源：Quark",
   "tooltip.dynamicdataext.convenient_crafting_2": "例：8 原木 -> 4 箱子，投掷器 + 弓 -> 发射器",
-  "tooltip.dynamicdataext.leather_from_rotten_flesh": "让腐肉变得更有用",
+  "tooltip.dynamicdataext.leather_from_rotten_flesh": "腐肉烧炼 / 烟熏 / 营火烹饪成皮革",
   "tooltip.dynamicdataext.raw_ore_block_smelting": "粗矿物块可以直接烧炼成矿物块",
   "tooltip.dynamicdataext.slab_recycling": "2 同种台阶 -> 原方块",
   "tooltip.dynamicdataext.wool_and_carpet_to_string": "4 羊毛 / 6 地毯 + 1 燧石 -> 4 根线\n%s",

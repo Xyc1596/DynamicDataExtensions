@@ -1,26 +1,25 @@
 package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.ModMain;
-import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.utils.RecipeUtils;
+import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.utils.CriterionUtils;
+import com.xyc.dynamicdataext.utils.RecipeUtils;
+import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ConvenientCrafting extends Module {
@@ -29,34 +28,52 @@ public class ConvenientCrafting extends Module {
     }
 
     @Override
-    public @NotNull Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
-        final TagKey<Item>
-            LOGS = RecipeUtils.createItemTagKey(ResourceLocation.withDefaultNamespace("logs")),
-            PLANKS = RecipeUtils.createItemTagKey(ResourceLocation.withDefaultNamespace("planks")),
-            WOODEN_RODS = RecipeUtils.createItemTagKey(RecipeUtils.withCommonNamespace("rods/wooden")),
-            IRON_INGOTS = RecipeUtils.createItemTagKey(RecipeUtils.withCommonNamespace("ingots/iron")),
-            IRON_BLOCKS = RecipeUtils.createItemTagKey(RecipeUtils.withCommonNamespace("storage_blocks/iron")),
-            STONES = RecipeUtils.createItemTagKey(RecipeUtils.withCommonNamespace("stones")),
-            REDSTONE = RecipeUtils.createItemTagKey(RecipeUtils.withCommonNamespace("dusts/redstone")),
-            BOWS = RecipeUtils.createItemTagKey(RecipeUtils.withCommonNamespace("tools/bow"));
+    public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
+        final TagKey<Item> LOGS = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withDefaultNamespace("logs")
+        );
+        final TagKey<Item> PLANKS = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withDefaultNamespace("planks")
+        );
+        final TagKey<Item> WOODEN_RODS = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withCommonNamespace("rods/wooden")
+        );
+        final TagKey<Item> IRON_INGOTS = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withCommonNamespace("ingots/iron")
+        );
+        final TagKey<Item> IRON_BLOCKS = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withCommonNamespace("storage_blocks/iron")
+        );
+        final TagKey<Item> STONES = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withCommonNamespace("stones")
+        );
+        final TagKey<Item> REDSTONE = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withCommonNamespace("dusts/redstone")
+        );
+        final TagKey<Item> BOWS = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withCommonNamespace("tools/bow")
+        );
 
-        Set<RecipeHolder<Recipe<?>>> output = new HashSet<>();
+        Set<RecipeEntry> output = new LinkedHashSet<>();
 
         output.add(
-            RecipeUtils.createRecipeHolder(
-                this.namespace,
+            RecipeUtils.createRecipeEntry(
+                this,
                 "chest_from_log",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.CHEST, 4)
                     .define('L', LOGS)
                     .pattern("LLL").pattern("L L").pattern("LLL")
-                    .unlockedBy("has_chest_recipe", CriterionUtils.recipeUnlocked("chest"))
+                    .unlockedBy(
+                        "has_chest_recipe",
+                        CriterionUtils.recipeUnlocked("chest")
+                    )
             )
         );
 
         output.add(
-            RecipeUtils.createRecipeHolder(
-                this.namespace,
+            RecipeUtils.createRecipeEntry(
+                this,
                 "barrel_from_log",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.BARREL, 4)
@@ -69,8 +86,8 @@ public class ConvenientCrafting extends Module {
         final Criterion<RecipeUnlockedTrigger.TriggerInstance> CRITERION_LADDER =
             CriterionUtils.recipeUnlocked("ladder");
         output.add(
-            RecipeUtils.createRecipeHolder(
-                this.namespace,
+            RecipeUtils.createRecipeEntry(
+                this,
                 "ladder_from_log",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.LADDER, 24)
@@ -80,8 +97,8 @@ public class ConvenientCrafting extends Module {
             )
         );
         output.add(
-            RecipeUtils.createRecipeHolder(
-                this.namespace,
+            RecipeUtils.createRecipeEntry(
+                this,
                 "ladder_from_plank",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.LADDER, 6)
@@ -92,8 +109,8 @@ public class ConvenientCrafting extends Module {
         );
 
         output.add(
-            RecipeUtils.createRecipeHolder(
-                this.namespace,
+            RecipeUtils.createRecipeEntry(
+                this,
                 "hopper_from_log",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.REDSTONE, Items.HOPPER)
@@ -104,8 +121,8 @@ public class ConvenientCrafting extends Module {
         );
 
         output.add(
-            RecipeUtils.createRecipeHolder(
-                this.namespace,
+            RecipeUtils.createRecipeEntry(
+                this,
                 "dispenser_from_dropper",
                 ShapelessRecipeBuilder
                     .shapeless(RecipeCategory.REDSTONE, Items.DISPENSER)
@@ -115,8 +132,8 @@ public class ConvenientCrafting extends Module {
         );
 
         output.add(
-            RecipeUtils.createRecipeHolder(
-                this.namespace,
+            RecipeUtils.createRecipeEntry(
+                this,
                 "chain_from_iron_block",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.CHAIN, 9)
@@ -130,8 +147,8 @@ public class ConvenientCrafting extends Module {
             CriterionUtils.recipeUnlocked("repeater");
         if (ModMain.CONFIG.isModuleEnabled("all_stones")) {
             output.add(
-                RecipeUtils.createRecipeHolder(
-                    this.namespace,
+                RecipeUtils.createRecipeEntry(
+                    this,
                     "repeater_from_redstone",
                     ShapedRecipeBuilder
                         .shaped(RecipeCategory.REDSTONE, Items.REPEATER)
@@ -142,8 +159,8 @@ public class ConvenientCrafting extends Module {
             );
         } else {
             output.add(
-                RecipeUtils.createRecipeHolder(
-                    this.namespace,
+                RecipeUtils.createRecipeEntry(
+                    this,
                     "repeater_from_redstone",
                     ShapedRecipeBuilder
                         .shaped(RecipeCategory.REDSTONE, Items.REPEATER)
@@ -159,16 +176,16 @@ public class ConvenientCrafting extends Module {
 
     @Override
     protected @NotNull TranslatableLang buildOptionLang() {
-        return ModuleLangBuilder.translatable("option", this.namespace, this.id)
-                                .translation("zh_cn", "便捷合成")
-                                .translation("en_us", "Convenient Crafting")
-                                .build();
+        return this.getOptionLangBuilder()
+                   .translation("zh_cn", "便捷合成")
+                   .translation("en_us", "Convenient Crafting")
+                   .build();
     }
 
     @Override
     protected @NotNull TranslatableLang buildTooltipLang() {
-        return ModuleLangBuilder
-            .translatable("tooltip", this.namespace, this.id)
+        return this
+            .getTooltipLangBuilder()
             .translation(
                 "zh_cn",
                 "省略部分中间产物 / 添加包含中间产物的合成路线\n%s\n%s"

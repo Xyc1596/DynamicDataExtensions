@@ -29,3 +29,6 @@ examplemod/
 .github
 .cache
 /assets/ref/
+
+*.code-workspace
+/.vscode

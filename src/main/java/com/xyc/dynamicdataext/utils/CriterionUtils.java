@@ -15,12 +15,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public final class CriterionUtils {
     @ParametersAreNonnullByDefault
     public static Criterion<RecipeUnlockedTrigger.TriggerInstance> recipeUnlocked(String recipeId) {
-        return RecipeUnlockedTrigger.unlocked(ResourceLocation.withDefaultNamespace(recipeId));
+        return RecipeUnlockedTrigger.unlocked(ResourceLocationUtils.withDefaultNamespace(recipeId));
     }
 
     @ParametersAreNonnullByDefault
     public static Criterion<RecipeUnlockedTrigger.TriggerInstance> recipeUnlocked(String namespace, String recipeId) {
-        return RecipeUnlockedTrigger.unlocked(ResourceLocation.fromNamespaceAndPath(namespace, recipeId));
+        return RecipeUnlockedTrigger.unlocked(ResourceLocationUtils.fromNamespaceAndPath(namespace, recipeId));
     }
 
     @ParametersAreNonnullByDefault

@@ -2,18 +2,17 @@ package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.ModMain;
 import com.xyc.dynamicdataext.base.Module;
+import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
+import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -24,8 +23,8 @@ public class TagsTest extends Module {
         super(ModMain.MOD_ID, "tags_test");
     }
 
-    private static final TagKey<Item> TEST_TAG = RecipeUtils.createItemTagKey(
-        ResourceLocation.fromNamespaceAndPath(ModMain.MOD_ID, "test_tag")
+    private static final TagKey<Item> TEST_TAG = ResourceLocationUtils.createItemTagKey(
+        ResourceLocationUtils.fromNamespaceAndPath(ModMain.MOD_ID, "test_tag")
     );
 
     @Override
@@ -37,10 +36,10 @@ public class TagsTest extends Module {
     }
 
     @Override
-    public @NotNull Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
+    public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
         return Set.of(
-            RecipeUtils.createRecipeHolder(
-                this.namespace,
+            RecipeUtils.createRecipeEntry(
+                this,
                 "test_tag_recipe",
                 ShapelessRecipeBuilder
                     .shapeless(RecipeCategory.MISC, Items.ROTTEN_FLESH, 3)

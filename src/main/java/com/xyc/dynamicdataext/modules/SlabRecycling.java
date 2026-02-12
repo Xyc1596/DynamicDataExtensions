@@ -2,10 +2,11 @@ package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.ModMain;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
+import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
+import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -13,12 +14,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class SlabRecycling extends Module {
@@ -27,14 +26,14 @@ public class SlabRecycling extends Module {
     }
 
     @Override
-    public @NotNull Set<RecipeHolder<Recipe<?>>> gatherRecipesToAdd() {
+    public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
         final String BRICK_SUFFIX = "_brick_slab", NORMAL_SUFFIX = "_slab";
-        final TagKey<Item> WOODEN_SLABS = RecipeUtils.createItemTagKey(
-            ResourceLocation.withDefaultNamespace("wooden_slabs")
+        final TagKey<Item> WOODEN_SLABS = ResourceLocationUtils.createItemTagKey(
+            ResourceLocationUtils.withDefaultNamespace("wooden_slabs")
         );
-        Set<RecipeHolder<Recipe<?>>> output = new HashSet<>();
+        Set<RecipeEntry> output = new LinkedHashSet<>();
         BuiltInRegistries.ITEM
-            .getTag(RecipeUtils.createItemTagKey(ResourceLocation.withDefaultNamespace("slabs")))
+            .getTag(ResourceLocationUtils.createItemTagKey(ResourceLocationUtils.withDefaultNamespace("slabs")))
             .ifPresent(holders -> holders.forEach(
                 holder -> holder.unwrapKey().ifPresent(
                     key -> {
@@ -50,8 +49,8 @@ public class SlabRecycling extends Module {
                         );
                         if (result != Items.AIR) {
                             output.add(
-                                RecipeUtils.createRecipeHolder(
-                                    this.namespace,
+                                RecipeUtils.createRecipeEntry(
+                                    this,
                                     resultName + "_from_" + name,
                                     ShapelessRecipeBuilder
                                         .shapeless(RecipeCategory.BUILDING_BLOCKS, result)
@@ -68,17 +67,17 @@ public class SlabRecycling extends Module {
 
     @Override
     protected @NotNull TranslatableLang buildOptionLang() {
-        return ModuleLangBuilder.translatable("option", this.namespace, this.id)
-                                .translation("zh_cn", "台阶还原")
-                                .translation("en_us", "Slab Recycling")
-                                .build();
+        return this.getOptionLangBuilder()
+                   .translation("zh_cn", "台阶还原")
+                   .translation("en_us", "Slab Recycling")
+                   .build();
     }
 
     @Override
     protected @NotNull TranslatableLang buildTooltipLang() {
-        return ModuleLangBuilder.translatable("tooltip", this.namespace, this.id)
-                                .translation("zh_cn", "2 同种台阶 -> 原方块")
-                                .translation("en_us", "2 slabs of same material -> original block")
-                                .build();
+        return this.getTooltipLangBuilder()
+                   .translation("zh_cn", "2 同种台阶 -> 原方块")
+                   .translation("en_us", "2 slabs of same material -> original block")
+                   .build();
     }
 }
