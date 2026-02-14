@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.modules;
 
-import com.xyc.dynamicdataext.ModMain;
+import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
@@ -20,11 +20,11 @@ import java.util.Set;
 
 public class TagsTest extends Module {
     public TagsTest() {
-        super(ModMain.MOD_ID, "tags_test");
+        super(DynamicDataMain.MOD_ID, "tags_test");
     }
 
     private static final TagKey<Item> TEST_TAG = ResourceLocationUtils.createItemTagKey(
-        ResourceLocationUtils.fromNamespaceAndPath(ModMain.MOD_ID, "test_tag")
+        ResourceLocationUtils.fromNamespaceAndPath(DynamicDataMain.MOD_ID, "test_tag")
     );
 
     @Override

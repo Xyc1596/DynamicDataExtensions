@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.modules;
 
-import com.xyc.dynamicdataext.ModMain;
+import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class RawOreBlockSmelting extends Module {
     public RawOreBlockSmelting() {
-        super(ModMain.MOD_ID, "raw_ore_block_smelting");
+        super(DynamicDataMain.MOD_ID, "raw_ore_block_smelting");
     }
 
     @Override

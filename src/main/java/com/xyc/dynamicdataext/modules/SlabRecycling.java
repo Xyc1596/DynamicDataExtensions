@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.modules;
 
-import com.xyc.dynamicdataext.ModMain;
+import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class SlabRecycling extends Module {
     public SlabRecycling() {
-        super(ModMain.MOD_ID, "slab_recycling");
+        super(DynamicDataMain.MOD_ID, "slab_recycling");
     }
 
     @Override

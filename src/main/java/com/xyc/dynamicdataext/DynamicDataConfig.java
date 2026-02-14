@@ -22,11 +22,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ModuleConfig {
+public class DynamicDataConfig {
     public final static String
-        MESSAGE_RELOAD_CONFIG = "message." + ModMain.MOD_ID + ".reload_config",
-        MESSAGE_AUTO_RELOAD_DISABLED = "message." + ModMain.MOD_ID + ".auto_reload_disabled",
-        MESSAGE_NO_PERMISSION = "message." + ModMain.MOD_ID + ".no_permission";
+        MESSAGE_RELOAD_CONFIG = "message." + DynamicDataMain.MOD_ID + ".reload_config",
+        MESSAGE_AUTO_RELOAD_DISABLED = "message." + DynamicDataMain.MOD_ID + ".auto_reload_disabled",
+        MESSAGE_NO_PERMISSION = "message." + DynamicDataMain.MOD_ID + ".no_permission";
 
     private int cache;
 
@@ -49,7 +49,7 @@ public class ModuleConfig {
         moduleToggles.get(id).set(enabled);
     }
 
-    public ModuleConfig(IEventBus modEventBus, ModContainer container, List<Module> modules) {
+    public DynamicDataConfig(IEventBus modEventBus, ModContainer container, List<Module> modules) {
         this.modules = modules.stream().distinct().toList();
 
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -105,7 +105,7 @@ public class ModuleConfig {
                 player.sendSystemMessage(
                     Component.translatable(
                         MESSAGE_NO_PERMISSION,
-                        Component.translatable(ModMain.MOD_ID)
+                        Component.translatable(DynamicDataMain.MOD_ID)
                                  .withStyle(ChatFormatting.DARK_AQUA)
                                  .withStyle(ChatFormatting.BOLD)
                     ).withStyle(ChatFormatting.RED)
@@ -119,7 +119,7 @@ public class ModuleConfig {
             server.getPlayerList().broadcastSystemMessage(
                 Component.translatable(
                     MESSAGE_RELOAD_CONFIG,
-                    Component.translatable(ModMain.MOD_ID)
+                    Component.translatable(DynamicDataMain.MOD_ID)
                              .withStyle(ChatFormatting.DARK_AQUA)
                              .withStyle(ChatFormatting.BOLD)
                 ),
@@ -131,7 +131,7 @@ public class ModuleConfig {
                     player.sendSystemMessage(
                         Component.translatable(
                             MESSAGE_AUTO_RELOAD_DISABLED,
-                            Component.translatable(ModMain.MOD_ID)
+                            Component.translatable(DynamicDataMain.MOD_ID)
                                      .withStyle(ChatFormatting.DARK_AQUA)
                                      .withStyle(ChatFormatting.BOLD)
                         )

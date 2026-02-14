@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.modules;
 
-import com.xyc.dynamicdataext.ModMain;
+import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class ConvenientCrafting extends Module {
     public ConvenientCrafting() {
-        super(ModMain.MOD_ID, "convenient_crafting");
+        super(DynamicDataMain.MOD_ID, "convenient_crafting");
     }
 
     @Override
@@ -145,7 +145,7 @@ public class ConvenientCrafting extends Module {
 
         final Criterion<RecipeUnlockedTrigger.TriggerInstance> CRITERION_REPEATER =
             CriterionUtils.recipeUnlocked("repeater");
-        if (ModMain.CONFIG.isModuleEnabled("all_stones")) {
+        if (DynamicDataMain.CONFIG.isModuleEnabled("all_stones")) {
             output.add(
                 RecipeUtils.createRecipeEntry(
                     this,

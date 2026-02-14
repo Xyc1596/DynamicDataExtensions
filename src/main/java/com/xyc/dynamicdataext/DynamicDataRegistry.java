@@ -13,16 +13,16 @@ import java.util.*;
  * 所有扩展模组共享
  */
 public final class DynamicDataRegistry {
-    private static final Set<ModuleConfig> configs = new LinkedHashSet<>();
+    private static final Set<DynamicDataConfig> configs = new LinkedHashSet<>();
 
-    public static void registerConfig(ModuleConfig config) {
+    public static void registerConfig(DynamicDataConfig config) {
         configs.add(config);
     }
 
     public static Pair<Set<RecipeEntry>, Set<ResourceLocation>> getAllRecipesToUpdate() {
         Set<RecipeEntry> recipesToAdd = new LinkedHashSet<>();
         Set<ResourceLocation> recipesToRemove = new LinkedHashSet<>();
-        for (ModuleConfig config : configs) {
+        for (DynamicDataConfig config : configs) {
             for (Module module : config.getModules()) {
                 if (config.isModuleEnabled(module.getId())) {
                     recipesToAdd.addAll(module.gatherRecipesToAdd());
@@ -36,7 +36,7 @@ public final class DynamicDataRegistry {
     public static Pair<Map<TagKey<?>, Set<Holder<?>>>, Map<TagKey<?>, Set<Holder<?>>>> getAllTagsToUpdate() {
         Map<TagKey<?>, Set<Holder<?>>> tagsToAdd = new LinkedHashMap<>();
         Map<TagKey<?>, Set<Holder<?>>> tagsToRemove = new LinkedHashMap<>();
-        for (ModuleConfig config : configs) {
+        for (DynamicDataConfig config : configs) {
             for (Module module : config.getModules()) {
                 if (config.isModuleEnabled(module.getId())) {
                     tagsToAdd.putAll(module.gatherTagsToAdd());

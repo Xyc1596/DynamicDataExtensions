@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.modules;
 
-import com.xyc.dynamicdataext.ModMain;
+import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class WoolToString extends Module {
     public WoolToString() {
-        super(ModMain.MOD_ID, "wool_and_carpet_to_string");
+        super(DynamicDataMain.MOD_ID, "wool_and_carpet_to_string");
     }
 
     @Override

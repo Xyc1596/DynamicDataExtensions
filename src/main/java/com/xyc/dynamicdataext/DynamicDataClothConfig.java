@@ -12,27 +12,27 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @OnlyIn(Dist.CLIENT)
-public class ModuleClothConfig implements IExtensionPoint {
+public class DynamicDataClothConfig implements IExtensionPoint {
     public final String TITLE_CONFIG;
     public static final String
-        TITLE_MODULES = "title." + ModMain.MOD_ID + ".modules",
-        TITLE_GENERAL = "title." + ModMain.MOD_ID + ".general",
-        OPTION_AUTO_RELOAD = "option." + ModMain.MOD_ID + ".auto_reload",
-        TOOLTIP_AUTO_RELOAD = "tooltip." + ModMain.MOD_ID + ".auto_reload";
+        TITLE_MODULES = "title." + DynamicDataMain.MOD_ID + ".modules",
+        TITLE_GENERAL = "title." + DynamicDataMain.MOD_ID + ".general",
+        OPTION_AUTO_RELOAD = "option." + DynamicDataMain.MOD_ID + ".auto_reload",
+        TOOLTIP_AUTO_RELOAD = "tooltip." + DynamicDataMain.MOD_ID + ".auto_reload";
 
-    public ConfigBuilder getBuilder(ModuleConfig moduleConfig) {
+    public ConfigBuilder getBuilder(DynamicDataConfig ddConfig) {
         ConfigBuilder builder = ConfigBuilder.create()
                                              .setTitle(Component.translatable(TITLE_CONFIG))
-                                             .setSavingRunnable(moduleConfig.COMMON::save);
+                                             .setSavingRunnable(ddConfig.COMMON::save);
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         ConfigCategory modulesBuilder = builder.getOrCreateCategory(Component.translatable(TITLE_MODULES));
-        for (Module module : moduleConfig.getModules()) {
+        for (Module module : ddConfig.getModules()) {
             modulesBuilder.addEntry(
                 entryBuilder
-                    .startBooleanToggle(module.getOption().toComponent(), moduleConfig.isModuleEnabled(module.getId()))
+                    .startBooleanToggle(module.getOption().toComponent(), ddConfig.isModuleEnabled(module.getId()))
                     .setTooltip(module.getTooltip().toComponent())
-                    .setSaveConsumer(newVal -> moduleConfig.setModuleEnabled(module.getId(), newVal))
+                    .setSaveConsumer(newVal -> ddConfig.setModuleEnabled(module.getId(), newVal))
                     .setDefaultValue(true)
                     .build()
             );
@@ -41,9 +41,9 @@ public class ModuleClothConfig implements IExtensionPoint {
         ConfigCategory generalBuilder = builder.getOrCreateCategory(Component.translatable(TITLE_GENERAL));
         generalBuilder.addEntry(
             entryBuilder
-                .startBooleanToggle(Component.translatable(OPTION_AUTO_RELOAD), moduleConfig.AUTO_RELOAD.get())
+                .startBooleanToggle(Component.translatable(OPTION_AUTO_RELOAD), ddConfig.AUTO_RELOAD.get())
                 .setTooltip(Component.translatable(TOOLTIP_AUTO_RELOAD))
-                .setSaveConsumer(moduleConfig.AUTO_RELOAD::set)
+                .setSaveConsumer(ddConfig.AUTO_RELOAD::set)
                 .setDefaultValue(true)
                 .build()
         );
@@ -51,11 +51,11 @@ public class ModuleClothConfig implements IExtensionPoint {
         return builder;
     }
 
-    public ModuleClothConfig(String namespace, ModContainer container, ModuleConfig moduleConfig) {
+    public DynamicDataClothConfig(String namespace, ModContainer container, DynamicDataConfig ddConfig) {
         TITLE_CONFIG = "title." + namespace + ".config";
         container.registerExtensionPoint(
             IConfigScreenFactory.class,
-            (c, s) -> getBuilder(moduleConfig).build()
+            (c, s) -> getBuilder(ddConfig).build()
         );
     }
 }
