@@ -1,8 +1,7 @@
 package com.xyc.dynamicdataext.base;
 
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.config.ModuleConfig;
+import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -12,36 +11,21 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class Module {
-    protected final String id;
+    protected final String moduleId;
     protected final String namespace;
-    protected TranslatableLang option;
-    protected TranslatableLang tooltip;
+    protected ModuleConfig config;
 
-    protected Module(String namespace, String id) {
-        this.id = id;
+    protected Module(String namespace, String moduleId) {
+        this.moduleId = moduleId;
         this.namespace = namespace;
     }
 
-    public final String getId() {
-        return this.id;
+    public final String getModuleId() {
+        return this.moduleId;
     }
 
     public final String getNamespace() {
         return this.namespace;
-    }
-
-    public final TranslatableLang getOption() {
-        if (this.option == null) {
-            this.option = buildOptionLang();
-        }
-        return this.option;
-    }
-
-    public final TranslatableLang getTooltip() {
-        if (this.tooltip == null) {
-            this.tooltip = buildTooltipLang();
-        }
-        return this.tooltip;
     }
 
     @Nonnull
@@ -71,22 +55,18 @@ public abstract class Module {
     }
 
     @Nonnull
-    protected TranslatableLang buildOptionLang() {
-        return TranslatableLang.of("option", this.namespace, this.id);
+    protected ModuleConfig buildConfig() {
+        return ModuleConfig.defaultConfig(this.namespace, this.moduleId);
     }
 
-    @Nonnull
-    protected TranslatableLang buildTooltipLang() {
-        return TranslatableLang.of("tooltip", this.namespace, this.id);
+    public final ModuleConfig getConfig() {
+        if (this.config == null) {
+            this.config = this.buildConfig();
+        }
+        return this.config;
     }
 
-    @Nonnull
-    protected final TranslatableBuilder getOptionLangBuilder() {
-        return ModuleLangBuilder.translatable("option", this.namespace, this.id);
-    }
-
-    @Nonnull
-    protected final TranslatableBuilder getTooltipLangBuilder() {
-        return ModuleLangBuilder.translatable("tooltip", this.namespace, this.id);
+    protected final ModuleConfigBuilder createConfigBuilder() {
+        return new ModuleConfigBuilder(this.namespace, this.moduleId);
     }
 }

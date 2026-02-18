@@ -18,4 +18,6 @@ public class LiteralLang extends ModuleLang {
     public MutableComponent toComponent() {
         return Component.literal(this.text).withStyle(this.formats);
     }
+
+    public static final LiteralLang EMPTY = new LiteralLang("", Set.of());
 }

@@ -3,8 +3,9 @@ package com.xyc.dynamicdataext.modules;
 import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.config.ModuleConfig;
+import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
+import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
@@ -175,41 +176,38 @@ public class ConvenientCrafting extends Module {
     }
 
     @Override
-    protected @NotNull TranslatableLang buildOptionLang() {
-        return this.getOptionLangBuilder()
-                   .translation("zh_cn", "便捷合成")
-                   .translation("en_us", "Convenient Crafting")
-                   .build();
-    }
-
-    @Override
-    protected @NotNull TranslatableLang buildTooltipLang() {
-        return this
-            .getTooltipLangBuilder()
-            .translation(
-                "zh_cn",
-                "省略部分中间产物 / 添加包含中间产物的合成路线\n%s\n%s"
-            )
-            .translation(
-                "en_us",
-                "Omit some intermediate products / add routes with intermediate products\n%s\n%s"
-            )
-            .child(
-                ModuleLangBuilder
-                    .translatable("tooltip", this.namespace, this.id + "_1")
+    protected @NotNull ModuleConfig buildConfig() {
+        ModuleConfigBuilder builder = this.createConfigBuilder();
+        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        return builder.setTitle(builder
+            .getTitleLangBuilder()
+            .translation("zh_cn", "便捷合成")
+            .translation("en_us", "Convenient Crafting")
+            .build()
+        ).defineEnabled(enabled
+            .setDefaultValue(true)
+            .setTooltip(enabled
+                .getTooltipLangBuilder()
+                .translation(
+                    "zh_cn",
+                    "省略部分中间产物 / 添加包含中间产物的合成路线\n%s\n%s"
+                ).translation(
+                    "en_us",
+                    "Omit some intermediate products / add routes with intermediate products\n%s\n%s"
+                ).child(enabled
+                    .createTooltipChildLangBuilder("1")
                     .translation("zh_cn", "灵感来源：Quark")
                     .translation("en_us", "Inspired by: Quark")
                     .format(ChatFormatting.ITALIC)
                     .build()
-            )
-            .child(
-                ModuleLangBuilder
-                    .translatable("tooltip", this.namespace, this.id + "_2")
+                ).child(enabled
+                    .createTooltipChildLangBuilder("2")
                     .translation("zh_cn", "例：8 原木 -> 4 箱子，投掷器 + 弓 -> 发射器")
                     .translation("en_us", "E.g. 8 Logs -> 4 chests, dropper + bow -> dispenser")
                     .format(ChatFormatting.GRAY)
                     .build()
-            )
-            .build();
+                ).build()
+            ).build()
+        ).build();
     }
 }

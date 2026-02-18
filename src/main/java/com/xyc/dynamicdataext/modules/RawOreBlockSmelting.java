@@ -3,7 +3,9 @@ package com.xyc.dynamicdataext.modules;
 import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.config.ModuleConfig;
+import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
+import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -57,18 +59,22 @@ public class RawOreBlockSmelting extends Module {
     }
 
     @Override
-    protected @NotNull TranslatableLang buildOptionLang() {
-        return this.getOptionLangBuilder()
-                   .translation("zh_cn", "粗矿物块烧炼")
-                   .translation("en_us", "Raw Ore Block Smelting")
-                   .build();
-    }
-
-    @Override
-    protected @NotNull TranslatableLang buildTooltipLang() {
-        return this.getTooltipLangBuilder()
-                   .translation("zh_cn", "粗矿物块可以直接烧炼成矿物块")
-                   .translation("en_us", "Smelt raw mineral blocks directly into mineral blocks")
-                   .build();
+    protected @NotNull ModuleConfig buildConfig() {
+        ModuleConfigBuilder builder = this.createConfigBuilder();
+        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        return builder.setTitle(builder
+            .getTitleLangBuilder()
+            .translation("zh_cn", "粗矿物块烧炼")
+            .translation("en_us", "Raw Ore Block Smelting")
+            .build()
+        ).defineEnabled(enabled
+            .setDefaultValue(true)
+            .setTooltip(enabled
+                .getTooltipLangBuilder()
+                .translation("zh_cn", "粗矿物块可以直接烧炼成矿物块")
+                .translation("en_us", "Smelt raw mineral blocks directly into mineral blocks")
+                .build()
+            ).build()
+        ).build();
     }
 }

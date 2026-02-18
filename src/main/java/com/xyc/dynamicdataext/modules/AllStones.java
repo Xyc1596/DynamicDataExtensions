@@ -3,8 +3,10 @@ package com.xyc.dynamicdataext.modules;
 import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
+import com.xyc.dynamicdataext.config.ModuleConfig;
+import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
+import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
@@ -128,34 +130,36 @@ public class AllStones extends Module {
     }
 
     @Override
-    protected @NotNull TranslatableLang buildOptionLang() {
-        return this.getOptionLangBuilder()
-                   .translation("zh_cn", "石材通用")
-                   .translation("en_us", "All stones")
-                   .build();
-    }
-
-    @Override
-    protected @NotNull TranslatableLang buildTooltipLang() {
-        return this
-            .getTooltipLangBuilder()
-            .translation(
-                "zh_cn",
-                "部分配方中的石头可以替换为标签 %s 包含的任何材料\n%s"
-            )
-            .translation(
-                "en_us",
-                "Stones / cobblestones in some recipes can be replaced with any material matching tag %s / %s\n%s"
-            )
-            .child(ModuleLangBuilder.literal("#c:stones").format(ChatFormatting.LIGHT_PURPLE).build())
-            .child(
-                ModuleLangBuilder
-                    .translatable("tooltip", this.namespace, this.id + "_1")
+    protected @NotNull ModuleConfig buildConfig() {
+        ModuleConfigBuilder builder = this.createConfigBuilder();
+        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        return builder.setTitle(builder
+            .getTitleLangBuilder()
+            .translation("zh_cn", "石材通用")
+            .translation("en_us", "All stones")
+            .build()
+        ).defineEnabled(enabled
+            .setDefaultValue(true)
+            .setTooltip(enabled
+                .getTooltipLangBuilder()
+                .translation(
+                    "zh_cn",
+                    "部分配方中的石头可以替换为标签 %s 包含的任何材料\n%s"
+                )
+                .translation(
+                    "en_us",
+                    "Stones / cobblestones in some recipes can be replaced with any material matching " +
+                        "tag %s / %s\n%s"
+                )
+                .child(ModuleLangBuilder.literal("#c:stones").format(ChatFormatting.LIGHT_PURPLE).build())
+                .child(enabled
+                    .createTooltipChildLangBuilder("1")
                     .translation("zh_cn", "例：石头 -> 石头 / 深板岩 / 安山岩 / 闪长岩 / 花岗岩")
                     .translation("en_us", "E.g. stone -> stone / deepslate / andesite / diorite / granite")
                     .format(ChatFormatting.GRAY)
                     .build()
-            )
-            .build();
+                ).build()
+            ).build()
+        ).build();
     }
 }

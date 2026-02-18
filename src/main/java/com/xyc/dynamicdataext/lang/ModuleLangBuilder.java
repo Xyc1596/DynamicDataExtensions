@@ -28,7 +28,11 @@ public abstract class ModuleLangBuilder<T extends ModuleLangBuilder<T>> {
         return new LiteralBuilder(text);
     }
 
-    public static TranslatableBuilder translatable(String category, String namespace, String id) {
+    public static TranslatableBuilder translatable(String category, String namespace, String... id) {
         return new TranslatableBuilder(category, namespace, id);
+    }
+
+    public static PlaceholderBuilder placeholder() {
+        return new PlaceholderBuilder();
     }
 }

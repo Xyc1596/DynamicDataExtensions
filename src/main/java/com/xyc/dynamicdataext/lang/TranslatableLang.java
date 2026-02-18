@@ -12,19 +12,30 @@ public class TranslatableLang extends ModuleLang {
     protected final Map<String, Map<String, String>> allTranslations;   // locale, (key, translation)
 
     public TranslatableLang(
-        String key,
+        String category,
+        String namespace,
+        String[] id,
         Set<ChatFormatting> formats,
         List<ModuleLang> children,
         Map<String, String> translations    // locale, translation
     ) {
         super(formats);
-        this.key = key;
+        List<String> keyParts = new LinkedList<>();
+        if (!(category == null || category.isEmpty()))
+            keyParts.add(category);
+        if (namespace == null || namespace.isEmpty())
+            throw new IllegalArgumentException("Namespace is null or empty");
+        else
+            keyParts.add(namespace);
+        keyParts.addAll(Arrays.asList(id));
+
+        this.key = String.join(".", keyParts);
         this.children = children;
         this.allTranslations = new HashMap<>();
 
-        Set<com.xyc.dynamicdataext.lang.TranslatableLang> allTranslatableChildren = new HashSet<>();
+        Set<TranslatableLang> allTranslatableChildren = new HashSet<>();
         for (ModuleLang child : children) {
-            if (child instanceof com.xyc.dynamicdataext.lang.TranslatableLang tc) {
+            if (child instanceof TranslatableLang tc) {
                 allTranslatableChildren.add(tc);
             }
         }
@@ -35,7 +46,7 @@ public class TranslatableLang extends ModuleLang {
             this.allTranslations.get(locale).put(key, translation);
         }
 
-        for (com.xyc.dynamicdataext.lang.TranslatableLang child : allTranslatableChildren) {
+        for (TranslatableLang child : allTranslatableChildren) {
             Map<String, Map<String, String>> childAllTranslations = child.getAllTranslations();
             for (Map.Entry<String, Map<String, String>> entry : childAllTranslations.entrySet()) {
                 String locale = entry.getKey();
@@ -45,13 +56,8 @@ public class TranslatableLang extends ModuleLang {
         }
     }
 
-    public static com.xyc.dynamicdataext.lang.TranslatableLang of(String category, String namespace, String id) {
-        return new com.xyc.dynamicdataext.lang.TranslatableLang(
-            String.join(".", category, namespace, id),
-            Set.of(),
-            List.of(),
-            Map.of()
-        );
+    public static TranslatableLang empty(String category, String namespace, String... id) {
+        return new TranslatableLang(category, namespace, id, Set.of(), List.of(), Map.of());
     }
 
     /**
@@ -70,6 +76,22 @@ public class TranslatableLang extends ModuleLang {
         return Component.translatable(
             this.key,
             (Object[]) children.stream().map(ModuleLang::toComponent).toArray(MutableComponent[]::new)
+        ).withStyle(this.formats);
+    }
+
+    public MutableComponent toComponentReplacingPlaceholders(Component... contents) {
+        List<Component> objects = new LinkedList<>();
+        Queue<Component> extra = new LinkedList<>(Arrays.asList(contents));
+        for (ModuleLang c : children) {
+            if (c instanceof PlaceholderLang cp) {
+                objects.add(cp.replaceWith(extra.poll()));
+            } else {
+                objects.add(c.toComponent());
+            }
+        }
+        return Component.translatable(
+            this.key,
+            objects.toArray()
         ).withStyle(this.formats);
     }
 }

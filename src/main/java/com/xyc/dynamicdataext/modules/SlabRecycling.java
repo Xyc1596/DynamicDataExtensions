@@ -3,7 +3,9 @@ package com.xyc.dynamicdataext.modules;
 import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.config.ModuleConfig;
+import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
+import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
@@ -66,18 +68,23 @@ public class SlabRecycling extends Module {
     }
 
     @Override
-    protected @NotNull TranslatableLang buildOptionLang() {
-        return this.getOptionLangBuilder()
-                   .translation("zh_cn", "台阶还原")
-                   .translation("en_us", "Slab Recycling")
-                   .build();
-    }
-
-    @Override
-    protected @NotNull TranslatableLang buildTooltipLang() {
-        return this.getTooltipLangBuilder()
-                   .translation("zh_cn", "2 同种台阶 -> 原方块")
-                   .translation("en_us", "2 slabs of same material -> original block")
-                   .build();
+    protected @NotNull ModuleConfig buildConfig() {
+        ModuleConfigBuilder builder = this.createConfigBuilder();
+        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        return builder
+            .setTitle(builder
+                .getTitleLangBuilder()
+                .translation("zh_cn", "台阶还原")
+                .translation("en_us", "Slab Recycling")
+                .build()
+            ).defineEnabled(enabled
+                .setDefaultValue(true)
+                .setTooltip(enabled
+                    .getTooltipLangBuilder()
+                    .translation("zh_cn", "2 同种台阶 -> 原方块")
+                    .translation("en_us", "2 slabs of same material -> original block")
+                    .build()
+                ).build()
+            ).build();
     }
 }

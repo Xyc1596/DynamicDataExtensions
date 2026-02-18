@@ -37,7 +37,7 @@ public final class ResourceLocationUtils {
 
     @ParametersAreNonnullByDefault
     public static String getContentNameWithModuleId(Module module, String id) {
-        return module.getId() + "." + id;
+        return module.getModuleId() + "." + id;
     }
 
     @ParametersAreNonnullByDefault

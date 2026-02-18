@@ -3,8 +3,9 @@ package com.xyc.dynamicdataext.modules;
 import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.config.ModuleConfig;
+import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
+import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
@@ -58,27 +59,28 @@ public class WoolToString extends Module {
     }
 
     @Override
-    protected @NotNull TranslatableLang buildOptionLang() {
-        return this.getOptionLangBuilder()
-                   .translation("zh_cn", "羊毛 & 地毯制线")
-                   .translation("en_us", "Wool & Carpet to String")
-                   .build();
-    }
-
-    @Override
-    protected @NotNull TranslatableLang buildTooltipLang() {
-        return this
-            .getTooltipLangBuilder()
-            .translation("zh_cn", "4 羊毛 / 6 地毯 + 1 燧石 -> 4 根线\n%s")
-            .translation("en_us", "4 wools / 6 carpets + 1 flint -> 4 strings\n%s")
-            .child(
-                ModuleLangBuilder
-                    .translatable("tooltip", this.namespace, this.id + "_1")
+    protected @NotNull ModuleConfig buildConfig() {
+        ModuleConfigBuilder builder = this.createConfigBuilder();
+        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        return builder.setTitle(builder
+            .getTitleLangBuilder()
+            .translation("zh_cn", "羊毛 & 地毯制线")
+            .translation("en_us", "Wool & Carpet to String")
+            .build()
+        ).defineEnabled(enabled
+            .setDefaultValue(true)
+            .setTooltip(enabled
+                .getTooltipLangBuilder()
+                .translation("zh_cn", "4 羊毛 / 6 地毯 + 1 燧石 -> 4 根线\n%s")
+                .translation("en_us", "4 wools / 6 carpets + 1 flint -> 4 strings\n%s")
+                .child(enabled
+                    .createTooltipChildLangBuilder()
                     .translation("zh_cn", "灵感来源：不记得了 :(")
                     .translation("en_us", "Inspired by: I don't remember :(")
                     .format(ChatFormatting.ITALIC)
                     .build()
-            )
-            .build();
+                ).build()
+            ).build()
+        ).build();
     }
 }
