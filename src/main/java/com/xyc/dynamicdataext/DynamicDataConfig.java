@@ -5,6 +5,8 @@ import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.PlaceholderLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -19,6 +21,7 @@ import net.neoforged.fml.config.IConfigSpec;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
@@ -111,6 +114,13 @@ public class DynamicDataConfig {
 
         modEventBus.addListener(this::handleLoadConfig);
         modEventBus.addListener(this::handleReloadConfig);
+
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            container.registerExtensionPoint(
+                IConfigScreenFactory.class,
+                (c, s) -> this.getClothBuilder(title).setParentScreen(s).build()
+            );
+        }
     }
 
     public void handleLoadConfig(final ModConfigEvent.Loading event) {
@@ -173,5 +183,18 @@ public class DynamicDataConfig {
 
     public static List<TranslatableLang> gatherAllMessageLang() {
         return List.of(MESSAGE_RELOAD_CONFIG, MESSAGE_AUTO_RELOAD_DISABLED, MESSAGE_NO_PERMISSION);
+    }
+
+    protected ConfigBuilder getClothBuilder(ModuleLang title) {
+        ConfigBuilder builder = ConfigBuilder.create()
+                                             .setTitle(title.toComponent())
+                                             .setSavingRunnable(this.COMMON::save);
+        builder.setGlobalized(true);
+        builder.setGlobalizedExpanded(true);
+        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
+        for (Module module : this.getModules()) {
+            module.getConfig().buildCloth(builder, entryBuilder);
+        }
+        return builder;
     }
 }

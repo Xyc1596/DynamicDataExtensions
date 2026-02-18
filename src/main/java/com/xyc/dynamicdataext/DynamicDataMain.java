@@ -9,13 +9,11 @@ import net.minecraft.data.PackOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mod(DynamicDataMain.MOD_ID)
 public class DynamicDataMain {
@@ -47,11 +45,6 @@ public class DynamicDataMain {
         DynamicDataRegistry.registerConfig(CONFIG);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-
-            Optional<DynamicDataClothConfig> clothConfig = ModList.get().isLoaded("cloth_config")
-                ? Optional.of(new DynamicDataClothConfig(container, CONFIG, title))
-                : Optional.empty();
-
             // DataGen
             modEventBus.addListener((final GatherDataEvent event) -> {
                 DataGenerator generator = event.getGenerator();
