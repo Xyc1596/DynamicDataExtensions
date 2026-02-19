@@ -1,17 +1,13 @@
 package com.xyc.dynamicdataext;
 
-import com.xyc.dynamicdataext.lang.LanguageProviderWrapper;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.modules.*;
 import com.xyc.dynamicdataext.utils.ModMainUtils;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.List;
 
@@ -46,36 +42,11 @@ public class DynamicDataMain {
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             // DataGen
-            modEventBus.addListener((final GatherDataEvent event) -> {
-                DataGenerator generator = event.getGenerator();
-                PackOutput output = generator.getPackOutput();
-
-                // zh_cn
-                generator.addProvider(
-                    event.includeClient(),
-                    new LanguageProviderWrapper(output, MOD_ID, "zh_cn") {
-                        @Override
-                        protected void addTranslations() {
-                            this.addModuleLangTranslations(title);
-                            CONFIG.getModules().forEach(this::addModuleTranslations);
-                            DynamicDataConfig.gatherAllMessageLang().forEach(this::addModuleLangTranslations);
-                        }
-                    }
-                );
-
-                // en_us
-                generator.addProvider(
-                    event.includeClient(),
-                    new LanguageProviderWrapper(output, MOD_ID, "en_us") {
-                        @Override
-                        protected void addTranslations() {
-                            this.addModuleLangTranslations(title);
-                            CONFIG.getModules().forEach(this::addModuleTranslations);
-                            DynamicDataConfig.gatherAllMessageLang().forEach(this::addModuleLangTranslations);
-                        }
-                    }
-                );
-            });
+            DynamicDataLanguageProvider provider = new DynamicDataLanguageProvider(MOD_ID);
+            provider.addModuleLang(title);
+            CONFIG.getModules().forEach(provider::addModule);
+            DynamicDataConfig.gatherAllMessageLang().forEach(provider::addModuleLang);
+            modEventBus.addListener(provider::onGatherData);
         }
     }
 }
