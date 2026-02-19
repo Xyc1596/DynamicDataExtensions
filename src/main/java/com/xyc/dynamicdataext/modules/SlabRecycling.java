@@ -6,9 +6,10 @@ import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
-import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
+import com.xyc.dynamicdataext.utils.LocationUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -30,12 +31,12 @@ public class SlabRecycling extends Module {
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
         final String BRICK_SUFFIX = "_brick_slab", NORMAL_SUFFIX = "_slab";
-        final TagKey<Item> WOODEN_SLABS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withDefaultNamespace("wooden_slabs")
+        final TagKey<Item> WOODEN_SLABS = LocationUtils.createItemTagKey(
+            LocationUtils.withDefaultNamespace("wooden_slabs")
         );
         Set<RecipeEntry> output = new LinkedHashSet<>();
         BuiltInRegistries.ITEM
-            .getTag(ResourceLocationUtils.createItemTagKey(ResourceLocationUtils.withDefaultNamespace("slabs")))
+            .getTag(LocationUtils.createItemTagKey(LocationUtils.withDefaultNamespace("slabs")))
             .ifPresent(holders -> holders.forEach(
                 holder -> holder.unwrapKey().ifPresent(
                     key -> {
@@ -70,7 +71,7 @@ public class SlabRecycling extends Module {
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
         return builder
             .setTitle(builder
                 .getTitleLangBuilder()

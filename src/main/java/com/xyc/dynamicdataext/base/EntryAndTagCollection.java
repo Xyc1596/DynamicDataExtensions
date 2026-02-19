@@ -1,0 +1,73 @@
+package com.xyc.dynamicdataext.base;
+
+import com.google.common.collect.Sets;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class EntryAndTagCollection<T> {
+    protected final Set<T> entries = new LinkedHashSet<>();
+    protected final Set<TagKey<T>> tags = new LinkedHashSet<>();
+    protected final Set<T> allEntries = new LinkedHashSet<>();
+    protected final Registry<T> registry;
+
+    protected EntryAndTagCollection(Registry<T> registry) {
+        this.registry = registry;
+    }
+
+    public static EntryAndTagCollection<Item> items() {
+        return new EntryAndTagCollection<>(BuiltInRegistries.ITEM);
+    }
+
+    public EntryAndTagCollection<T> parseStrings(Collection<String> ids) {
+        for (String id : ids) {
+            if (id.startsWith("#")) {
+                ResourceLocation location = ResourceLocation.tryParse(id.substring(1));
+                if (location != null) {
+                    TagKey<T> tag = TagKey.create(this.registry.key(), location);
+                    this.tags.add(tag);
+                    this.registry.getTag(tag).ifPresent(
+                        holders -> holders.forEach(holder -> this.allEntries.add(holder.value()))
+                    );
+                }
+            } else {
+                ResourceLocation location = ResourceLocation.tryParse(id);
+                if (location != null) {
+                    if (this.registry.containsKey(location)) {
+                        T entry = this.registry.get(location);
+                        this.entries.add(entry);
+                        this.allEntries.add(entry);
+                    }
+                }
+            }
+        }
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean contains(T entry) {
+        return this.allEntries.contains(entry);
+    }
+
+    public Set<T> intersection(TagKey<T> tag) {
+        Optional<HolderSet.Named<T>> holders = this.registry.getTag(tag);
+        return holders.isEmpty() ? Set.of() : this.intersection(holders.get());
+    }
+
+    public Set<T> intersection(HolderSet<T> holders) {
+        return Sets.intersection(
+            holders.stream().map(Holder::value).collect(Collectors.toSet()),
+            this.allEntries
+        );
+    }
+}

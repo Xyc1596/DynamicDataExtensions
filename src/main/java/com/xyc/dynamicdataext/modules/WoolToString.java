@@ -6,9 +6,10 @@ import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
-import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
+import com.xyc.dynamicdataext.utils.LocationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -27,11 +28,11 @@ public class WoolToString extends Module {
 
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
-        final TagKey<Item> WOOLS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withDefaultNamespace("wool")
+        final TagKey<Item> WOOLS = LocationUtils.createItemTagKey(
+            LocationUtils.withDefaultNamespace("wool")
         );
-        final TagKey<Item> CARPETS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withDefaultNamespace("wool_carpets")
+        final TagKey<Item> CARPETS = LocationUtils.createItemTagKey(
+            LocationUtils.withDefaultNamespace("wool_carpets")
         );
 
         return Set.of(
@@ -61,7 +62,7 @@ public class WoolToString extends Module {
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
         return builder.setTitle(builder
             .getTitleLangBuilder()
             .translation("zh_cn", "羊毛 & 地毯制线")

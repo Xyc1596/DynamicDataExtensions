@@ -7,9 +7,10 @@ import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
+import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
-import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
+import com.xyc.dynamicdataext.utils.LocationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -30,17 +31,17 @@ public class AllStones extends Module {
 
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
-        final TagKey<Item> STONES = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("stones")
+        final TagKey<Item> STONES = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("stones")
         );
-        final TagKey<Item> REDSTONE = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("dusts/redstone")
+        final TagKey<Item> REDSTONE = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("dusts/redstone")
         );
-        final TagKey<Item> QUARTZ = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("gems/quartz")
+        final TagKey<Item> QUARTZ = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("gems/quartz")
         );
-        final TagKey<Item> IRON_INGOTS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("ingots/iron")
+        final TagKey<Item> IRON_INGOTS = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("ingots/iron")
         );
 
         Set<RecipeEntry> output = new LinkedHashSet<>();
@@ -121,18 +122,18 @@ public class AllStones extends Module {
     @Override
     public @NotNull Set<ResourceLocation> gatherRecipesToRemove() {
         return Set.of(
-            ResourceLocationUtils.withDefaultNamespace("repeater"),
-            ResourceLocationUtils.withDefaultNamespace("comparator"),
-            ResourceLocationUtils.withDefaultNamespace("stonecutter"),
-            ResourceLocationUtils.withDefaultNamespace("stone_pressure_plate"),
-            ResourceLocationUtils.withDefaultNamespace("stone_button")
+            LocationUtils.withDefaultNamespace("repeater"),
+            LocationUtils.withDefaultNamespace("comparator"),
+            LocationUtils.withDefaultNamespace("stonecutter"),
+            LocationUtils.withDefaultNamespace("stone_pressure_plate"),
+            LocationUtils.withDefaultNamespace("stone_button")
         );
     }
 
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
         return builder.setTitle(builder
             .getTitleLangBuilder()
             .translation("zh_cn", "石材通用")

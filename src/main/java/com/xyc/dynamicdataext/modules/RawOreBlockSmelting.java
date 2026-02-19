@@ -1,59 +1,95 @@
 package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.DynamicDataMain;
+import com.xyc.dynamicdataext.base.EntryAndTagCollection;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
+import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
-import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
+import com.xyc.dynamicdataext.utils.LocationUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RawOreBlockSmelting extends Module {
+    protected ModuleOption<List<String>> ingredientBlacklist;
+
     public RawOreBlockSmelting() {
         super(DynamicDataMain.MOD_ID, "raw_ore_block_smelting");
     }
 
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
+        EntryAndTagCollection<Item> ingredientBlacklist = EntryAndTagCollection
+            .items().parseStrings(this.ingredientBlacklist.getValue());
         Pattern materialPattern = Pattern.compile("storage_blocks/raw_(.*)");
         Set<RecipeEntry> output = new LinkedHashSet<>();
-        BuiltInRegistries.ITEM
-            .getTag(ResourceLocationUtils.createItemTagKey(ResourceLocationUtils.withCommonNamespace("storage_blocks")))
-            .ifPresent(holders -> holders.forEach(
-                holder -> holder.tags().forEach(tagKey -> {
-                    Matcher matcher = materialPattern.matcher(tagKey.location().getPath());
-                    if (matcher.find()) {
-                        String material = matcher.group(1);
-                        BuiltInRegistries.ITEM.getTag(
-                            ResourceLocationUtils.createItemTagKey(
-                                ResourceLocationUtils.withCommonNamespace("storage_blocks/" + material)
-                            )
-                        ).ifPresent(
-                            resultHolders -> output.addAll(
-                                RecipeUtils.createBlastingAll(
-                                    this,
-                                    "raw_" + material + "_block",
-                                    Ingredient.of(tagKey),
-                                    RecipeCategory.MISC,
-                                    resultHolders.get(0).value(),
-                                    6.3f,
-                                    1800
-                                )
-                            )
-                        );
-                    }
-                })
-            ));
+        BuiltInRegistries.ITEM.getTag(
+            LocationUtils.createItemTagKey(LocationUtils.withCommonNamespace("storage_blocks"))
+        ).ifPresent(holders -> holders.forEach(
+            holder -> holder.tags().forEach(tagKey -> {
+                Matcher matcher = materialPattern.matcher(tagKey.location().getPath());
+                if (matcher.find()) {
+                    String material = matcher.group(1);
+                    BuiltInRegistries.ITEM.getTag(
+                        LocationUtils.createItemTagKey(
+                            LocationUtils.withCommonNamespace("storage_blocks/" + material)
+                        )
+                    ).ifPresent(
+                        resultHolders -> {
+                            Item result = resultHolders.get(0).value();
+                            Set<Item> intersection = ingredientBlacklist.intersection(tagKey);
+                            if (intersection.isEmpty())
+                                output.addAll(
+                                    RecipeUtils.createBlastingAll(
+                                        this,
+                                        "raw_" + material + "_block",
+                                        Ingredient.of(tagKey),
+                                        RecipeCategory.MISC,
+                                        result,
+                                        6.3f,
+                                        1800
+                                    )
+                                );
+                            else
+                                BuiltInRegistries.ITEM.getTag(tagKey).ifPresent(
+                                    ingredientHolders -> {
+                                        Item[] ingredients = ingredientHolders
+                                            .stream().map(Holder::value)
+                                            .filter(i -> !intersection.contains(i))
+                                            .toArray(Item[]::new);
+                                        if (ingredients.length > 0)
+                                            output.addAll(
+                                                RecipeUtils.createBlastingAll(
+                                                    this,
+                                                    "raw_" + material + "_block",
+                                                    Ingredient.of(ingredients),
+                                                    RecipeCategory.MISC,
+                                                    result,
+                                                    6.3f,
+                                                    1800
+                                                )
+                                            );
+                                    }
+                                );
+                        }
+                    );
+                }
+            })
+        ));
 
         return output;
     }
@@ -61,20 +97,22 @@ public class RawOreBlockSmelting extends Module {
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
-        return builder.setTitle(builder
-            .getTitleLangBuilder()
-            .translation("zh_cn", "粗矿物块烧炼")
-            .translation("en_us", "Raw Ore Block Smelting")
-            .build()
-        ).defineEnabled(enabled
-            .setDefaultValue(true)
-            .setTooltip(enabled
-                .getTooltipLangBuilder()
-                .translation("zh_cn", "粗矿物块可以直接烧炼成矿物块")
-                .translation("en_us", "Smelt raw mineral blocks directly into mineral blocks")
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
+        this.ingredientBlacklist = ConfigUtils.createIngredientBlacklistOption(builder);
+        return builder
+            .setTitle(builder
+                .getTitleLangBuilder()
+                .translation("zh_cn", "粗矿物块烧炼")
+                .translation("en_us", "Raw Ore Block Smelting")
                 .build()
-            ).build()
-        ).build();
+            ).defineEnabled(enabled
+                .setTooltip(enabled
+                    .getTooltipLangBuilder()
+                    .translation("zh_cn", "粗矿物块可以直接烧炼成矿物块")
+                    .translation("en_us", "Smelt raw mineral blocks directly into mineral blocks")
+                    .build()
+                ).build()
+            ).defineOption(this.ingredientBlacklist)
+            .build();
     }
 }

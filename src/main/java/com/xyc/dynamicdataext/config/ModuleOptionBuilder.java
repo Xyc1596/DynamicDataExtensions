@@ -36,7 +36,6 @@ public class ModuleOptionBuilder<T> {
         return this;
     }
 
-    @SuppressWarnings("unused")
     public TranslatableBuilder getTitleLangBuilder() {
         return this.titleLangBuilder;
     }

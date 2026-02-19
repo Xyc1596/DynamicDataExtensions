@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @SuppressWarnings("unused")
-public final class ResourceLocationUtils {
+public final class LocationUtils {
     @ParametersAreNonnullByDefault
     public static ResourceLocation withDefaultNamespace(String id) {
         return ResourceLocation.withDefaultNamespace(id);
@@ -22,7 +22,7 @@ public final class ResourceLocationUtils {
 
     @ParametersAreNonnullByDefault
     public static ResourceLocation withCommonNamespace(String id) {
-        return ResourceLocationUtils.fromNamespaceAndPath("c", id);
+        return LocationUtils.fromNamespaceAndPath("c", id);
     }
 
     @ParametersAreNonnullByDefault
@@ -32,7 +32,7 @@ public final class ResourceLocationUtils {
 
     @ParametersAreNonnullByDefault
     public static TagKey<Item> createItemTagKey(String namespace, String path) {
-        return TagKey.create(Registries.ITEM, ResourceLocationUtils.fromNamespaceAndPath(namespace, path));
+        return TagKey.create(Registries.ITEM, LocationUtils.fromNamespaceAndPath(namespace, path));
     }
 
     @ParametersAreNonnullByDefault
@@ -42,7 +42,7 @@ public final class ResourceLocationUtils {
 
     @ParametersAreNonnullByDefault
     public static ResourceLocation getContentLocationWithModuleId(Module module, String id) {
-        return ResourceLocationUtils.fromNamespaceAndPath(
+        return LocationUtils.fromNamespaceAndPath(
             module.getNamespace(),
             getContentNameWithModuleId(module, id)
         );

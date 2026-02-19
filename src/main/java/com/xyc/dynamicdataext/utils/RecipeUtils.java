@@ -25,7 +25,7 @@ public final class RecipeUtils {
         Item result,
         float experience, int cookingTime
     ) {
-        ResourceLocation location = ResourceLocationUtils.getContentLocationWithModuleId(module, recipeId);
+        ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
         return new RecipeEntry(
             location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
@@ -44,7 +44,7 @@ public final class RecipeUtils {
         Item result,
         float experience, int cookingTime
     ) {
-        ResourceLocation location = ResourceLocationUtils.getContentLocationWithModuleId(module, recipeId);
+        ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
         return new RecipeEntry(
             location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
@@ -64,7 +64,7 @@ public final class RecipeUtils {
         float experience,
         int cookingTime
     ) {
-        ResourceLocation location = ResourceLocationUtils.getContentLocationWithModuleId(module, recipeId);
+        ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
         return new RecipeEntry(
             location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
@@ -84,7 +84,7 @@ public final class RecipeUtils {
         float experience,
         int cookingTime
     ) {
-        ResourceLocation location = ResourceLocationUtils.getContentLocationWithModuleId(module, recipeId);
+        ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
         return new RecipeEntry(
             location,
             ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
@@ -139,7 +139,7 @@ public final class RecipeUtils {
 
     @ParametersAreNonnullByDefault
     public static RecipeEntry createRecipeEntry(Module module, String recipeId, RecipeBuilder builder) {
-        ResourceLocation location = ResourceLocationUtils.getContentLocationWithModuleId(module, recipeId);
+        ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
         return new RecipeEntry(location, ((IDynamicRecipeBuilder) builder).dynamicdataext$toRecipe(location));
     }
 }

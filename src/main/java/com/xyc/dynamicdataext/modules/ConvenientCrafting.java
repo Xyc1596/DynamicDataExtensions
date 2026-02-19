@@ -6,9 +6,10 @@ import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
-import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
+import com.xyc.dynamicdataext.utils.LocationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
@@ -30,29 +31,29 @@ public class ConvenientCrafting extends Module {
 
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
-        final TagKey<Item> LOGS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withDefaultNamespace("logs")
+        final TagKey<Item> LOGS = LocationUtils.createItemTagKey(
+            LocationUtils.withDefaultNamespace("logs")
         );
-        final TagKey<Item> PLANKS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withDefaultNamespace("planks")
+        final TagKey<Item> PLANKS = LocationUtils.createItemTagKey(
+            LocationUtils.withDefaultNamespace("planks")
         );
-        final TagKey<Item> WOODEN_RODS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("rods/wooden")
+        final TagKey<Item> WOODEN_RODS = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("rods/wooden")
         );
-        final TagKey<Item> IRON_INGOTS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("ingots/iron")
+        final TagKey<Item> IRON_INGOTS = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("ingots/iron")
         );
-        final TagKey<Item> IRON_BLOCKS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("storage_blocks/iron")
+        final TagKey<Item> IRON_BLOCKS = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("storage_blocks/iron")
         );
-        final TagKey<Item> STONES = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("stones")
+        final TagKey<Item> STONES = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("stones")
         );
-        final TagKey<Item> REDSTONE = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("dusts/redstone")
+        final TagKey<Item> REDSTONE = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("dusts/redstone")
         );
-        final TagKey<Item> BOWS = ResourceLocationUtils.createItemTagKey(
-            ResourceLocationUtils.withCommonNamespace("tools/bow")
+        final TagKey<Item> BOWS = LocationUtils.createItemTagKey(
+            LocationUtils.withCommonNamespace("tools/bow")
         );
 
         Set<RecipeEntry> output = new LinkedHashSet<>();
@@ -178,7 +179,7 @@ public class ConvenientCrafting extends Module {
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
         return builder.setTitle(builder
             .getTitleLangBuilder()
             .translation("zh_cn", "便捷合成")

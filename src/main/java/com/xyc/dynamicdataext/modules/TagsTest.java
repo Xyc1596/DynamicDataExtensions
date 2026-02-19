@@ -5,7 +5,7 @@ import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
-import com.xyc.dynamicdataext.utils.ResourceLocationUtils;
+import com.xyc.dynamicdataext.utils.LocationUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -23,8 +23,8 @@ public class TagsTest extends Module {
         super(DynamicDataMain.MOD_ID, "tags_test");
     }
 
-    private static final TagKey<Item> TEST_TAG = ResourceLocationUtils.createItemTagKey(
-        ResourceLocationUtils.fromNamespaceAndPath(DynamicDataMain.MOD_ID, "test_tag")
+    private static final TagKey<Item> TEST_TAG = LocationUtils.createItemTagKey(
+        LocationUtils.fromNamespaceAndPath(DynamicDataMain.MOD_ID, "test_tag")
     );
 
     @Override

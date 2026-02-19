@@ -1,6 +1,5 @@
 package com.xyc.dynamicdataext.config;
 
-import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
@@ -8,15 +7,10 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ModuleConfigBuilder {
-    public static final TranslatableLang DEFAULT_ENABLED_TITLE = ModuleLangBuilder
-        .translatable("module", DynamicDataMain.MOD_ID, "default", "enabled")
-        .translation("zh_cn", "启用模块")
-        .translation("en_us", "Enable")
-        .build();
-
     protected TranslatableLang title;
     protected final String namespace;
     protected final String moduleId;
@@ -35,7 +29,6 @@ public class ModuleConfigBuilder {
         return this;
     }
 
-    @SuppressWarnings("unused")
     public ModuleConfigBuilder defineOption(@NotNull ModuleOption<?> option) {
         String optionId = option.getOptionId();
         if (this.options.containsKey(optionId))
@@ -67,7 +60,7 @@ public class ModuleConfigBuilder {
         return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, ModuleBooleanOption::new);
     }
 
-    public ModuleOptionBuilder<Boolean> createEnabledOptionBuilderWithDefaultTitle() {
-        return this.createBooleanOptionBuilder("enabled").setTitle(DEFAULT_ENABLED_TITLE);
+    public ModuleOptionBuilder<List<String>> createStringListOptionBuilder(String optionId) {
+        return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, ModuleStringListOption::new);
     }
 }

@@ -6,6 +6,7 @@ import com.xyc.dynamicdataext.base.RecipeEntry;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.Items;
@@ -35,7 +36,7 @@ public class LeatherFromRottenFlesh extends Module {
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = builder.createEnabledOptionBuilderWithDefaultTitle();
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
         return builder.setTitle(builder
             .getTitleLangBuilder()
             .translation("zh_cn", "腐肉换皮革")
