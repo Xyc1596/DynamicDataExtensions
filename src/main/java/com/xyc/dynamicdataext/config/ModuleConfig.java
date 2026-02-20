@@ -1,7 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
 import com.xyc.dynamicdataext.lang.TranslatableLang;
-import com.xyc.dynamicdataext.utils.ConfigUtils;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -81,12 +80,5 @@ public class ModuleConfig {
             null,
             Map.of()
         );
-    }
-
-    @SuppressWarnings("unused")
-    public static ModuleConfig defaultConfigWithEnabled(String namespace, String moduleId, boolean defaultEnabled) {
-        ModuleConfigBuilder builder = new ModuleConfigBuilder(namespace, moduleId);
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
-        return builder.defineEnabled(enabled.build()).build();
     }
 }

@@ -8,9 +8,11 @@ import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
-import com.xyc.dynamicdataext.utils.RecipeUtils;
+import com.xyc.dynamicdataext.utils.ConfigUtils.ListMode;
 import com.xyc.dynamicdataext.utils.LocationUtils;
+import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -25,7 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RawOreBlockSmelting extends Module {
-    protected ModuleOption<List<String>> ingredientBlacklist;
+    protected ModuleOption<List<String>> ingredientList;
+    protected ModuleOption<ListMode> ingredientListMode;
 
     public RawOreBlockSmelting() {
         super(DynamicDataMain.MOD_ID, "raw_ore_block_smelting");
@@ -34,9 +37,10 @@ public class RawOreBlockSmelting extends Module {
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
         EntryAndTagCollection<Item> ingredientBlacklist = EntryAndTagCollection
-            .items().parseStrings(this.ingredientBlacklist.getValue());
+            .items().parseStrings(this.ingredientList.getValue());
         Pattern materialPattern = Pattern.compile("storage_blocks/raw_(.*)");
         Set<RecipeEntry> output = new LinkedHashSet<>();
+        boolean whitelistMode = this.ingredientListMode.getValue() == ListMode.WHITELIST;
         BuiltInRegistries.ITEM.getTag(
             LocationUtils.createItemTagKey(LocationUtils.withCommonNamespace("storage_blocks"))
         ).ifPresent(holders -> holders.forEach(
@@ -69,7 +73,7 @@ public class RawOreBlockSmelting extends Module {
                                     ingredientHolders -> {
                                         Item[] ingredients = ingredientHolders
                                             .stream().map(Holder::value)
-                                            .filter(i -> !intersection.contains(i))
+                                            .filter(i -> intersection.contains(i) == whitelistMode)
                                             .toArray(Item[]::new);
                                         if (ingredients.length > 0)
                                             output.addAll(
@@ -97,8 +101,49 @@ public class RawOreBlockSmelting extends Module {
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
-        this.ingredientBlacklist = ConfigUtils.createIngredientBlacklistOption(builder);
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
+
+        ModuleOptionBuilder<List<String>> ingredientListBuilder = ConfigUtils
+            .createEntryListOptionBuilderWithTooltip(builder, "ingredient_list");
+        TranslatableLang ingredientListTitle = ingredientListBuilder
+            .getTitleLangBuilder()
+            .translation("zh_cn", "原材料列表")
+            .translation("en_us", "Ingredient List")
+            .build();
+        this.ingredientList = ingredientListBuilder.setTitle(ingredientListTitle).build();
+
+        ModuleOptionBuilder<ListMode> ingredientListModeBuilder = ConfigUtils
+            .createListModeOptionBuilderWithTitle(builder, this.ingredientList, ListMode.BLACKLIST);
+        this.ingredientListMode = ingredientListModeBuilder
+            .setTooltip(ingredientListModeBuilder
+                .getTooltipLangBuilder()
+                .translation("zh_cn", """
+                    %s模式 - 如果配方的原材料%s【%s】中的物品，则该配方不会生成
+                    %s模式 - 如果配方的原材料%s【%s】中的物品，则该配方不会生成"""
+                ).translation("en_us", """
+                    %s Mode: If a recipe's ingredients contain any item from [%s],
+                             the recipe will not be generated
+                    %s Mode: If a recipe's ingredients do not contain any item from [%s],
+                             the recipe will not be generated"""
+                ).child(ConfigUtils.DEFAULT_LIST_MODE_BLACKLIST)
+                .child(ingredientListModeBuilder
+                    .createTooltipChildLangBuilder()
+                    .translation("zh_cn", "包含")
+                    .translation("en_us", "contain any")
+                    .format(ConfigUtils.DEFAULT_LIST_MODE_BLACKLIST.getFormats())
+                    .build()
+                ).child(ingredientListTitle.getPlaceholder())
+                .child(ConfigUtils.DEFAULT_LIST_MODE_WHITELIST)
+                .child(ingredientListModeBuilder
+                    .createTooltipChildLangBuilder()
+                    .translation("zh_cn", "不含")
+                    .translation("en_us", "do not contain any")
+                    .format(ConfigUtils.DEFAULT_LIST_MODE_WHITELIST.getFormats())
+                    .build()
+                ).child(ingredientListTitle.getPlaceholder())
+                .build()
+            ).build();
+
         return builder
             .setTitle(builder
                 .getTitleLangBuilder()
@@ -112,7 +157,8 @@ public class RawOreBlockSmelting extends Module {
                     .translation("en_us", "Smelt raw mineral blocks directly into mineral blocks")
                     .build()
                 ).build()
-            ).defineOption(this.ingredientBlacklist)
+            ).defineOption(this.ingredientList)
+            .defineOption(this.ingredientListMode)
             .build();
     }
 }

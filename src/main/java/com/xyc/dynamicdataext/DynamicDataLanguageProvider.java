@@ -30,13 +30,16 @@ public class DynamicDataLanguageProvider {
             Set<String> currentDefaultKeys = this.defaultKeys.get(locale);
             for (Map.Entry<String, String> keyAndTranslation : localeAndTranslations.getValue().entrySet()) {
                 String key = keyAndTranslation.getKey();
-                if (key.contains(".default.")) {
+                if (key.contains(".__default__.")) {
                     if (currentDefaultKeys.contains(key))
                         continue;
                     else
                         currentDefaultKeys.add(key);
                 } else if (currentAdded.containsKey(key)) {
-                    throw new IllegalStateException("Duplicate translation key " + key);
+                    throw new IllegalStateException(
+                        "Duplicate translation key " + key + ". Use PlaceholderLang " +
+                            "instead of the original ModuleLang instance as a child of another ModuleLang"
+                    );
                 }
                 currentAdded.put(key, keyAndTranslation.getValue());
             }

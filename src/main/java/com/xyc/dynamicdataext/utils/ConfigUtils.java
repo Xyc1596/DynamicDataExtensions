@@ -1,9 +1,11 @@
 package com.xyc.dynamicdataext.utils;
 
 import com.xyc.dynamicdataext.DynamicDataMain;
+import com.xyc.dynamicdataext.base.NamedEnum;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
@@ -18,7 +20,7 @@ public final class ConfigUtils {
         .translation("en_us", "Enable")
         .build();
 
-    public static final TranslatableLang DEFAULT_ITEM_LIST_INSTRUCTION =
+    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION =
         createDefaultLangBuilder("id_format_instruction")
             .translation(
                 "zh_cn",
@@ -48,35 +50,32 @@ public final class ConfigUtils {
                     .build()
             ).format(ChatFormatting.GRAY).build();
 
-    public static final TranslatableLang DEFAULT_INGREDIENT_BLACKLIST_TITLE =
-        createDefaultLangBuilder("ingredient_blacklist")
-            .translation("zh_cn", "原材料黑名单")
-            .translation("en_us", "Ingredient Blacklist")
+    public static final TranslatableLang DEFAULT_LIST_MODE_BLACKLIST =
+        createDefaultLangBuilder("list_mode", "blacklist")
+            .translation("zh_cn", "黑名单")
+            .translation("en_us", "Blacklist")
+            .format(ChatFormatting.RED)
             .build();
-
-    public static final TranslatableLang DEFAULT_INGREDIENT_BLACKLIST_TOOLTIP =
-        createDefaultLangBuilder("ingredient_blacklist", "tooltip")
-            .translation("zh_cn", "如果配方的原材料包含列表中的物品，则该配方不会生成\n%s")
-            .translation(
-                "en_us",
-                "If a recipe's ingredients include any item from this list, the recipe will not be generated\n%s"
-            )
-            .child(DEFAULT_ITEM_LIST_INSTRUCTION)
+    public static final TranslatableLang DEFAULT_LIST_MODE_WHITELIST =
+        createDefaultLangBuilder("list_mode", "whitelist")
+            .translation("zh_cn", "白名单")
+            .translation("en_us", "Whitelist")
+            .format(ChatFormatting.GREEN)
             .build();
 
     public static TranslatableBuilder createDefaultLangBuilder(String... id) {
         return ModuleLangBuilder.translatable(
             "module",
             DynamicDataMain.MOD_ID,
-            ArrayUtils.insert(0, id, "default")
+            ArrayUtils.insert(0, id, "__default__")
         );
     }
 
-    public static ModuleOptionBuilder<Boolean> createEnabledOptionBuilder(ModuleConfigBuilder builder) {
-        return createEnabledOptionBuilder(builder, true);
+    public static ModuleOptionBuilder<Boolean> createEnabledOptionBuilderWithTitle(ModuleConfigBuilder builder) {
+        return createEnabledOptionBuilderWithTitle(builder, true);
     }
 
-    public static ModuleOptionBuilder<Boolean> createEnabledOptionBuilder(
+    public static ModuleOptionBuilder<Boolean> createEnabledOptionBuilderWithTitle(
         ModuleConfigBuilder builder,
         boolean defaultValue
     ) {
@@ -85,18 +84,52 @@ public final class ConfigUtils {
                       .setTitle(DEFAULT_ENABLED_TITLE);
     }
 
-    public static ModuleOption<List<String>> createIngredientBlacklistOption(ModuleConfigBuilder builder) {
-        return createIngredientBlacklistOption(builder, List.of());
+    public static ModuleOptionBuilder<ListMode> createListModeOptionBuilderWithTitle(
+        ModuleConfigBuilder builder,
+        ModuleOption<? extends List<?>> list,
+        ListMode defaultValue
+    ) {
+        return builder
+            .<ListMode>createEnumOptionBuilder(list.getOptionId() + "_list_mode")
+            .setDefaultValue(defaultValue)
+            .setTitle(createDefaultLangBuilder("list_mode")
+                .translation("zh_cn", "%s - 列表模式")
+                .translation("en_us", "%s - List Mode")
+                .child(list.getTitle().getPlaceholder())
+                .build()
+            );
     }
 
-    public static ModuleOption<List<String>> createIngredientBlacklistOption(
+    public static ModuleOptionBuilder<List<String>> createEntryListOptionBuilderWithTooltip(
         ModuleConfigBuilder builder,
+        String optionId
+    ) {
+        return createEntryListOptionBuilderWithTooltip(builder, optionId, List.of());
+    }
+
+    public static ModuleOptionBuilder<List<String>> createEntryListOptionBuilderWithTooltip(
+        ModuleConfigBuilder builder,
+        String optionId,
         List<String> defaultValue
     ) {
-        return builder.createStringListOptionBuilder("ingredient_blacklist")
-                      .setTitle(DEFAULT_INGREDIENT_BLACKLIST_TITLE)
-                      .setTooltip(DEFAULT_INGREDIENT_BLACKLIST_TOOLTIP)
+        return builder.createStringListOptionBuilder(optionId)
                       .setDefaultValue(defaultValue)
-                      .build();
+                      .setTooltip(ConfigUtils.DEFAULT_ID_FORMAT_INSTRUCTION);
+    }
+
+    public enum ListMode implements NamedEnum {
+        WHITELIST(DEFAULT_LIST_MODE_WHITELIST),
+        BLACKLIST(DEFAULT_LIST_MODE_BLACKLIST);
+
+        private final ModuleLang name;
+
+        ListMode(ModuleLang name) {
+            this.name = name;
+        }
+
+        @Override
+        public ModuleLang getName() {
+            return this.name;
+        }
     }
 }

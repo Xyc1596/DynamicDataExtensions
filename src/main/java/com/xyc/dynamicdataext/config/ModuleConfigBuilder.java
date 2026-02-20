@@ -1,5 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
+import com.xyc.dynamicdataext.base.NamedEnum;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
@@ -62,5 +63,9 @@ public class ModuleConfigBuilder {
 
     public ModuleOptionBuilder<List<String>> createStringListOptionBuilder(String optionId) {
         return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, ModuleStringListOption::new);
+    }
+
+    public <T extends Enum<T> & NamedEnum> ModuleOptionBuilder<T> createEnumOptionBuilder(String optionId) {
+        return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, ModuleEnumOption<T>::new);
     }
 }

@@ -18,5 +18,7 @@ public interface ModuleOption<T> {
 
     String getOptionId();
 
+    TranslatableLang getTitle();
+
     List<TranslatableLang> getAllTranslatableLang();
 }

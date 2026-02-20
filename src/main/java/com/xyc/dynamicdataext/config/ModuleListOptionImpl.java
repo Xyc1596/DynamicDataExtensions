@@ -5,7 +5,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
-abstract class ModuleListOptionImpl<T> implements ModuleOption<List<T>> {
+public abstract class ModuleListOptionImpl<T> implements ModuleOption<List<T>> {
     protected final String optionId;
     protected final TranslatableLang title;
     protected final TranslatableLang tooltip;
@@ -38,6 +38,11 @@ abstract class ModuleListOptionImpl<T> implements ModuleOption<List<T>> {
     @Override
     public final String getOptionId() {
         return this.optionId;
+    }
+
+    @Override
+    public TranslatableLang getTitle() {
+        return this.title;
     }
 
     @Override

@@ -10,6 +10,7 @@ public class TranslatableLang extends ModuleLang {
     protected final String key;
     protected final List<ModuleLang> children;
     protected final Map<String, Map<String, String>> allTranslations;   // locale, (key, translation)
+    protected PlaceholderLang placeholder;
 
     public TranslatableLang(
         String category,
@@ -67,10 +68,6 @@ public class TranslatableLang extends ModuleLang {
         return this.allTranslations;
     }
 
-    public Optional<Map<String, String>> getAllTranslationsOfLocale(String locale) {
-        return Optional.ofNullable(this.allTranslations.get(locale));
-    }
-
     @Override
     public MutableComponent toComponent() {
         return Component.translatable(
@@ -93,5 +90,12 @@ public class TranslatableLang extends ModuleLang {
             this.key,
             objects.toArray()
         ).withStyle(this.formats);
+    }
+
+    @Override
+    public PlaceholderLang getPlaceholder() {
+        if (this.placeholder == null)
+            this.placeholder = new PlaceholderLang(this, Set.of());
+        return this.placeholder;
     }
 }

@@ -179,7 +179,7 @@ public class ConvenientCrafting extends Module {
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
         return builder.setTitle(builder
             .getTitleLangBuilder()
             .translation("zh_cn", "便捷合成")
@@ -196,13 +196,13 @@ public class ConvenientCrafting extends Module {
                     "en_us",
                     "Omit some intermediate products / add routes with intermediate products\n%s\n%s"
                 ).child(enabled
-                    .createTooltipChildLangBuilder("1")
+                    .createTooltipChildLangBuilder()
                     .translation("zh_cn", "灵感来源：Quark")
                     .translation("en_us", "Inspired by: Quark")
                     .format(ChatFormatting.ITALIC)
                     .build()
                 ).child(enabled
-                    .createTooltipChildLangBuilder("2")
+                    .createTooltipChildLangBuilder()
                     .translation("zh_cn", "例：8 原木 -> 4 箱子，投掷器 + 弓 -> 发射器")
                     .translation("en_us", "E.g. 8 Logs -> 4 chests, dropper + bow -> dispenser")
                     .format(ChatFormatting.GRAY)

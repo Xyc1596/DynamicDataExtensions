@@ -15,4 +15,10 @@ public abstract class ModuleLang {
     }
 
     public abstract MutableComponent toComponent();
+
+    public final ChatFormatting[] getFormats() {
+        return this.formats;
+    }
+
+    public abstract PlaceholderLang getPlaceholder();
 }

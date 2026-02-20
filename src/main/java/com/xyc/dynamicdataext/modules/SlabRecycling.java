@@ -71,7 +71,7 @@ public class SlabRecycling extends Module {
     @Override
     protected @NotNull ModuleConfig buildConfig() {
         ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilder(builder);
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
         return builder
             .setTitle(builder
                 .getTitleLangBuilder()

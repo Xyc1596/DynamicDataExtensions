@@ -27,5 +27,10 @@ public class PlaceholderLang extends ModuleLang {
         return (component == null ? this.defaultContent.toComponent() : component);
     }
 
+    @Override
+    public PlaceholderLang getPlaceholder() {
+        return this;
+    }
+
     public static final PlaceholderLang EMPTY = new PlaceholderLang(null, Set.of());
 }
