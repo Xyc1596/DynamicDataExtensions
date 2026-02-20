@@ -64,7 +64,7 @@ public class DynamicDataConfig {
         .child(PlaceholderLang.EMPTY)
         .build();
 
-    private int cache;
+    private IConfigSpec.ILoadedConfig configCache;
     private final Map<String, Module> moduleMap = new LinkedHashMap<>();
     protected final String namespace;
     protected final MutableComponent titleComponent;
@@ -126,19 +126,13 @@ public class DynamicDataConfig {
     public void handleLoadConfig(final ModConfigEvent.Loading event) {
         IConfigSpec.ILoadedConfig loadedConfig = event.getConfig().getLoadedConfig();
         if (loadedConfig != null) {
-            this.cache = loadedConfig.hashCode();
+            this.configCache = loadedConfig;
         }
     }
 
     public void handleReloadConfig(final ModConfigEvent.Reloading event) {
         IConfigSpec.ILoadedConfig loadedConfig = event.getConfig().getLoadedConfig();
-        if (loadedConfig == null)
-            return;
-
-        // ModuleClothConfig 调用 ModConfigSpec#save() 导致 ModConfigEvent.Reloading 事件多触发一次
-        // 将当前 LoadedConfig 的 HashCode 与缓存值比较以滤除重复事件
-        int newHash = loadedConfig.hashCode();
-        if (newHash == this.cache)
+        if (loadedConfig == null || loadedConfig.equals(this.configCache))
             return;
 
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
@@ -178,7 +172,7 @@ public class DynamicDataConfig {
                 }
             }
         }
-        cache = newHash;
+        this.configCache = loadedConfig;
     }
 
     public static List<TranslatableLang> gatherAllMessageLang() {
