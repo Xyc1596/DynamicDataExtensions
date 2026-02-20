@@ -144,6 +144,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     runtimeOnly("maven.modrinth:jei:$jei_version")
     api("maven.modrinth:cloth-config:$cloth_config_version+neoforge")
+    runtimeOnly("maven.modrinth:modern-ui:$modern_ui_version")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -25,17 +25,23 @@ public final class ConfigUtils {
             .translation(
                 "zh_cn",
                 """
-                    命名空间ID格式：
+                    %s
                       * 单项 - %s
                       * 标签 - %s
                       > 命名空间为“minecraft”时，前缀“minecraft:”可省略"""
             ).translation(
                 "en_us",
                 """
-                    Namespaced ID Formats:
+                    %s
                       * Single - %s
                       * Tag    - %s
                       > If the namespace is "minecraft", the prefix "minecraft:" can be omitted"""
+            ).child(
+                createDefaultLangBuilder("id_format_instruction", "tooltip_head")
+                    .translation("zh_cn", "命名空间ID格式")
+                    .translation("en_us", "Namespaced ID Formats")
+                    .format(ChatFormatting.ITALIC, ChatFormatting.WHITE)
+                    .build()
             ).child(
                 createDefaultLangBuilder("id_format_instruction", "single")
                     .translation("zh_cn", "<命名空间>:<路径>")
@@ -61,6 +67,12 @@ public final class ConfigUtils {
             .translation("zh_cn", "白名单")
             .translation("en_us", "Whitelist")
             .format(ChatFormatting.GREEN)
+            .build();
+    public static final TranslatableLang DEFAULT_LIST_MODE_TOOLTIP_HEAD =
+        createDefaultLangBuilder("list_mode", "tooltip_head")
+            .translation("zh_cn", "列表模式")
+            .translation("en_us", "List Mode")
+            .format(ChatFormatting.ITALIC, ChatFormatting.WHITE)
             .build();
 
     public static TranslatableBuilder createDefaultLangBuilder(String... id) {

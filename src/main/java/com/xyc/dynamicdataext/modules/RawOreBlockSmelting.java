@@ -13,6 +13,7 @@ import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.ConfigUtils.ListMode;
 import com.xyc.dynamicdataext.utils.LocationUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -56,7 +57,7 @@ public class RawOreBlockSmelting extends Module {
                         resultHolders -> {
                             Item result = resultHolders.get(0).value();
                             Set<Item> intersection = ingredientBlacklist.intersection(tagKey);
-                            if (intersection.isEmpty())
+                            if (intersection.isEmpty() ^ whitelistMode)
                                 output.addAll(
                                     RecipeUtils.createBlastingAll(
                                         this,
@@ -117,17 +118,24 @@ public class RawOreBlockSmelting extends Module {
         this.ingredientListMode = ingredientListModeBuilder
             .setTooltip(ingredientListModeBuilder
                 .getTooltipLangBuilder()
-                .translation("zh_cn", """
-                    %s模式 - 如果配方的原材料%s【%s】中的物品，则该配方不会生成
-                    %s模式 - 如果配方的原材料%s【%s】中的物品，则该配方不会生成"""
-                ).translation("en_us", """
-                    %s Mode: If a recipe's ingredients contain any item from [%s],
-                             the recipe will not be generated
-                    %s Mode: If a recipe's ingredients do not contain any item from [%s],
-                             the recipe will not be generated"""
-                ).child(ConfigUtils.DEFAULT_LIST_MODE_BLACKLIST)
+                .translation(
+                    "zh_cn",
+                    """
+                        %s
+                        %s模式 - 如果配方的原材料%s【%s】中的物品，则该配方不会生成
+                        %s模式 - 如果配方的原材料%s【%s】中的物品，则该配方不会生成"""
+                ).translation(
+                    "en_us",
+                    """
+                        %s
+                        %s Mode: If a recipe's ingredients contain any item from [%s],
+                                 the recipe will not be generated
+                        %s Mode: If a recipe's ingredients do not contain any item from [%s],
+                                 the recipe will not be generated"""
+                ).child(ConfigUtils.DEFAULT_LIST_MODE_TOOLTIP_HEAD)
+                .child(ConfigUtils.DEFAULT_LIST_MODE_BLACKLIST)
                 .child(ingredientListModeBuilder
-                    .createTooltipChildLangBuilder()
+                    .createTooltipChildLangBuilder("contain")
                     .translation("zh_cn", "包含")
                     .translation("en_us", "contain any")
                     .format(ConfigUtils.DEFAULT_LIST_MODE_BLACKLIST.getFormats())
@@ -135,12 +143,13 @@ public class RawOreBlockSmelting extends Module {
                 ).child(ingredientListTitle.getPlaceholder())
                 .child(ConfigUtils.DEFAULT_LIST_MODE_WHITELIST)
                 .child(ingredientListModeBuilder
-                    .createTooltipChildLangBuilder()
+                    .createTooltipChildLangBuilder("not_contain")
                     .translation("zh_cn", "不含")
                     .translation("en_us", "do not contain any")
                     .format(ConfigUtils.DEFAULT_LIST_MODE_WHITELIST.getFormats())
                     .build()
                 ).child(ingredientListTitle.getPlaceholder())
+                .format(ChatFormatting.GRAY)
                 .build()
             ).build();
 
