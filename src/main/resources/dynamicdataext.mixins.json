@@ -11,6 +11,8 @@
     "recipes.ShapelessRecipeBuilderMixin",
     "recipes.SimpleCookingRecipeBuilderMixin",
     "recipes.SingleItemRecipeBuilderMixin",
+    "recipes.SmithingTransformRecipeBuilderMixin",
+    "recipes.SmithingTrimRecipeBuilderMixin",
     "recipes.SpecialRecipeBuilderMixin",
     "tags.TagManagerMixin"
   ],

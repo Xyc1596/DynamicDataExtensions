@@ -4,7 +4,7 @@
 
 [//]: # (**Modrinth**：[Dynamic Data Extensions]&#40;&#41;)
 
-<div align="center">
+<div style="text-align: center;">
 <img src="src/main/resources/icon_256x.png" alt="icon_256x.png"/>
 </div>
 
@@ -26,7 +26,19 @@
 
 还可根据其他模块的启用状态改变生成的内容。
 
-* 已支持数据类型：所有原版配方、标签
+<details>
+<summary>已支持数据类型：</summary>
+
+* 原版配方（基于`RecipeBuilder`）
+  * [有序合成](src/main/java/com/xyc/dynamicdataext/mixins/recipes/ShapedRecipeBuilderMixin.java)
+  * [无序合成](src/main/java/com/xyc/dynamicdataext/mixins/recipes/ShapelessRecipeBuilderMixin.java)
+  * [烧炼](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SimpleCookingRecipeBuilderMixin.java)（熔炉 / 高炉 / 烟熏炉 / 营火）
+  * [切石机](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SingleItemRecipeBuilderMixin.java)
+  * [锻造升级](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SmithingTransformRecipeBuilderMixin.java)
+  * [盔甲纹饰](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SmithingTrimRecipeBuilderMixin.java)
+  * [定制配方 / 特殊配方](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SpecialRecipeBuilderMixin.java)
+* 标签
+</details>
 
 > 例：根据 `c:storage_blocks/raw_(.*)` 标签匹配所有粗矿物块，生成将它们烧炼成对应矿物块的配方
 
