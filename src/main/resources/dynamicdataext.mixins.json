@@ -5,7 +5,6 @@
     "MinecraftServerMixin",
     "ReloadableServerResourcesMixin",
     "WorldLoaderMixin",
-    "recipes.RecipeBuilderMixin",
     "recipes.RecipeManagerMixin",
     "recipes.ShapedRecipeBuilderMixin",
     "recipes.ShapelessRecipeBuilderMixin",

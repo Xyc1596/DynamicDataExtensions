@@ -1,5 +1,6 @@
 package com.xyc.dynamicdataext.mixins.recipes;
 
+import com.xyc.dynamicdataext.base.IDynamicRecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +17,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 @Mixin(SingleItemRecipeBuilder.class)
-public abstract class SingleItemRecipeBuilderMixin implements RecipeBuilderMixin {
+public abstract class SingleItemRecipeBuilderMixin implements IDynamicRecipeBuilder {
     @Shadow
     @Final
     private SingleItemRecipe.Factory<?> factory;
@@ -33,7 +34,8 @@ public abstract class SingleItemRecipeBuilderMixin implements RecipeBuilderMixin
     @Final
     private int count;
 
-    @Shadow protected abstract void ensureValid(ResourceLocation id);
+    @Shadow
+    protected abstract void ensureValid(ResourceLocation id);
 
     /**
      * @see SingleItemRecipeBuilder#save(RecipeOutput, ResourceLocation)
