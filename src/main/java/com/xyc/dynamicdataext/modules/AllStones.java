@@ -9,16 +9,15 @@ import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
-import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
+import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
@@ -31,28 +30,16 @@ public class AllStones extends Module {
 
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
-        final TagKey<Item> STONES = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("stones")
-        );
-        final TagKey<Item> REDSTONE = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("dusts/redstone")
-        );
-        final TagKey<Item> QUARTZ = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("gems/quartz")
-        );
-        final TagKey<Item> IRON_INGOTS = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("ingots/iron")
-        );
-
         Set<RecipeEntry> output = new LinkedHashSet<>();
-
         output.add(
             RecipeUtils.createRecipeEntry(
                 this,
                 "repeater",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.REDSTONE, Items.REPEATER)
-                    .define('S', STONES).define('R', REDSTONE).define('T', Items.REDSTONE_TORCH)
+                    .define('S', Tags.Items.STONES)
+                    .define('R', Tags.Items.DUSTS_REDSTONE)
+                    .define('T', Items.REDSTONE_TORCH)
                     .pattern("TRT").pattern("SSS")
                     .unlockedBy(
                         "has_repeater_recipe",
@@ -66,7 +53,9 @@ public class AllStones extends Module {
                 "comparator",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.REDSTONE, Items.COMPARATOR)
-                    .define('S', STONES).define('T', Items.REDSTONE_TORCH).define('Q', QUARTZ)
+                    .define('S', Tags.Items.STONES)
+                    .define('T', Items.REDSTONE_TORCH)
+                    .define('Q', Tags.Items.GEMS_QUARTZ)
                     .pattern(" T ").pattern("TQT").pattern("SSS")
                     .unlockedBy(
                         "has_comparator_recipe",
@@ -80,7 +69,7 @@ public class AllStones extends Module {
                 "stonecutter",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.STONECUTTER)
-                    .define('S', STONES).define('I', IRON_INGOTS)
+                    .define('S', Tags.Items.STONES).define('I', Tags.Items.INGOTS_IRON)
                     .pattern(" I ").pattern("SSS")
                     .unlockedBy(
                         "has_stonecutter_recipe",
@@ -94,7 +83,7 @@ public class AllStones extends Module {
                 "stone_pressure_plate",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.REDSTONE, Items.STONE_PRESSURE_PLATE)
-                    .define('S', STONES)
+                    .define('S', Tags.Items.STONES)
                     .pattern("SS")
                     .unlockedBy(
                         "has_stone_pressure_plate_recipe",
@@ -108,14 +97,13 @@ public class AllStones extends Module {
                 "stone_button",
                 ShapelessRecipeBuilder
                     .shapeless(RecipeCategory.REDSTONE, Items.STONE_BUTTON)
-                    .requires(STONES)
+                    .requires(Tags.Items.STONES)
                     .unlockedBy(
                         "has_stone_button_recipe",
                         CriterionUtils.recipeUnlocked("stone_button")
                     )
             )
         );
-
         return output;
     }
 
@@ -155,8 +143,8 @@ public class AllStones extends Module {
                 .child(ModuleLangBuilder.literal("#c:stones").format(ChatFormatting.LIGHT_PURPLE).build())
                 .child(enabled
                     .createTooltipChildLangBuilder("1")
-                    .translation("zh_cn", "例：石头 -> 石头 / 深板岩 / 安山岩 / 闪长岩 / 花岗岩")
-                    .translation("en_us", "E.g. stone -> stone / deepslate / andesite / diorite / granite")
+                    .translation("zh_cn", "例：石头 → 石头 / 深板岩 / 安山岩 / 闪长岩 / 花岗岩")
+                    .translation("en_us", "E.g. stone → stone / deepslate / andesite / diorite / granite")
                     .format(ChatFormatting.GRAY)
                     .build()
                 ).build()

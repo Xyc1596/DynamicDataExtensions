@@ -24,15 +24,15 @@ public abstract class TagManagerMixin implements IInjectingTags {
         var allTagsToUpdate = DynamicDataRegistry.getAllTagsToUpdate();
         Set<ResourceKey<? extends Registry<?>>> allResourceKeys = new HashSet<>();
         Map<ResourceKey<? extends Registry<?>>, Map<TagKey<?>, Set<Holder<?>>>> allTagsToAddInRegistry =
-            new HashMap<>();
+            new LinkedHashMap<>();
         Map<ResourceKey<? extends Registry<?>>, Map<TagKey<?>, Set<Holder<?>>>> allTagsToRemoveInRegistry =
-            new HashMap<>();
+            new LinkedHashMap<>();
 
         for (Map.Entry<TagKey<?>, Set<Holder<?>>> entry : allTagsToUpdate.getLeft().entrySet()) {
             TagKey<?> key = entry.getKey();
             ResourceKey<? extends Registry<?>> registry = key.registry();
             allResourceKeys.add(registry);
-            allTagsToAddInRegistry.putIfAbsent(registry, new HashMap<>());
+            allTagsToAddInRegistry.putIfAbsent(registry, new LinkedHashMap<>());
             allTagsToAddInRegistry.get(registry).put(key, entry.getValue());
         }
 
@@ -40,7 +40,7 @@ public abstract class TagManagerMixin implements IInjectingTags {
             TagKey<?> key = entry.getKey();
             ResourceKey<? extends Registry<?>> resourceKey = key.registry();
             allResourceKeys.add(resourceKey);
-            allTagsToRemoveInRegistry.putIfAbsent(resourceKey, new HashMap<>());
+            allTagsToRemoveInRegistry.putIfAbsent(resourceKey, new LinkedHashMap<>());
             allTagsToRemoveInRegistry.get(resourceKey).put(key, entry.getValue());
         }
 

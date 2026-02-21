@@ -9,12 +9,10 @@ import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
-import com.xyc.dynamicdataext.utils.LocationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
@@ -28,22 +26,15 @@ public class WoolToString extends Module {
 
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
-        final TagKey<Item> WOOLS = LocationUtils.createItemTagKey(
-            LocationUtils.withDefaultNamespace("wool")
-        );
-        final TagKey<Item> CARPETS = LocationUtils.createItemTagKey(
-            LocationUtils.withDefaultNamespace("wool_carpets")
-        );
-
         return Set.of(
             RecipeUtils.createRecipeEntry(
                 this,
                 "wool_to_string",
                 ShapelessRecipeBuilder
                     .shapeless(RecipeCategory.MISC, Items.STRING, 4)
-                    .requires(Ingredient.of(WOOLS), 4)
+                    .requires(Ingredient.of(ItemTags.WOOL), 4)
                     .requires(Items.FLINT)
-                    .unlockedBy("has_wool", CriterionUtils.hasTag(WOOLS))
+                    .unlockedBy("has_wool", CriterionUtils.hasTag(ItemTags.WOOL))
                     .unlockedBy("has_flint", CriterionUtils.hasItems(Items.FLINT))
             ),
             RecipeUtils.createRecipeEntry(
@@ -51,9 +42,9 @@ public class WoolToString extends Module {
                 "carpet_to_string",
                 ShapelessRecipeBuilder
                     .shapeless(RecipeCategory.MISC, Items.STRING, 4)
-                    .requires(Ingredient.of(CARPETS), 6)
+                    .requires(Ingredient.of(ItemTags.WOOL_CARPETS), 6)
                     .requires(Items.FLINT)
-                    .unlockedBy("has_carpet", CriterionUtils.hasTag(CARPETS))
+                    .unlockedBy("has_carpet", CriterionUtils.hasTag(ItemTags.WOOL_CARPETS))
                     .unlockedBy("has_flint", CriterionUtils.hasItems(Items.FLINT))
             )
         );
@@ -72,8 +63,8 @@ public class WoolToString extends Module {
             .setDefaultValue(true)
             .setTooltip(enabled
                 .getTooltipLangBuilder()
-                .translation("zh_cn", "4 羊毛 / 6 地毯 + 1 燧石 -> 4 根线\n%s")
-                .translation("en_us", "4 wools / 6 carpets + 1 flint -> 4 strings\n%s")
+                .translation("zh_cn", "4 羊毛 / 6 地毯 + 1 燧石 → 4 根线\n%s")
+                .translation("en_us", "4 wools / 6 carpets + 1 flint → 4 strings\n%s")
                 .child(enabled
                     .createTooltipChildLangBuilder()
                     .translation("zh_cn", "灵感来源：不记得了 :(")

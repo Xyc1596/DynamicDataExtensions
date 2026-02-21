@@ -15,17 +15,22 @@ import com.xyc.dynamicdataext.utils.LocationUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class RawOreBlockSmelting extends Module {
     protected ModuleOption<List<String>> ingredientList;
@@ -37,64 +42,61 @@ public class RawOreBlockSmelting extends Module {
 
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
-        EntryAndTagCollection<Item> ingredientBlacklist = EntryAndTagCollection
+        EntryAndTagCollection<Item> ingredientList = EntryAndTagCollection
             .items().parseStrings(this.ingredientList.getValue());
         Pattern materialPattern = Pattern.compile("storage_blocks/raw_(.*)");
         Set<RecipeEntry> output = new LinkedHashSet<>();
         boolean whitelistMode = this.ingredientListMode.getValue() == ListMode.WHITELIST;
-        BuiltInRegistries.ITEM.getTag(
-            LocationUtils.createItemTagKey(LocationUtils.withCommonNamespace("storage_blocks"))
-        ).ifPresent(holders -> holders.forEach(
-            holder -> holder.tags().forEach(tagKey -> {
-                Matcher matcher = materialPattern.matcher(tagKey.location().getPath());
-                if (matcher.find()) {
-                    String material = matcher.group(1);
-                    BuiltInRegistries.ITEM.getTag(
-                        LocationUtils.createItemTagKey(
-                            LocationUtils.withCommonNamespace("storage_blocks/" + material)
-                        )
-                    ).ifPresent(
-                        resultHolders -> {
-                            Item result = resultHolders.get(0).value();
-                            Set<Item> intersection = ingredientBlacklist.intersection(tagKey);
-                            if (intersection.isEmpty() ^ whitelistMode)
-                                output.addAll(
-                                    RecipeUtils.createBlastingAll(
-                                        this,
-                                        "raw_" + material + "_block",
-                                        Ingredient.of(tagKey),
-                                        RecipeCategory.MISC,
-                                        result,
-                                        6.3f,
-                                        1800
-                                    )
-                                );
-                            else
-                                BuiltInRegistries.ITEM.getTag(tagKey).ifPresent(
-                                    ingredientHolders -> {
-                                        Item[] ingredients = ingredientHolders
-                                            .stream().map(Holder::value)
-                                            .filter(i -> intersection.contains(i) == whitelistMode)
-                                            .toArray(Item[]::new);
-                                        if (ingredients.length > 0)
-                                            output.addAll(
-                                                RecipeUtils.createBlastingAll(
-                                                    this,
-                                                    "raw_" + material + "_block",
-                                                    Ingredient.of(ingredients),
-                                                    RecipeCategory.MISC,
-                                                    result,
-                                                    6.3f,
-                                                    1800
-                                                )
-                                            );
-                                    }
-                                );
-                        }
-                    );
-                }
-            })
-        ));
+
+        Optional<HolderSet.Named<Item>> storageBlockHolders = BuiltInRegistries.ITEM.getTag(Tags.Items.STORAGE_BLOCKS);
+        if (storageBlockHolders.isEmpty())
+            return Set.of();
+
+        for (Holder<Item> storageBlockHolder : storageBlockHolders.get())
+            storageBlockHolder.tags().forEach(ingredientTag -> {
+                Matcher matcher = materialPattern.matcher(ingredientTag.location().getPath());
+                if (!matcher.find())
+                    return;
+
+                String material = matcher.group(1);
+                Optional<HolderSet.Named<Item>> resultHolders_ = BuiltInRegistries.ITEM.getTag(
+                    LocationUtils.createItemTagKey(
+                        LocationUtils.withCommonNamespace("storage_blocks/" + material)
+                    )
+                );
+                if (resultHolders_.isEmpty())
+                    return;
+
+                HolderSet.Named<Item> resultHolder = resultHolders_.get();
+                if (resultHolder.size() == 0)
+                    return;
+
+                Item result = resultHolder.get(0).value();
+                Optional<HolderSet.Named<Item>> ingredientHolders_ = BuiltInRegistries.ITEM.getTag(ingredientTag);
+                if (ingredientHolders_.isEmpty())
+                    return;
+
+                Set<Item> ingredientSet = ingredientHolders_.get().stream().map(Holder::value)
+                                                            .collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Item> filtered = ingredientList.applyToForSet(ingredientSet, whitelistMode);
+                Ingredient ingredient = filtered.size() == ingredientSet.size()
+                    ? Ingredient.of(ingredientTag)
+                    : Ingredient.of(filtered.stream().map(ItemStack::new));
+                if (ingredient.isEmpty())
+                    return;
+
+                output.addAll(
+                    RecipeUtils.createBlastingAll(
+                        this,
+                        "raw_" + material + "_block",
+                        ingredient,
+                        RecipeCategory.MISC,
+                        result,
+                        6.3f,
+                        1800
+                    )
+                );
+            });
 
         return output;
     }

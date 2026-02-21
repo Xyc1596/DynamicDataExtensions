@@ -1,19 +1,14 @@
 package com.xyc.dynamicdataext.base;
 
 import com.google.common.collect.Sets;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
-import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class EntryAndTagCollection<T> {
     protected final Set<T> entries = new LinkedHashSet<>();
@@ -29,7 +24,7 @@ public class EntryAndTagCollection<T> {
         return new EntryAndTagCollection<>(BuiltInRegistries.ITEM);
     }
 
-    public EntryAndTagCollection<T> parseStrings(Collection<String> ids) {
+    public EntryAndTagCollection<T> parseStrings(Iterable<String> ids) {
         for (String id : ids) {
             if (id.startsWith("#")) {
                 ResourceLocation location = ResourceLocation.tryParse(id.substring(1));
@@ -59,15 +54,15 @@ public class EntryAndTagCollection<T> {
         return this.allEntries.contains(entry);
     }
 
-    public Set<T> intersection(TagKey<T> tag) {
-        Optional<HolderSet.Named<T>> holders = this.registry.getTag(tag);
-        return holders.isEmpty() ? Set.of() : this.intersection(holders.get());
+    public boolean isEmpty() {
+        return this.allEntries.isEmpty();
     }
 
-    public Set<T> intersection(HolderSet<T> holders) {
-        return Sets.intersection(
-            holders.stream().map(Holder::value).collect(Collectors.toSet()),
-            this.allEntries
-        );
+    public Set<T> applyToForSet(Set<T> entries, boolean whitelist) {
+        if (entries.isEmpty())
+            return Set.of();
+        return this.isEmpty() ^ whitelist
+            ? Sets.intersection(entries, this.allEntries)
+            : Sets.difference(entries, this.allEntries);
     }
 }

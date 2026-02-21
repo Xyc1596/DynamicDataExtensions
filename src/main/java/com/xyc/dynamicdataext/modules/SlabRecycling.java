@@ -8,13 +8,13 @@ import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
-import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
+import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.apache.commons.lang3.StringUtils;
@@ -31,24 +31,21 @@ public class SlabRecycling extends Module {
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
         final String BRICK_SUFFIX = "_brick_slab", NORMAL_SUFFIX = "_slab";
-        final TagKey<Item> WOODEN_SLABS = LocationUtils.createItemTagKey(
-            LocationUtils.withDefaultNamespace("wooden_slabs")
-        );
         Set<RecipeEntry> output = new LinkedHashSet<>();
         BuiltInRegistries.ITEM
-            .getTag(LocationUtils.createItemTagKey(LocationUtils.withDefaultNamespace("slabs")))
+            .getTag(ItemTags.SLABS)
             .ifPresent(holders -> holders.forEach(
                 holder -> holder.unwrapKey().ifPresent(
                     key -> {
                         ResourceLocation location = key.location();
                         String name = location.getPath();
-                        String resultName = holder.is(WOODEN_SLABS)
+                        String resultName = holder.is(ItemTags.WOODEN_SLABS)
                             ? StringUtils.stripEnd(name, NORMAL_SUFFIX) + "_planks"
                             : name.endsWith(BRICK_SUFFIX)
                             ? StringUtils.stripEnd(name, BRICK_SUFFIX) + "s"
                             : StringUtils.stripEnd(name, "_slab");
                         Item result = BuiltInRegistries.ITEM.get(
-                            ResourceLocation.fromNamespaceAndPath(location.getNamespace(), resultName)
+                            LocationUtils.fromNamespaceAndPath(location.getNamespace(), resultName)
                         );
                         if (result != Items.AIR) {
                             output.add(
@@ -82,8 +79,8 @@ public class SlabRecycling extends Module {
                 .setDefaultValue(true)
                 .setTooltip(enabled
                     .getTooltipLangBuilder()
-                    .translation("zh_cn", "2 同种台阶 -> 原方块")
-                    .translation("en_us", "2 slabs of same material -> original block")
+                    .translation("zh_cn", "2 同种台阶 → 原方块")
+                    .translation("en_us", "2 slabs of same material → original block")
                     .build()
                 ).build()
             ).build();

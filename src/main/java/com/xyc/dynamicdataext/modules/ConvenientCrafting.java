@@ -9,16 +9,15 @@ import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
-import com.xyc.dynamicdataext.utils.LocationUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
@@ -31,31 +30,6 @@ public class ConvenientCrafting extends Module {
 
     @Override
     public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
-        final TagKey<Item> LOGS = LocationUtils.createItemTagKey(
-            LocationUtils.withDefaultNamespace("logs")
-        );
-        final TagKey<Item> PLANKS = LocationUtils.createItemTagKey(
-            LocationUtils.withDefaultNamespace("planks")
-        );
-        final TagKey<Item> WOODEN_RODS = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("rods/wooden")
-        );
-        final TagKey<Item> IRON_INGOTS = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("ingots/iron")
-        );
-        final TagKey<Item> IRON_BLOCKS = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("storage_blocks/iron")
-        );
-        final TagKey<Item> STONES = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("stones")
-        );
-        final TagKey<Item> REDSTONE = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("dusts/redstone")
-        );
-        final TagKey<Item> BOWS = LocationUtils.createItemTagKey(
-            LocationUtils.withCommonNamespace("tools/bow")
-        );
-
         Set<RecipeEntry> output = new LinkedHashSet<>();
 
         output.add(
@@ -64,7 +38,7 @@ public class ConvenientCrafting extends Module {
                 "chest_from_log",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.CHEST, 4)
-                    .define('L', LOGS)
+                    .define('L', ItemTags.LOGS)
                     .pattern("LLL").pattern("L L").pattern("LLL")
                     .unlockedBy(
                         "has_chest_recipe",
@@ -79,7 +53,7 @@ public class ConvenientCrafting extends Module {
                 "barrel_from_log",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.BARREL, 4)
-                    .define('L', LOGS)
+                    .define('L', ItemTags.LOGS)
                     .pattern("LLL").pattern("L L").pattern("L L")
                     .unlockedBy("has_barrel_recipe", CriterionUtils.recipeUnlocked("barrel"))
             )
@@ -93,7 +67,7 @@ public class ConvenientCrafting extends Module {
                 "ladder_from_log",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.LADDER, 24)
-                    .define('L', LOGS)
+                    .define('L', ItemTags.LOGS)
                     .pattern("L L").pattern("LLL").pattern("L L")
                     .unlockedBy("has_ladder_recipe", CRITERION_LADDER)
             )
@@ -104,7 +78,7 @@ public class ConvenientCrafting extends Module {
                 "ladder_from_plank",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.LADDER, 6)
-                    .define('P', PLANKS)
+                    .define('P', ItemTags.PLANKS)
                     .pattern("P P").pattern("PPP").pattern("P P")
                     .unlockedBy("has_ladder_recipe", CRITERION_LADDER)
             )
@@ -116,7 +90,7 @@ public class ConvenientCrafting extends Module {
                 "hopper_from_log",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.REDSTONE, Items.HOPPER)
-                    .define('L', LOGS).define('I', IRON_INGOTS)
+                    .define('L', ItemTags.LOGS).define('I', Tags.Items.INGOTS_IRON)
                     .pattern("ILI").pattern("ILI").pattern(" I ")
                     .unlockedBy("has_hopper_recipe", CriterionUtils.recipeUnlocked("hopper"))
             )
@@ -128,7 +102,7 @@ public class ConvenientCrafting extends Module {
                 "dispenser_from_dropper",
                 ShapelessRecipeBuilder
                     .shapeless(RecipeCategory.REDSTONE, Items.DISPENSER)
-                    .requires(Items.DROPPER).requires(BOWS)
+                    .requires(Items.DROPPER).requires(Tags.Items.TOOLS_BOW)
                     .unlockedBy("has_dispenser_recipe", CriterionUtils.recipeUnlocked("dispenser"))
             )
         );
@@ -139,7 +113,7 @@ public class ConvenientCrafting extends Module {
                 "chain_from_iron_block",
                 ShapedRecipeBuilder
                     .shaped(RecipeCategory.MISC, Items.CHAIN, 9)
-                    .define('I', IRON_INGOTS).define('B', IRON_BLOCKS)
+                    .define('I', Tags.Items.INGOTS_IRON).define('B', Tags.Items.STORAGE_BLOCKS_IRON)
                     .pattern("I").pattern("B").pattern("I")
                     .unlockedBy("has_chain_recipe", CriterionUtils.recipeUnlocked("chain"))
             )
@@ -154,7 +128,9 @@ public class ConvenientCrafting extends Module {
                     "repeater_from_redstone",
                     ShapedRecipeBuilder
                         .shaped(RecipeCategory.REDSTONE, Items.REPEATER)
-                        .define('S', STONES).define('R', REDSTONE).define('r', WOODEN_RODS)
+                        .define('S', Tags.Items.STONES)
+                        .define('R', Tags.Items.DUSTS_REDSTONE)
+                        .define('r', Tags.Items.RODS_WOODEN)
                         .pattern("R R").pattern("rRr").pattern("SSS")
                         .unlockedBy("has_repeater_recipe", CRITERION_REPEATER)
                 )
@@ -166,7 +142,9 @@ public class ConvenientCrafting extends Module {
                     "repeater_from_redstone",
                     ShapedRecipeBuilder
                         .shaped(RecipeCategory.REDSTONE, Items.REPEATER)
-                        .define('S', Items.STONE).define('R', REDSTONE).define('r', WOODEN_RODS)
+                        .define('S', Items.STONE)
+                        .define('R', Tags.Items.DUSTS_REDSTONE)
+                        .define('r', Tags.Items.RODS_WOODEN)
                         .pattern("R R").pattern("rRr").pattern("SSS")
                         .unlockedBy("has_repeater_recipe", CRITERION_REPEATER)
                 )
@@ -203,8 +181,8 @@ public class ConvenientCrafting extends Module {
                     .build()
                 ).child(enabled
                     .createTooltipChildLangBuilder()
-                    .translation("zh_cn", "例：8 原木 -> 4 箱子，投掷器 + 弓 -> 发射器")
-                    .translation("en_us", "E.g. 8 Logs -> 4 chests, dropper + bow -> dispenser")
+                    .translation("zh_cn", "例：8 原木 → 4 箱子，投掷器 + 弓 → 发射器")
+                    .translation("en_us", "E.g. 8 Logs → 4 chests, dropper + bow → dispenser")
                     .format(ChatFormatting.GRAY)
                     .build()
                 ).build()
