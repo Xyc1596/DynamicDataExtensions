@@ -2,7 +2,7 @@ package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.base.RecipeEntry;
+import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
@@ -29,9 +29,9 @@ public class SlabRecycling extends Module {
     }
 
     @Override
-    public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
+    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
         final String BRICK_SUFFIX = "_brick_slab", NORMAL_SUFFIX = "_slab";
-        Set<RecipeEntry> output = new LinkedHashSet<>();
+        Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         BuiltInRegistries.ITEM
             .getTag(ItemTags.SLABS)
             .ifPresent(holders -> holders.forEach(

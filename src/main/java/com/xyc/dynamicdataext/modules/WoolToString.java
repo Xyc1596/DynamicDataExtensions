@@ -2,7 +2,7 @@ package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.base.RecipeEntry;
+import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
@@ -25,7 +25,7 @@ public class WoolToString extends Module {
     }
 
     @Override
-    public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
+    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
         return Set.of(
             RecipeUtils.createRecipeEntry(
                 this,

@@ -38,7 +38,7 @@ public class DynamicDataLanguageProvider {
                 } else if (currentAdded.containsKey(key)) {
                     throw new IllegalStateException(
                         "Duplicate translation key " + key + ". Use PlaceholderLang " +
-                            "instead of the original ModuleLang instance as a child of another ModuleLang"
+                            "instead of the original ModuleLang instance as a child of another ModuleLang."
                     );
                 }
                 currentAdded.put(key, keyAndTranslation.getValue());

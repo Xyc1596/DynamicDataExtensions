@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.mixins;
 
-import com.xyc.dynamicdataext.base.IInjectingReloadableServerResources;
+import com.xyc.dynamicdataext.base.IReloadableServerResourcesExtensions;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.WorldLoader;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ public abstract class WorldLoaderMixin {
         remap = false
     )
     private static ReloadableServerResources modifyReloadableServerResources(ReloadableServerResources p_335216_) {
-        ((IInjectingReloadableServerResources) p_335216_).dynamicdataext$injectTags();
+        ((IReloadableServerResourcesExtensions) p_335216_).dynamicdataext$injectTags();
         return p_335216_;
     }
 }

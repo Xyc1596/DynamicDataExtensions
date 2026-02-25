@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.mixins.recipes;
 
-import com.xyc.dynamicdataext.base.IDynamicRecipeBuilder;
+import com.xyc.dynamicdataext.base.IRecipeBuilderExtensions;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 @Mixin(ShapedRecipeBuilder.class)
-public abstract class ShapedRecipeBuilderMixin implements IDynamicRecipeBuilder {
+public abstract class ShapedRecipeBuilderMixin implements IRecipeBuilderExtensions {
     @Shadow
     @Nullable
     private String group;

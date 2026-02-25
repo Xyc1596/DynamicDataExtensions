@@ -5,24 +5,31 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 
-import java.util.Map;
-
-public class RecipeEntry {
+public class DynamicRecipeEntry {
     protected final ResourceLocation id;
     protected final Recipe<?> recipe;
     protected final RecipeHolder<Recipe<?>> holder;
 
-    public RecipeEntry(ResourceLocation id, Recipe<?> recipe) {
+    public DynamicRecipeEntry(ResourceLocation id, Recipe<?> recipe) {
         this.id = id;
         this.recipe = recipe;
         this.holder = new RecipeHolder<>(id, recipe);
     }
 
-    public Map.Entry<RecipeType<?>, RecipeHolder<?>> toMapEntryByType() {
-        return Map.entry(this.recipe.getType(), this.holder);
+    public ResourceLocation getId() {
+        return this.id;
     }
 
-    public Map.Entry<ResourceLocation, RecipeHolder<?>> toMapEntryByName() {
-        return Map.entry(this.id, this.holder);
+    public RecipeHolder<?> getValue() {
+        return new RecipeHolder<>(this.id, this.recipe);
+    }
+
+    public RecipeType<?> getType() {
+        return this.recipe.getType();
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
     }
 }

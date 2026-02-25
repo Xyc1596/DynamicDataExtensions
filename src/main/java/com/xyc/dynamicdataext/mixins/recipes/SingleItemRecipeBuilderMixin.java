@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.mixins.recipes;
 
-import com.xyc.dynamicdataext.base.IDynamicRecipeBuilder;
+import com.xyc.dynamicdataext.base.IRecipeBuilderExtensions;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 @Mixin(SingleItemRecipeBuilder.class)
-public abstract class SingleItemRecipeBuilderMixin implements IDynamicRecipeBuilder {
+public abstract class SingleItemRecipeBuilderMixin implements IRecipeBuilderExtensions {
     @Shadow
     @Final
     private SingleItemRecipe.Factory<?> factory;

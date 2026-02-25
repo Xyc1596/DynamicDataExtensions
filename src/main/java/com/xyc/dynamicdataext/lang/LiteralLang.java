@@ -21,9 +21,9 @@ public class LiteralLang extends ModuleLang {
     }
 
     @Override
-    public PlaceholderLang getPlaceholder() {
+    public PlaceholderLang getPlaceholder(ChatFormatting... formats) {
         if (this.placeholder == null)
-            this.placeholder = new PlaceholderLang(this, Set.of());
+            this.placeholder = new PlaceholderLang(this, Set.of(formats));
         return this.placeholder;
     }
 

@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.mixins.recipes;
 
-import com.xyc.dynamicdataext.base.IDynamicRecipeBuilder;
+import com.xyc.dynamicdataext.base.IRecipeBuilderExtensions;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.function.Function;
 
 @Mixin(SpecialRecipeBuilder.class)
-public abstract class SpecialRecipeBuilderMixin implements IDynamicRecipeBuilder {
+public abstract class SpecialRecipeBuilderMixin implements IRecipeBuilderExtensions {
     @Shadow
     @Final
     private Function<CraftingBookCategory, Recipe<?>> factory;

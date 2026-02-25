@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.mixins;
 
-import com.xyc.dynamicdataext.base.IInjectingReloadableServerResources;
+import com.xyc.dynamicdataext.base.IReloadableServerResourcesExtensions;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ReloadableServerResources;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +22,7 @@ public abstract class MinecraftServerMixin {
     private MinecraftServer.ReloadableResources modifyReloadableResources(
         MinecraftServer.ReloadableResources p_335203_
     ) {
-        ((IInjectingReloadableServerResources) p_335203_.managers()).dynamicdataext$injectData();
+        ((IReloadableServerResourcesExtensions) p_335203_.managers()).dynamicdataext$injectData();
         return p_335203_;
     }
 
@@ -42,7 +42,7 @@ public abstract class MinecraftServerMixin {
     private ReloadableServerResources modifyInitReloadableResources(
         ReloadableServerResources resources
     ) {
-        ((IInjectingReloadableServerResources) resources).dynamicdataext$injectRecipes();
+        ((IReloadableServerResourcesExtensions) resources).dynamicdataext$injectRecipes();
         return resources;
     }
 }

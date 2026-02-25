@@ -1,69 +1,19 @@
 package com.xyc.dynamicdataext.mixins.tags;
 
-import com.xyc.dynamicdataext.DynamicDataRegistry;
-import com.xyc.dynamicdataext.base.IInjectingTags;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.TagKey;
+import com.xyc.dynamicdataext.base.ITagManagerExtensions;
 import net.minecraft.tags.TagManager;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-import java.util.*;
+import java.util.List;
 
 @Mixin(TagManager.class)
-public abstract class TagManagerMixin implements IInjectingTags {
-    @Shadow
-    private List<TagManager.LoadResult<?>> results;
-
-    @Unique
+public interface TagManagerMixin extends ITagManagerExtensions {
     @Override
-    public int[] dynamicdataext$injectTags() {
-        var allTagsToUpdate = DynamicDataRegistry.getAllTagsToUpdate();
-        Set<ResourceKey<? extends Registry<?>>> allResourceKeys = new HashSet<>();
-        Map<ResourceKey<? extends Registry<?>>, Map<TagKey<?>, Set<Holder<?>>>> allTagsToAddInRegistry =
-            new LinkedHashMap<>();
-        Map<ResourceKey<? extends Registry<?>>, Map<TagKey<?>, Set<Holder<?>>>> allTagsToRemoveInRegistry =
-            new LinkedHashMap<>();
+    @Accessor("results")
+    List<TagManager.LoadResult<?>> getResults();
 
-        for (Map.Entry<TagKey<?>, Set<Holder<?>>> entry : allTagsToUpdate.getLeft().entrySet()) {
-            TagKey<?> key = entry.getKey();
-            ResourceKey<? extends Registry<?>> registry = key.registry();
-            allResourceKeys.add(registry);
-            allTagsToAddInRegistry.putIfAbsent(registry, new LinkedHashMap<>());
-            allTagsToAddInRegistry.get(registry).put(key, entry.getValue());
-        }
-
-        for (Map.Entry<TagKey<?>, Set<Holder<?>>> entry : allTagsToUpdate.getRight().entrySet()) {
-            TagKey<?> key = entry.getKey();
-            ResourceKey<? extends Registry<?>> resourceKey = key.registry();
-            allResourceKeys.add(resourceKey);
-            allTagsToRemoveInRegistry.putIfAbsent(resourceKey, new LinkedHashMap<>());
-            allTagsToRemoveInRegistry.get(resourceKey).put(key, entry.getValue());
-        }
-
-        int[] i = {0, 0, 0};
-        List<TagManager.LoadResult<?>> newResults = new ArrayList<>();
-        for (TagManager.LoadResult<?> result : results) {
-            ResourceKey<? extends Registry<?>> resourceKey = result.key();
-            if (allResourceKeys.contains(resourceKey)) {
-                var r = IInjectingTags.injectTagsByRegistry(
-                    result,
-                    allTagsToAddInRegistry.getOrDefault(resourceKey, Map.of()),
-                    allTagsToRemoveInRegistry.getOrDefault(resourceKey, Map.of())
-                );
-                newResults.add(IInjectingTags.createLoadResult(resourceKey, r.getFirst()));
-                int[] iResults = r.getSecond();
-                i[0] += iResults[0];
-                i[1] += iResults[1];
-                i[2] += iResults[2];
-            } else {
-                newResults.add(result);
-            }
-        }
-        this.results = newResults.stream().toList();
-        return i;
-    }
+    @Override
+    @Accessor("results")
+    void setResults(List<TagManager.LoadResult<?>> results);
 }

@@ -20,5 +20,5 @@ public abstract class ModuleLang {
         return this.formats;
     }
 
-    public abstract PlaceholderLang getPlaceholder();
+    public abstract PlaceholderLang getPlaceholder(ChatFormatting... formats);
 }

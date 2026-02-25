@@ -5,6 +5,7 @@ import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.PlaceholderLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.utils.ModMainUtils;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.ChatFormatting;
@@ -25,10 +26,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DynamicDataConfig {
     protected final static TranslatableLang MESSAGE_RELOAD_CONFIG = ModuleLangBuilder
@@ -159,10 +157,7 @@ public class DynamicDataConfig {
 
         if (DynamicDataRegistry.autoReloading()) {
             server.reloadResources(server.getPackRepository().getSelectedIds());
-            server.getPlayerList().broadcastSystemMessage(
-                MESSAGE_RELOAD_CONFIG.toComponentReplacingPlaceholders(this.titleComponent),
-                false
-            );
+            ModMainUtils.broadcastMessage(MESSAGE_RELOAD_CONFIG.toComponentReplacingPlaceholders(this.titleComponent));
         } else {
             for (ServerPlayer player : playerList.getPlayers()) {
                 if (playerList.isOp(player.getGameProfile())) {
@@ -175,8 +170,8 @@ public class DynamicDataConfig {
         this.configCache = loadedConfig;
     }
 
-    public static List<TranslatableLang> gatherAllMessageLang() {
-        return List.of(MESSAGE_RELOAD_CONFIG, MESSAGE_AUTO_RELOAD_DISABLED, MESSAGE_NO_PERMISSION);
+    public static Set<TranslatableLang> gatherAllMessageLang() {
+        return Set.of(MESSAGE_RELOAD_CONFIG, MESSAGE_AUTO_RELOAD_DISABLED, MESSAGE_NO_PERMISSION);
     }
 
     protected ConfigBuilder getClothBuilder(ModuleLang title) {

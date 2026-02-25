@@ -28,25 +28,33 @@ public class EntryAndTagCollection<T> {
         for (String id : ids) {
             if (id.startsWith("#")) {
                 ResourceLocation location = ResourceLocation.tryParse(id.substring(1));
-                if (location != null) {
-                    TagKey<T> tag = TagKey.create(this.registry.key(), location);
-                    this.tags.add(tag);
-                    this.registry.getTag(tag).ifPresent(
-                        holders -> holders.forEach(holder -> this.allEntries.add(holder.value()))
-                    );
-                }
+                if (location != null)
+                    this.addTag(TagKey.create(this.registry.key(), location));
             } else {
                 ResourceLocation location = ResourceLocation.tryParse(id);
-                if (location != null) {
-                    if (this.registry.containsKey(location)) {
-                        T entry = this.registry.get(location);
-                        this.entries.add(entry);
-                        this.allEntries.add(entry);
-                    }
-                }
+                if (location != null && this.registry.containsKey(location))
+                    this.addEntry(this.registry.get(location));
             }
         }
         return this;
+    }
+
+    public void addEntry(T entry) {
+        this.entries.add(entry);
+        this.allEntries.add(entry);
+    }
+
+    @SuppressWarnings("unused")
+    public void addEntries(Iterable<T> entries) {
+        for (T e : entries)
+            this.addEntry(e);
+    }
+
+    public void addTag(TagKey<T> tag) {
+        this.tags.add(tag);
+        this.registry.getTag(tag).ifPresent(
+            holders -> holders.forEach(holder -> this.allEntries.add(holder.value()))
+        );
     }
 
     @SuppressWarnings("unused")

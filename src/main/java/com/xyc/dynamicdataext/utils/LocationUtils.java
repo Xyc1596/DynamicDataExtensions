@@ -1,6 +1,7 @@
 package com.xyc.dynamicdataext.utils;
 
 import com.xyc.dynamicdataext.base.Module;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -26,12 +27,12 @@ public final class LocationUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static TagKey<Item> createItemTagKey(ResourceLocation location) {
+    public static TagKey<Item> createItemTag(ResourceLocation location) {
         return TagKey.create(Registries.ITEM, location);
     }
 
     @ParametersAreNonnullByDefault
-    public static TagKey<Item> createItemTagKey(String namespace, String path) {
+    public static TagKey<Item> createItemTag(String namespace, String path) {
         return TagKey.create(Registries.ITEM, LocationUtils.fromNamespaceAndPath(namespace, path));
     }
 
@@ -46,5 +47,10 @@ public final class LocationUtils {
             module.getNamespace(),
             getContentNameWithModuleId(module, id)
         );
+    }
+
+    @ParametersAreNonnullByDefault
+    public static String getItemId(Item item) {
+        return BuiltInRegistries.ITEM.getKey(item).getPath();
     }
 }

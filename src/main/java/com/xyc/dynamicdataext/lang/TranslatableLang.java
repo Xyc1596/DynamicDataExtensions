@@ -80,11 +80,10 @@ public class TranslatableLang extends ModuleLang {
         List<Component> objects = new LinkedList<>();
         Queue<Component> extra = new LinkedList<>(Arrays.asList(contents));
         for (ModuleLang c : children) {
-            if (c instanceof PlaceholderLang cp) {
-                objects.add(cp.replaceWith(extra.poll()));
-            } else {
+            if (c instanceof PlaceholderLang cp)
+                objects.add(cp.isEmpty() ? cp.replaceWith(extra.poll()) : cp.toComponent());
+            else
                 objects.add(c.toComponent());
-            }
         }
         return Component.translatable(
             this.key,
@@ -93,9 +92,9 @@ public class TranslatableLang extends ModuleLang {
     }
 
     @Override
-    public PlaceholderLang getPlaceholder() {
+    public PlaceholderLang getPlaceholder(ChatFormatting... formats) {
         if (this.placeholder == null)
-            this.placeholder = new PlaceholderLang(this, Set.of());
+            this.placeholder = new PlaceholderLang(this, Set.of(formats));
         return this.placeholder;
     }
 }

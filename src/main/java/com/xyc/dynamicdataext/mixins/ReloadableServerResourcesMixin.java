@@ -1,9 +1,8 @@
 package com.xyc.dynamicdataext.mixins;
 
 import com.mojang.logging.LogUtils;
-import com.xyc.dynamicdataext.base.IInjectingRecipes;
-import com.xyc.dynamicdataext.base.IInjectingReloadableServerResources;
-import com.xyc.dynamicdataext.base.IInjectingTags;
+import com.xyc.dynamicdataext.DynamicDataRegistry;
+import com.xyc.dynamicdataext.base.IReloadableServerResourcesExtensions;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.tags.TagManager;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -14,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ReloadableServerResources.class)
-public abstract class ReloadableServerResourcesMixin implements IInjectingReloadableServerResources {
+public abstract class ReloadableServerResourcesMixin implements IReloadableServerResourcesExtensions {
     @Shadow
     @Final
     private RecipeManager recipes;
@@ -28,31 +27,19 @@ public abstract class ReloadableServerResourcesMixin implements IInjectingReload
     @Unique
     @Override
     public void dynamicdataext$injectTags() {
-        long t1 = System.currentTimeMillis();
-        int[] tagResults = ((IInjectingTags) this.tagManager).dynamicdataext$injectTags();
-        long t2 = System.currentTimeMillis();
-        practicalExtensions$LOGGER.info(
-            "Tag(s) injected in {} ms: {} added, {} removed, {} modified",
-            t2 - t1, tagResults[0], tagResults[1], tagResults[2]
-        );
+        DynamicDataRegistry.injectTags(this.tagManager);
     }
 
     @Unique
     @Override
     public void dynamicdataext$injectRecipes() {
-        long t1 = System.currentTimeMillis();
-        int[] recipeResults = ((IInjectingRecipes) this.recipes).dynamicdataext$injectRecipes();
-        long t2 = System.currentTimeMillis();
-        practicalExtensions$LOGGER.info(
-            "Recipe(s) injected in {} ms: {} added, {} removed",
-            t2 - t1, recipeResults[0], recipeResults[1]
-        );
+        DynamicDataRegistry.injectRecipes(this.recipes);
     }
 
     @Unique
     @Override
     public void dynamicdataext$injectData() {
-        this.dynamicdataext$injectTags();
-        this.dynamicdataext$injectRecipes();
+        DynamicDataRegistry.injectTags(this.tagManager);
+        DynamicDataRegistry.injectRecipes(this.recipes);
     }
 }

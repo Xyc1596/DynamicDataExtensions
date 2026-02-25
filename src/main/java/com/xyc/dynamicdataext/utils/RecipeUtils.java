@@ -1,8 +1,8 @@
 package com.xyc.dynamicdataext.utils;
 
-import com.xyc.dynamicdataext.base.IDynamicRecipeBuilder;
+import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
+import com.xyc.dynamicdataext.base.IRecipeBuilderExtensions;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.base.RecipeEntry;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
@@ -17,7 +17,7 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public final class RecipeUtils {
     @ParametersAreNonnullByDefault
-    public static RecipeEntry createSmelting(
+    public static DynamicRecipeEntry createSmelting(
         Module module,
         String recipeId,
         Ingredient ingredient,
@@ -26,9 +26,9 @@ public final class RecipeUtils {
         float experience, int cookingTime
     ) {
         ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
-        return new RecipeEntry(
+        return new DynamicRecipeEntry(
             location,
-            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
+            ((IRecipeBuilderExtensions) SimpleCookingRecipeBuilder
                 .smelting(ingredient, category, result, experience, cookingTime)
                 .unlockedBy("has_ingredient", CriterionUtils.hasSingleIngredient(ingredient))
             ).dynamicdataext$toRecipe(location)
@@ -36,7 +36,7 @@ public final class RecipeUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static RecipeEntry createSmoking(
+    public static DynamicRecipeEntry createSmoking(
         Module module,
         String recipeId,
         Ingredient ingredient,
@@ -45,9 +45,9 @@ public final class RecipeUtils {
         float experience, int cookingTime
     ) {
         ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
-        return new RecipeEntry(
+        return new DynamicRecipeEntry(
             location,
-            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
+            ((IRecipeBuilderExtensions) SimpleCookingRecipeBuilder
                 .smoking(ingredient, category, result, experience, cookingTime)
                 .unlockedBy("has_ingredient", CriterionUtils.hasSingleIngredient(ingredient))
             ).dynamicdataext$toRecipe(location)
@@ -55,7 +55,7 @@ public final class RecipeUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static RecipeEntry createCampfire(
+    public static DynamicRecipeEntry createCampfire(
         Module module,
         String recipeId,
         Ingredient ingredient,
@@ -65,9 +65,9 @@ public final class RecipeUtils {
         int cookingTime
     ) {
         ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
-        return new RecipeEntry(
+        return new DynamicRecipeEntry(
             location,
-            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
+            ((IRecipeBuilderExtensions) SimpleCookingRecipeBuilder
                 .campfireCooking(ingredient, category, result, experience, cookingTime)
                 .unlockedBy("has_ingredient", CriterionUtils.hasSingleIngredient(ingredient))
             ).dynamicdataext$toRecipe(location)
@@ -75,7 +75,7 @@ public final class RecipeUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static RecipeEntry createBlasting(
+    public static DynamicRecipeEntry createBlasting(
         Module module,
         String recipeId,
         Ingredient ingredient,
@@ -85,9 +85,9 @@ public final class RecipeUtils {
         int cookingTime
     ) {
         ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
-        return new RecipeEntry(
+        return new DynamicRecipeEntry(
             location,
-            ((IDynamicRecipeBuilder) SimpleCookingRecipeBuilder
+            ((IRecipeBuilderExtensions) SimpleCookingRecipeBuilder
                 .blasting(ingredient, category, result, experience, cookingTime)
                 .unlockedBy("has_ingredient", CriterionUtils.hasSingleIngredient(ingredient))
             ).dynamicdataext$toRecipe(location)
@@ -95,7 +95,7 @@ public final class RecipeUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static Set<RecipeEntry> createSmokingAll(
+    public static Set<DynamicRecipeEntry> createSmokingAll(
         Module module,
         String recipeId,
         Ingredient ingredient,
@@ -104,7 +104,7 @@ public final class RecipeUtils {
         float experience,
         int cookingTimeInFurnace
     ) {
-        Set<RecipeEntry> output = new LinkedHashSet<>();
+        Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         output.add(createSmelting(
             module, recipeId + "_smelting", ingredient, category, result, experience, cookingTimeInFurnace
         ));
@@ -118,7 +118,7 @@ public final class RecipeUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static Set<RecipeEntry> createBlastingAll(
+    public static Set<DynamicRecipeEntry> createBlastingAll(
         Module module,
         String recipeId,
         Ingredient ingredient,
@@ -127,9 +127,9 @@ public final class RecipeUtils {
         float experience,
         int cookingTimeInFurnace
     ) {
-        Set<RecipeEntry> output = new LinkedHashSet<>();
+        Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         output.add(createSmelting(
-                module, recipeId + "_smelting", ingredient, category, result, experience, cookingTimeInFurnace
+            module, recipeId + "_smelting", ingredient, category, result, experience, cookingTimeInFurnace
         ));
         output.add(createBlasting(
             module, recipeId + "_blasting", ingredient, category, result, experience, cookingTimeInFurnace / 2
@@ -138,8 +138,8 @@ public final class RecipeUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static RecipeEntry createRecipeEntry(Module module, String recipeId, RecipeBuilder builder) {
+    public static DynamicRecipeEntry createRecipeEntry(Module module, String recipeId, RecipeBuilder builder) {
         ResourceLocation location = LocationUtils.getContentLocationWithModuleId(module, recipeId);
-        return new RecipeEntry(location, ((IDynamicRecipeBuilder) builder).dynamicdataext$toRecipe(location));
+        return new DynamicRecipeEntry(location, ((IRecipeBuilderExtensions) builder).dynamicdataext$toRecipe(location));
     }
 }

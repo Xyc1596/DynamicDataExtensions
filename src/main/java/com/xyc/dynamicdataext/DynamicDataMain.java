@@ -32,6 +32,7 @@ public class DynamicDataMain {
                 new ConvenientCrafting(),
                 new AllStones(),
                 new SlabRecycling(),
+                new TrapdoorBalance(),
                 new TagsTest(),
                 new Common()
             ),
@@ -46,6 +47,7 @@ public class DynamicDataMain {
             provider.addModuleLang(title);
             CONFIG.getModules().forEach(provider::addModule);
             DynamicDataConfig.gatherAllMessageLang().forEach(provider::addModuleLang);
+            DynamicDataRegistry.gatherAllMessageLang().forEach(provider::addModuleLang);
             modEventBus.addListener(provider::onGatherData);
         }
     }

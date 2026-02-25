@@ -3,7 +3,7 @@ package com.xyc.dynamicdataext.modules;
 import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.EntryAndTagCollection;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.base.RecipeEntry;
+import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOption;
@@ -11,6 +11,7 @@ import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.ConfigUtils.ListMode;
+import com.xyc.dynamicdataext.utils.ContentUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.ChatFormatting;
@@ -30,7 +31,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class RawOreBlockSmelting extends Module {
     protected ModuleOption<List<String>> ingredientList;
@@ -41,11 +41,11 @@ public class RawOreBlockSmelting extends Module {
     }
 
     @Override
-    public @NotNull Set<RecipeEntry> gatherRecipesToAdd() {
+    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
         EntryAndTagCollection<Item> ingredientList = EntryAndTagCollection
             .items().parseStrings(this.ingredientList.getValue());
         Pattern materialPattern = Pattern.compile("storage_blocks/raw_(.*)");
-        Set<RecipeEntry> output = new LinkedHashSet<>();
+        Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         boolean whitelistMode = this.ingredientListMode.getValue() == ListMode.WHITELIST;
 
         Optional<HolderSet.Named<Item>> storageBlockHolders = BuiltInRegistries.ITEM.getTag(Tags.Items.STORAGE_BLOCKS);
@@ -60,7 +60,7 @@ public class RawOreBlockSmelting extends Module {
 
                 String material = matcher.group(1);
                 Optional<HolderSet.Named<Item>> resultHolders_ = BuiltInRegistries.ITEM.getTag(
-                    LocationUtils.createItemTagKey(
+                    LocationUtils.createItemTag(
                         LocationUtils.withCommonNamespace("storage_blocks/" + material)
                     )
                 );
@@ -76,8 +76,7 @@ public class RawOreBlockSmelting extends Module {
                 if (ingredientHolders_.isEmpty())
                     return;
 
-                Set<Item> ingredientSet = ingredientHolders_.get().stream().map(Holder::value)
-                                                            .collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Item> ingredientSet = ContentUtils.getHolderSetContents(ingredientHolders_.get());
                 Set<Item> filtered = ingredientList.applyToForSet(ingredientSet, whitelistMode);
                 Ingredient ingredient = filtered.size() == ingredientSet.size()
                     ? Ingredient.of(ingredientTag)

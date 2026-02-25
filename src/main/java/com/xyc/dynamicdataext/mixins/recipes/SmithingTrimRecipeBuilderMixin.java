@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.mixins.recipes;
 
-import com.xyc.dynamicdataext.base.IDynamicRecipeBuilder;
+import com.xyc.dynamicdataext.base.IRecipeBuilderExtensions;
 import net.minecraft.data.recipes.SmithingTrimRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(SmithingTrimRecipeBuilder.class)
-public abstract class SmithingTrimRecipeBuilderMixin implements IDynamicRecipeBuilder {
+public abstract class SmithingTrimRecipeBuilderMixin implements IRecipeBuilderExtensions {
     @Shadow
     @Final
     private Ingredient template;
