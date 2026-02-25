@@ -159,13 +159,10 @@ public class DynamicDataConfig {
             server.reloadResources(server.getPackRepository().getSelectedIds());
             ModMainUtils.broadcastMessage(MESSAGE_RELOAD_CONFIG.toComponentReplacingPlaceholders(this.titleComponent));
         } else {
-            for (ServerPlayer player : playerList.getPlayers()) {
-                if (playerList.isOp(player.getGameProfile())) {
-                    player.sendSystemMessage(
-                        MESSAGE_AUTO_RELOAD_DISABLED.toComponentReplacingPlaceholders(this.titleComponent)
-                    );
-                }
-            }
+            ModMainUtils.broadcastMessage(
+                MESSAGE_AUTO_RELOAD_DISABLED.toComponentReplacingPlaceholders(this.titleComponent),
+                true
+            );
         }
         this.configCache = loadedConfig;
     }
