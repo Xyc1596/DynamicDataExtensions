@@ -37,15 +37,15 @@ public final class LocationUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static String getContentNameWithModuleId(Module module, String id) {
+    public static String createContentNameWithModuleId(Module module, String id) {
         return module.getModuleId() + "." + id;
     }
 
     @ParametersAreNonnullByDefault
-    public static ResourceLocation getContentLocationWithModuleId(Module module, String id) {
+    public static ResourceLocation createContentLocationWithModuleId(Module module, String id) {
         return LocationUtils.fromNamespaceAndPath(
             module.getNamespace(),
-            getContentNameWithModuleId(module, id)
+            createContentNameWithModuleId(module, id)
         );
     }
 

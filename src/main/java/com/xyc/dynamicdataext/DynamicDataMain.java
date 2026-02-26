@@ -9,8 +9,6 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 
-import java.util.List;
-
 @Mod(DynamicDataMain.MOD_ID)
 public class DynamicDataMain {
     public static final String MOD_ID = "dynamicdataext";
@@ -25,19 +23,18 @@ public class DynamicDataMain {
         CONFIG = new DynamicDataConfig(
             MOD_ID,
             title,
-            List.of(
-                new LeatherFromRottenFlesh(),
-                new RawOreBlockSmelting(),
-                new WoolToString(),
-                new ConvenientCrafting(),
-                new AllStones(),
-                new SlabRecycling(),
-                new TrapdoorBalance(),
-                new TagsTest(),
-                new Common()
-            ),
             modEventBus,
-            container
+            container,
+            new LeatherFromRottenFlesh(),
+            new RawOreBlockSmelting(),
+            new WoolToString(),
+            new ConvenientCrafting(),
+            new AllStones(),
+            new SlabRecycling(),
+            new TrapdoorBalance(),
+            new ReversibleCutting(),
+            new TagsTest(),
+            new Common()
         );
         DynamicDataRegistry.registerConfig(CONFIG);
 

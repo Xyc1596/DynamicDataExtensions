@@ -28,7 +28,10 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class DynamicDataConfig {
     protected final static TranslatableLang MESSAGE_RELOAD_CONFIG = ModuleLangBuilder
@@ -90,9 +93,9 @@ public class DynamicDataConfig {
     public DynamicDataConfig(
         String namespace,
         ModuleLang title,
-        List<Module> modules,
         IEventBus modEventBus,
-        ModContainer container
+        ModContainer container,
+        Module... modules
     ) {
         this.titleComponent = title.toComponent().withStyle(ChatFormatting.DARK_AQUA).withStyle(ChatFormatting.BOLD);
         this.namespace = namespace;

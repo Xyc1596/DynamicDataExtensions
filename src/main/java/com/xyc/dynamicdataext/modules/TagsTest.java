@@ -4,7 +4,7 @@ import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.base.DynamicTagEntry;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.utils.ContentUtils;
+import com.xyc.dynamicdataext.utils.TagUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
@@ -29,7 +29,7 @@ public class TagsTest extends Module {
 
     @Override
     public @NotNull Set<DynamicTagEntry<?>> gatherTagsToAdd() {
-        return Set.of(DynamicTagEntry.itemTag(TEST_TAG, Set.of(ContentUtils.getItemHolder(Items.ROTTEN_FLESH))));
+        return Set.of(DynamicTagEntry.itemTag(TEST_TAG, Set.of(TagUtils.getItemHolder(Items.ROTTEN_FLESH))));
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public final class ModMainUtils {
@@ -23,9 +24,13 @@ public final class ModMainUtils {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server != null) {
             PlayerList playerList = server.getPlayerList();
-            for (ServerPlayer player : playerList.getPlayers())
-                if (!opOnly || playerList.isOp(player.getGameProfile()))
-                    player.sendSystemMessage(component, true);
+            List<ServerPlayer> players = playerList.getPlayers();
+            if (!players.isEmpty()) {
+                for (ServerPlayer player : players)
+                    if (!opOnly || playerList.isOp(player.getGameProfile()))
+                        player.sendSystemMessage(component, false);
+                return;
+            }
         }
         logPrinter.accept(component.getString());
     }

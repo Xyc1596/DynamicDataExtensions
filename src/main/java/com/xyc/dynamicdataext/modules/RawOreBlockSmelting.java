@@ -11,7 +11,7 @@ import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.ConfigUtils.ListMode;
-import com.xyc.dynamicdataext.utils.ContentUtils;
+import com.xyc.dynamicdataext.utils.TagUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
 import net.minecraft.ChatFormatting;
@@ -76,7 +76,7 @@ public class RawOreBlockSmelting extends Module {
                 if (ingredientHolders_.isEmpty())
                     return;
 
-                Set<Item> ingredientSet = ContentUtils.getHolderSetContents(ingredientHolders_.get());
+                Set<Item> ingredientSet = TagUtils.getHolderSetContents(ingredientHolders_.get());
                 Set<Item> filtered = ingredientList.applyToForSet(ingredientSet, whitelistMode);
                 Ingredient ingredient = filtered.size() == ingredientSet.size()
                     ? Ingredient.of(ingredientTag)
