@@ -8,25 +8,25 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+import java.util.function.Consumer;
+
 public final class ModMainUtils {
     public static TranslatableBuilder createModTitleBuilder(String namespace) {
         return ModuleLangBuilder.translatable(null, namespace);
     }
 
-    public static void broadcastMessage(Component component) {
-        broadcastMessage(component, false);
+    public static void broadcastMessage(Component component, Consumer<String> logPrinter) {
+        broadcastMessage(component, false, logPrinter);
     }
 
-    public static void broadcastMessage(Component component, boolean opOnly) {
+    public static void broadcastMessage(Component component, boolean opOnly, Consumer<String> logPrinter) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server != null) {
             PlayerList playerList = server.getPlayerList();
-            if (opOnly) {
-                for (ServerPlayer player : playerList.getPlayers())
-                    if (playerList.isOp(player.getGameProfile()))
-                        player.sendSystemMessage(component);
-            } else server.getPlayerList().broadcastSystemMessage(component, false);
-            server.sendSystemMessage(component);
+            for (ServerPlayer player : playerList.getPlayers())
+                if (!opOnly || playerList.isOp(player.getGameProfile()))
+                    player.sendSystemMessage(component, true);
         }
+        logPrinter.accept(component.getString());
     }
 }

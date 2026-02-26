@@ -3,6 +3,7 @@ package com.xyc.dynamicdataext;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Sets;
+import com.mojang.logging.LogUtils;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.*;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -72,6 +74,7 @@ public final class DynamicDataRegistry {
     private static final Map<String, DynamicDataConfig> ddConfigs = new LinkedHashMap<>();
     private static IRecipeManagerExtensions recipeManager;
     private static ITagManagerExtensions tagManager;
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void registerConfig(DynamicDataConfig config) {
         ddConfigs.put(config.getNamespace(), config);
@@ -148,11 +151,12 @@ public final class DynamicDataRegistry {
         for (DynamicRecipeEntry entry : recipesToAdd) {
             ResourceLocation location = entry.getId();
             if (currentLocations.contains(location)) {
-                ModMainUtils.broadcastMessage(MESSAGE_FAILED_RECIPES.toComponentReplacingPlaceholders(
-                    MESSAGE_DUPLICATE_RECIPE.toComponentReplacingPlaceholders(
-                        Component.literal(location.toString())
-                    )
-                ));
+                ModMainUtils.broadcastMessage(
+                    MESSAGE_FAILED_RECIPES.toComponentReplacingPlaceholders(
+                        MESSAGE_DUPLICATE_RECIPE.toComponentReplacingPlaceholders(Component.literal(location.toString()))
+                    ),
+                    LOGGER::error
+                );
                 return;
             } else {
                 RecipeHolder<?> value = entry.getValue();
@@ -166,11 +170,14 @@ public final class DynamicDataRegistry {
             for (DynamicRecipeEntry entry : provider.get()) {
                 ResourceLocation location = entry.getId();
                 if (currentLocations.contains(location)) {
-                    ModMainUtils.broadcastMessage(MESSAGE_FAILED_RECIPES.toComponentReplacingPlaceholders(
-                        MESSAGE_DUPLICATE_RECIPE.toComponentReplacingPlaceholders(
-                            Component.literal(location.toString())
-                        )
-                    ));
+                    ModMainUtils.broadcastMessage(
+                        MESSAGE_FAILED_RECIPES.toComponentReplacingPlaceholders(
+                            MESSAGE_DUPLICATE_RECIPE.toComponentReplacingPlaceholders(
+                                Component.literal(location.toString())
+                            )
+                        ),
+                        LOGGER::error
+                    );
                     return;
                 } else {
                     RecipeHolder<?> value = entry.getValue();
@@ -183,11 +190,14 @@ public final class DynamicDataRegistry {
 
         m.setByType(byTypeBuilder.build());
         m.setByName(byNameBuilder.build());
-        ModMainUtils.broadcastMessage(MESSAGE_SUCCESS_RECIPES.toComponentReplacingPlaceholders(
-            Component.literal(String.valueOf(locationsRemoved.size())),
-            Component.literal(String.valueOf(locationsAdded.size())),
-            Component.literal(String.valueOf(System.currentTimeMillis() - t1))
-        ));
+        ModMainUtils.broadcastMessage(
+            MESSAGE_SUCCESS_RECIPES.toComponentReplacingPlaceholders(
+                Component.literal(String.valueOf(locationsRemoved.size())),
+                Component.literal(String.valueOf(locationsAdded.size())),
+                Component.literal(String.valueOf(System.currentTimeMillis() - t1))
+            ),
+            LOGGER::info
+        );
     }
 
     public static void injectTags(TagManager manager) {
@@ -250,11 +260,14 @@ public final class DynamicDataRegistry {
         }
 
         m.setResults(newResults);
-        ModMainUtils.broadcastMessage(MESSAGE_SUCCESS_TAGS.toComponentReplacingPlaceholders(
-            Component.literal(String.valueOf(nModified)),
-            Component.literal(String.valueOf(nAdded)),
-            Component.literal(String.valueOf(System.currentTimeMillis() - t1))
-        ));
+        ModMainUtils.broadcastMessage(
+            MESSAGE_SUCCESS_TAGS.toComponentReplacingPlaceholders(
+                Component.literal(String.valueOf(nModified)),
+                Component.literal(String.valueOf(nAdded)),
+                Component.literal(String.valueOf(System.currentTimeMillis() - t1))
+            ),
+            LOGGER::info
+        );
     }
 
     public static Set<TranslatableLang> gatherAllMessageLang() {

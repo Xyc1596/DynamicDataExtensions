@@ -25,6 +25,8 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -66,6 +68,7 @@ public class DynamicDataConfig {
     private final Map<String, Module> moduleMap = new LinkedHashMap<>();
     protected final String namespace;
     protected final MutableComponent titleComponent;
+    protected final Logger logger;
     public final ModConfigSpec COMMON;
 
     public String getNamespace() {
@@ -119,6 +122,7 @@ public class DynamicDataConfig {
                 (c, s) -> this.getClothBuilder(title).setParentScreen(s).build()
             );
         }
+        this.logger = LoggerFactory.getLogger(this.getClass().getName() + this.namespace);
     }
 
     public void handleLoadConfig(final ModConfigEvent.Loading event) {
@@ -157,11 +161,15 @@ public class DynamicDataConfig {
 
         if (DynamicDataRegistry.autoReloading()) {
             server.reloadResources(server.getPackRepository().getSelectedIds());
-            ModMainUtils.broadcastMessage(MESSAGE_RELOAD_CONFIG.toComponentReplacingPlaceholders(this.titleComponent));
+            ModMainUtils.broadcastMessage(
+                MESSAGE_RELOAD_CONFIG.toComponentReplacingPlaceholders(this.titleComponent),
+                this.logger::info
+            );
         } else {
             ModMainUtils.broadcastMessage(
                 MESSAGE_AUTO_RELOAD_DISABLED.toComponentReplacingPlaceholders(this.titleComponent),
-                true
+                true,
+                this.logger::warn
             );
         }
         this.configCache = loadedConfig;
