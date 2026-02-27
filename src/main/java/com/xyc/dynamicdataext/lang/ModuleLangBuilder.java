@@ -29,7 +29,16 @@ public abstract class ModuleLangBuilder<T extends ModuleLangBuilder<T>> {
     }
 
     public static TranslatableBuilder translatable(String category, String namespace, String... id) {
-        return new TranslatableBuilder(category, namespace, id);
+        return translatable(false, category, namespace, id);
+    }
+
+    public static TranslatableBuilder translatable(
+        boolean isTemplate,
+        String category,
+        String namespace,
+        String... id
+    ) {
+        return new TranslatableBuilder(isTemplate, category, namespace, id);
     }
 
     public static PlaceholderBuilder placeholder() {

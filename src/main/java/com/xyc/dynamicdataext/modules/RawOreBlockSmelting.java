@@ -60,7 +60,7 @@ public class RawOreBlockSmelting extends Module {
 
                 String material = matcher.group(1);
                 Optional<HolderSet.Named<Item>> resultHolders_ = BuiltInRegistries.ITEM.getTag(
-                    LocationUtils.createItemTag(
+                    TagUtils.createItemTag(
                         LocationUtils.withCommonNamespace("storage_blocks/" + material)
                     )
                 );

@@ -1,6 +1,8 @@
 package com.xyc.dynamicdataext;
 
 import com.xyc.dynamicdataext.base.Module;
+import com.xyc.dynamicdataext.lang.ModuleLang;
+import com.xyc.dynamicdataext.lang.PlaceholderLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -17,32 +19,53 @@ public class DynamicDataLanguageProvider {
     protected final Map<String, Map<String, String>> allTranslations = new HashMap<>();
     protected final Map<String, Set<String>> defaultKeys = new HashMap<>();
 
+    protected final Set<String> duplicateKeys = new HashSet<>();
+    protected final Set<String> addedKeys = new HashSet<>();
+
     public DynamicDataLanguageProvider(String modId) {
         this.modId = modId;
     }
 
     public void addModuleLang(TranslatableLang lang) {
-        for (Map.Entry<String, Map<String, String>> localeAndTranslations : lang.getAllTranslations().entrySet()) {
-            String locale = localeAndTranslations.getKey();
+        this.addTranslatableLang(lang, false);
+    }
+
+    protected void addTranslatableLang(TranslatableLang lang, boolean fromPlaceholder) {
+        String key = lang.getKey();
+        if (lang.isTemplate() || fromPlaceholder) {
+            if (!duplicateKeys.add(key))
+                return;
+        } else if (duplicateKeys.contains(key)) {
+            return;
+        } else if (!addedKeys.add(key)) {
+            throw new IllegalStateException(
+                "Duplicate translation key " + key + ". Use PlaceholderLang " +
+                    "instead of the original ModuleLang instance as a child of another ModuleLang."
+            );
+        }
+
+        for (Map.Entry<String, String> entry : lang.getTranslations().entrySet()) {
+            String locale = entry.getKey();
             this.allTranslations.putIfAbsent(locale, new LinkedHashMap<>());
-            this.defaultKeys.putIfAbsent(locale, new HashSet<>());
-            Map<String, String> currentAdded = this.allTranslations.get(locale);
-            Set<String> currentDefaultKeys = this.defaultKeys.get(locale);
-            for (Map.Entry<String, String> keyAndTranslation : localeAndTranslations.getValue().entrySet()) {
-                String key = keyAndTranslation.getKey();
-                if (key.contains(".__default__.")) {
-                    if (currentDefaultKeys.contains(key))
-                        continue;
-                    else
-                        currentDefaultKeys.add(key);
-                } else if (currentAdded.containsKey(key)) {
-                    throw new IllegalStateException(
-                        "Duplicate translation key " + key + ". Use PlaceholderLang " +
-                            "instead of the original ModuleLang instance as a child of another ModuleLang."
-                    );
-                }
-                currentAdded.put(key, keyAndTranslation.getValue());
+            this.allTranslations.get(locale).put(key, entry.getValue());
+        }
+
+        for (ModuleLang child : lang.getChildren()) {
+            if (child instanceof TranslatableLang translatable)
+                this.addTranslatableLang(translatable, false);
+            else if (child instanceof PlaceholderLang placeholder) {
+                this.addPlaceholderLang(placeholder);
             }
+        }
+    }
+
+    protected void addPlaceholderLang(PlaceholderLang lang) {
+        if (!lang.isEmpty()) {
+            ModuleLang content = lang.getDefaultContent();
+            if (content instanceof TranslatableLang translatable)
+                this.addTranslatableLang(translatable, true);
+            else if (content instanceof PlaceholderLang placeholder)
+                this.addPlaceholderLang(placeholder);
         }
     }
 

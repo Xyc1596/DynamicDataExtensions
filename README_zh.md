@@ -30,14 +30,15 @@
 <summary>已支持数据类型：</summary>
 
 * 原版配方（基于`RecipeBuilder`）
-  * [有序合成](src/main/java/com/xyc/dynamicdataext/mixins/recipes/ShapedRecipeBuilderMixin.java)
-  * [无序合成](src/main/java/com/xyc/dynamicdataext/mixins/recipes/ShapelessRecipeBuilderMixin.java)
-  * [烧炼](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SimpleCookingRecipeBuilderMixin.java)（熔炉 / 高炉 / 烟熏炉 / 营火）
-  * [切石机](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SingleItemRecipeBuilderMixin.java)
-  * [锻造升级](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SmithingTransformRecipeBuilderMixin.java)
-  * [盔甲纹饰](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SmithingTrimRecipeBuilderMixin.java)
-  * [定制配方 / 特殊配方](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SpecialRecipeBuilderMixin.java)
+    * [有序合成](src/main/java/com/xyc/dynamicdataext/mixins/recipes/ShapedRecipeBuilderMixin.java)
+    * [无序合成](src/main/java/com/xyc/dynamicdataext/mixins/recipes/ShapelessRecipeBuilderMixin.java)
+    * [烧炼](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SimpleCookingRecipeBuilderMixin.java)（熔炉 / 高炉 / 烟熏炉 / 营火）
+    * [切石机](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SingleItemRecipeBuilderMixin.java)
+    * [锻造升级](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SmithingTransformRecipeBuilderMixin.java)
+    * [盔甲纹饰](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SmithingTrimRecipeBuilderMixin.java)
+    * [定制配方 / 特殊配方](src/main/java/com/xyc/dynamicdataext/mixins/recipes/SpecialRecipeBuilderMixin.java)
 * 标签
+
 </details>
 
 > 例：根据 `c:storage_blocks/raw_(.*)` 标签匹配所有粗矿物块，生成将它们烧炼成对应矿物块的配方
@@ -64,7 +65,7 @@
 
 ## 计划中的内容
 
-* 对战利品列表的支持；
+* 战利品列表、进度；
 * 更多配置项类型；
 * 未安装 Cloth Config API 的提示页面；
 * 附属模组及教程；

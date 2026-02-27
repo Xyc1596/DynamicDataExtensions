@@ -18,7 +18,7 @@ public class PlaceholderLang extends ModuleLang {
         this.defaultContent = defaultContent;
     }
 
-    protected ModuleLang getDefaultContent() {
+    public ModuleLang getDefaultContent() {
         return this.defaultContent == null ? LiteralLang.EMPTY : this.defaultContent;
     }
 

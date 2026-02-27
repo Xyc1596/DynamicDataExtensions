@@ -11,6 +11,8 @@ public class TranslatableLang extends ModuleLang {
     protected final List<ModuleLang> children;
     protected final Map<String, Map<String, String>> allTranslations;   // locale, (key, translation)
     protected PlaceholderLang placeholder;
+    protected final boolean isTemplate;
+    protected final Map<String, String> translations;
 
     public TranslatableLang(
         String category,
@@ -18,7 +20,8 @@ public class TranslatableLang extends ModuleLang {
         String[] id,
         Set<ChatFormatting> formats,
         List<ModuleLang> children,
-        Map<String, String> translations    // locale, translation
+        Map<String, String> translations,    // locale, translation
+        boolean isTemplate
     ) {
         super(formats);
         List<String> keyParts = new LinkedList<>();
@@ -32,7 +35,9 @@ public class TranslatableLang extends ModuleLang {
 
         this.key = String.join(".", keyParts);
         this.children = children;
+        this.translations = translations;
         this.allTranslations = new HashMap<>();
+        this.isTemplate = isTemplate;
 
         Set<TranslatableLang> allTranslatableChildren = new HashSet<>();
         for (ModuleLang child : children) {
@@ -58,7 +63,19 @@ public class TranslatableLang extends ModuleLang {
     }
 
     public static TranslatableLang empty(String category, String namespace, String... id) {
-        return new TranslatableLang(category, namespace, id, Set.of(), List.of(), Map.of());
+        return new TranslatableLang(category, namespace, id, Set.of(), List.of(), Map.of(), false);
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public List<ModuleLang> getChildren() {
+        return this.children;
+    }
+
+    public Map<String, String> getTranslations() {
+        return this.translations;
     }
 
     /**
@@ -96,5 +113,12 @@ public class TranslatableLang extends ModuleLang {
         if (this.placeholder == null)
             this.placeholder = new PlaceholderLang(this, Set.of(formats));
         return this.placeholder;
+    }
+
+    /**
+     * 是否允许在DataGen阶段重复出现
+     */
+    public boolean isTemplate() {
+        return this.isTemplate;
     }
 }

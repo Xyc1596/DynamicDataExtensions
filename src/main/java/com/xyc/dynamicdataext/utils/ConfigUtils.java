@@ -77,6 +77,7 @@ public final class ConfigUtils {
 
     public static TranslatableBuilder createDefaultLangBuilder(String... id) {
         return ModuleLangBuilder.translatable(
+            true,
             "module",
             DynamicDataMain.MOD_ID,
             ArrayUtils.insert(0, id, "__default__")

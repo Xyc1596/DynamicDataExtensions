@@ -13,8 +13,10 @@ public class TranslatableBuilder extends ModuleLangBuilder<TranslatableBuilder> 
     protected final String[] id;
     protected final List<ModuleLang> children = new ArrayList<>();
     protected final Map<String, String> translations = new HashMap<>();
+    protected boolean isTemplate;
 
-    public TranslatableBuilder(String category, String namespace, String... id) {
+    public TranslatableBuilder(boolean isTemplate, String category, String namespace, String... id) {
+        this.isTemplate = isTemplate;
         this.category = category;
         this.namespace = namespace;
         this.id = id;
@@ -37,17 +39,18 @@ public class TranslatableBuilder extends ModuleLangBuilder<TranslatableBuilder> 
             this.id,
             this.formats,
             this.children,
-            this.translations
+            this.translations,
+            this.isTemplate
         );
     }
 
     public TranslatableBuilder childTranslatableBuilder(String... appendId) {
         String[] newId = ArrayUtils.addAll(this.id, appendId);
-        return new TranslatableBuilder(this.category, this.namespace, newId);
+        return new TranslatableBuilder(false, this.category, this.namespace, newId);
     }
 
     public TranslatableBuilder childTranslatableBuilder() {
         String[] newId = ArrayUtils.addAll(this.id, String.valueOf(this.children.size()));
-        return new TranslatableBuilder(this.category, this.namespace, newId);
+        return new TranslatableBuilder(false, this.category, this.namespace, newId);
     }
 }

@@ -2,9 +2,7 @@ package com.xyc.dynamicdataext.utils;
 
 import com.xyc.dynamicdataext.base.Module;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -12,28 +10,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @SuppressWarnings("unused")
 public final class LocationUtils {
     @ParametersAreNonnullByDefault
-    public static ResourceLocation withDefaultNamespace(String id) {
-        return ResourceLocation.withDefaultNamespace(id);
+    public static ResourceLocation withDefaultNamespace(String... paths) {
+        return ResourceLocation.withDefaultNamespace(String.join(".", paths));
     }
 
     @ParametersAreNonnullByDefault
-    public static ResourceLocation fromNamespaceAndPath(String namespace, String path) {
-        return ResourceLocation.fromNamespaceAndPath(namespace, path);
+    public static ResourceLocation fromNamespaceAndPath(String namespace, String... paths) {
+        return ResourceLocation.fromNamespaceAndPath(namespace, String.join(".", paths));
     }
 
     @ParametersAreNonnullByDefault
-    public static ResourceLocation withCommonNamespace(String id) {
-        return LocationUtils.fromNamespaceAndPath("c", id);
-    }
-
-    @ParametersAreNonnullByDefault
-    public static TagKey<Item> createItemTag(ResourceLocation location) {
-        return TagKey.create(Registries.ITEM, location);
-    }
-
-    @ParametersAreNonnullByDefault
-    public static TagKey<Item> createItemTag(String namespace, String path) {
-        return TagKey.create(Registries.ITEM, LocationUtils.fromNamespaceAndPath(namespace, path));
+    public static ResourceLocation withCommonNamespace(String... paths) {
+        return LocationUtils.fromNamespaceAndPath("c", String.join(".", paths));
     }
 
     @ParametersAreNonnullByDefault

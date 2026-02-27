@@ -23,7 +23,7 @@ public class TagsTest extends Module {
         super(DynamicDataMain.MOD_ID, "tags_test");
     }
 
-    private static final TagKey<Item> TEST_TAG = LocationUtils.createItemTag(
+    private static final TagKey<Item> TEST_TAG = TagUtils.createItemTag(
         LocationUtils.fromNamespaceAndPath(DynamicDataMain.MOD_ID, "test_tag")
     );
 
