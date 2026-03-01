@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
-import com.xyc.dynamicdataext.base.NamedEnum;
+import com.xyc.dynamicdataext.utils.NamedEnum;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;

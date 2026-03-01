@@ -16,6 +16,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,12 +26,11 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class TrapdoorBalance extends Module {
@@ -41,11 +41,11 @@ public class TrapdoorBalance extends Module {
     }
 
     @Override
-    public @Nullable Predicate<Recipe<?>> gatherRecipeExcluder() {
+    public BiPredicate<ResourceLocation, Recipe<?>> gatherRecipeExcluder() {
         this.newRecipes.clear();
         IRecipeManagerExtensions manager = DynamicDataRegistry.getRecipeManager();
 
-        return recipe -> {
+        return (location, recipe) -> {
             if (recipe instanceof ShapedRecipe shapedRecipe) {
                 ItemStack resultStack = manager.getResultItemStack(shapedRecipe);
                 if (resultStack.is(ItemTags.TRAPDOORS)) {

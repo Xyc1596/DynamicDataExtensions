@@ -1,4 +1,4 @@
-package com.xyc.dynamicdataext.base;
+package com.xyc.dynamicdataext.utils;
 
 import com.xyc.dynamicdataext.lang.ModuleLang;
 

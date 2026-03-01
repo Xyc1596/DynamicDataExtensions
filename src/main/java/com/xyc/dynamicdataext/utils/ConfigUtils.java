@@ -1,11 +1,9 @@
 package com.xyc.dynamicdataext.utils;
 
 import com.xyc.dynamicdataext.DynamicDataMain;
-import com.xyc.dynamicdataext.base.NamedEnum;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
-import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
@@ -20,41 +18,65 @@ public final class ConfigUtils {
         .translation("en_us", "Enable")
         .build();
 
-    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION =
-        createDefaultLangBuilder("id_format_instruction")
+    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION_HEAD =
+        createDefaultLangBuilder("id_format_instruction", "head")
+            .translation("zh_cn", "命名空间ID格式")
+            .translation("en_us", "Namespaced ID Formats")
+            .format(ChatFormatting.ITALIC, ChatFormatting.WHITE)
+            .build();
+    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION_SINGLE =
+        createDefaultLangBuilder("id_format_instruction", "single")
+            .translation("zh_cn", "* 单项 - %s")
+            .translation("en_us", "* Single - %s")
+            .child(createDefaultLangBuilder("id_format_instruction", "single", "format")
+                .translation("zh_cn", "<命名空间>:<路径>")
+                .translation("en_us", "<namespace>:<path>")
+                .format(ChatFormatting.WHITE)
+                .build()
+            ).format(ChatFormatting.GRAY)
+            .build();
+    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION_TAG =
+        createDefaultLangBuilder("id_format_instruction", "tag")
+            .translation("zh_cn", "* 标签 - %s")
+            .translation("en_us", "* Tag    - %s")
+            .child(createDefaultLangBuilder("id_format_instruction", "tag", "format")
+                .translation("zh_cn", "#<命名空间>:<路径>")
+                .translation("en_us", "#<namespace>:<path>")
+                .format(ChatFormatting.DARK_PURPLE)
+                .build()
+            ).format(ChatFormatting.GRAY)
+            .build();
+    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION_COMMENT =
+        createDefaultLangBuilder("id_format_instruction", "comment")
             .translation(
                 "zh_cn",
                 """
-                    %s
-                      * 单项 - %s
-                      * 标签 - %s
-                      > 命名空间为“minecraft”时，前缀“minecraft:”可省略"""
+                    > 命名空间为“minecraft”时，前缀“minecraft:”可省略
+                    > 添加“@”前缀以使用正则表达式匹配"""
             ).translation(
                 "en_us",
                 """
-                    %s
-                      * Single - %s
-                      * Tag    - %s
-                      > If the namespace is "minecraft", the prefix "minecraft:" can be omitted"""
-            ).child(
-                createDefaultLangBuilder("id_format_instruction", "tooltip_head")
-                    .translation("zh_cn", "命名空间ID格式")
-                    .translation("en_us", "Namespaced ID Formats")
-                    .format(ChatFormatting.ITALIC, ChatFormatting.WHITE)
-                    .build()
-            ).child(
-                createDefaultLangBuilder("id_format_instruction", "single")
-                    .translation("zh_cn", "<命名空间>:<路径>")
-                    .translation("en_us", "<namespace>:<path>")
-                    .format(ChatFormatting.WHITE)
-                    .build()
-            ).child(
-                createDefaultLangBuilder("id_format_instruction", "tag")
-                    .translation("zh_cn", "#<命名空间>:<路径>")
-                    .translation("en_us", "#<namespace>:<path>")
-                    .format(ChatFormatting.DARK_PURPLE)
-                    .build()
-            ).format(ChatFormatting.GRAY).build();
+                    > If the namespace is "minecraft", the prefix "minecraft:" can be omitted
+                    > Add "@" prefix to use regular expression matching"""
+            ).format(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+            .build();
+    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION =
+        createDefaultLangBuilder("id_format_instruction")
+            .translation("zh_cn", "%s\n%s\n%s\n%s")
+            .translation("en_us", "%s\n%s\n%s\n%s")
+            .child(DEFAULT_ID_FORMAT_INSTRUCTION_HEAD)
+            .child(DEFAULT_ID_FORMAT_INSTRUCTION_SINGLE)
+            .child(DEFAULT_ID_FORMAT_INSTRUCTION_TAG)
+            .child(DEFAULT_ID_FORMAT_INSTRUCTION_COMMENT)
+            .build();
+    public static final TranslatableLang DEFAULT_SINGLE_FORMAT_INSTRUCTION =
+        createDefaultLangBuilder("single_format_instruction")
+            .translation("zh_cn", "%s\n%s\n%s")
+            .translation("en_us", "%s\n%s\n%s")
+            .child(DEFAULT_ID_FORMAT_INSTRUCTION_HEAD)
+            .child(DEFAULT_ID_FORMAT_INSTRUCTION_SINGLE)
+            .child(DEFAULT_ID_FORMAT_INSTRUCTION_COMMENT)
+            .build();
 
     public static final TranslatableLang DEFAULT_LIST_MODE_BLACKLIST =
         createDefaultLangBuilder("list_mode", "blacklist")
@@ -111,38 +133,5 @@ public final class ConfigUtils {
                 .child(list.getTitle().getPlaceholder())
                 .build()
             );
-    }
-
-    public static ModuleOptionBuilder<List<String>> createEntryListOptionBuilderWithTooltip(
-        ModuleConfigBuilder builder,
-        String optionId
-    ) {
-        return createEntryListOptionBuilderWithTooltip(builder, optionId, List.of());
-    }
-
-    public static ModuleOptionBuilder<List<String>> createEntryListOptionBuilderWithTooltip(
-        ModuleConfigBuilder builder,
-        String optionId,
-        List<String> defaultValue
-    ) {
-        return builder.createStringListOptionBuilder(optionId)
-                      .setDefaultValue(defaultValue)
-                      .setTooltip(ConfigUtils.DEFAULT_ID_FORMAT_INSTRUCTION);
-    }
-
-    public enum ListMode implements NamedEnum {
-        WHITELIST(DEFAULT_LIST_MODE_WHITELIST),
-        BLACKLIST(DEFAULT_LIST_MODE_BLACKLIST);
-
-        private final ModuleLang name;
-
-        ListMode(ModuleLang name) {
-            this.name = name;
-        }
-
-        @Override
-        public ModuleLang getName() {
-            return this.name;
-        }
     }
 }

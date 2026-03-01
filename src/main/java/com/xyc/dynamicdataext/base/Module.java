@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public abstract class Module {
@@ -42,7 +42,7 @@ public abstract class Module {
      * @see com.xyc.dynamicdataext.DynamicDataRegistry#injectRecipes(net.minecraft.world.item.crafting.RecipeManager)
      */
     @Nullable
-    public Predicate<Recipe<?>> gatherRecipeExcluder() {
+    public BiPredicate<ResourceLocation, Recipe<?>> gatherRecipeExcluder() {
         return null;
     }
 

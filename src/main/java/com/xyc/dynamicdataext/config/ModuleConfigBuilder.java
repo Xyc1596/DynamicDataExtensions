@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
-import com.xyc.dynamicdataext.base.NamedEnum;
+import com.xyc.dynamicdataext.utils.NamedEnum;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;

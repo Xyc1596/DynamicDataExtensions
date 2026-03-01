@@ -17,7 +17,6 @@ import java.util.*;
 public class DynamicDataLanguageProvider {
     protected final String modId;
     protected final Map<String, Map<String, String>> allTranslations = new HashMap<>();
-    protected final Map<String, Set<String>> defaultKeys = new HashMap<>();
 
     protected final Set<String> duplicateKeys = new HashSet<>();
     protected final Set<String> addedKeys = new HashSet<>();

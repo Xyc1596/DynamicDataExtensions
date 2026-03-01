@@ -26,7 +26,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import org.slf4j.Logger;
 
 import java.util.*;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 /**
@@ -102,7 +102,7 @@ public final class DynamicDataRegistry {
         recipeManager = (IRecipeManagerExtensions) manager;
 
         Set<ResourceLocation> recipesToRemove = new LinkedHashSet<>();
-        Set<Predicate<Recipe<?>>> recipeExcluders = new LinkedHashSet<>();
+        Set<BiPredicate<ResourceLocation, Recipe<?>>> recipeExcluders = new LinkedHashSet<>();
         Set<DynamicRecipeEntry> recipesToAdd = new LinkedHashSet<>();
         Set<Supplier<Set<DynamicRecipeEntry>>> recipeProviders = new LinkedHashSet<>();
         for (DynamicDataConfig ddConfig : ddConfigs.values()) {
@@ -110,7 +110,7 @@ public final class DynamicDataRegistry {
                 if (ddConfig.isModuleEnabled(module.getModuleId())) {
                     recipesToRemove.addAll(module.gatherRecipesToRemove());
                     recipesToAdd.addAll(module.gatherRecipesToAdd());
-                    Predicate<Recipe<?>> excluder = module.gatherRecipeExcluder();
+                    BiPredicate<ResourceLocation, Recipe<?>> excluder = module.gatherRecipeExcluder();
                     if (excluder != null)
                         recipeExcluders.add(excluder);
                     Supplier<Set<DynamicRecipeEntry>> provider = module.gatherRecipeProvider();
@@ -134,8 +134,8 @@ public final class DynamicDataRegistry {
             else {
                 RecipeHolder<?> value = entry.getValue();
                 Recipe<?> recipe = value.value();
-                for (Predicate<Recipe<?>> p : recipeExcluders) {
-                    if (p.test(recipe)) {
+                for (BiPredicate<ResourceLocation, Recipe<?>> p : recipeExcluders) {
+                    if (p.test(location, recipe)) {
                         locationsRemoved.add(location);
                         continue LOOP_REM;
                     }
