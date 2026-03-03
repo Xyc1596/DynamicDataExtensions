@@ -33,6 +33,7 @@ public class DynamicDataMain {
             new SlabRecycling(),
             new TrapdoorBalance(),
             new ReversibleCutting(),
+            new GlassCutting(),
             new TagsTest(),
             new Common()
         );

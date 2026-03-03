@@ -14,7 +14,6 @@ import com.xyc.dynamicdataext.utils.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +44,7 @@ public class RawOreBlockSmelting extends Module {
         Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         boolean whitelistMode = this.ingredientListMode.getValue() == ListMode.WHITELIST;
 
-        Optional<HolderSet.Named<Item>> storageBlockHolders = BuiltInRegistries.ITEM.getTag(Tags.Items.STORAGE_BLOCKS);
+        Optional<HolderSet.Named<Item>> storageBlockHolders = RegistryUtils.getItemTagContents(Tags.Items.STORAGE_BLOCKS);
         if (storageBlockHolders.isEmpty())
             return Set.of();
 
@@ -56,10 +55,8 @@ public class RawOreBlockSmelting extends Module {
                     return;
 
                 String material = matcher.group(1);
-                Optional<HolderSet.Named<Item>> resultHolders_ = BuiltInRegistries.ITEM.getTag(
-                    TagUtils.createItemTag(
-                        LocationUtils.withCommonNamespace("storage_blocks/" + material)
-                    )
+                Optional<HolderSet.Named<Item>> resultHolders_ = RegistryUtils.getItemTagContents(
+                    LocationUtils.withCommonNamespace("storage_blocks/" + material)
                 );
                 if (resultHolders_.isEmpty())
                     return;
@@ -69,11 +66,11 @@ public class RawOreBlockSmelting extends Module {
                     return;
 
                 Item result = resultHolder.get(0).value();
-                Optional<HolderSet.Named<Item>> ingredientHolders_ = BuiltInRegistries.ITEM.getTag(ingredientTag);
+                Optional<HolderSet.Named<Item>> ingredientHolders_ = RegistryUtils.getItemTagContents(ingredientTag);
                 if (ingredientHolders_.isEmpty())
                     return;
 
-                Set<Item> ingredientSet = TagUtils.getHolderSetContents(ingredientHolders_.get());
+                Set<Item> ingredientSet = RegistryUtils.getHolderSetContents(ingredientHolders_.get());
                 Set<Item> filtered = ingredientList.applyToForSet(ingredientSet, whitelistMode);
                 Ingredient ingredient = filtered.size() == ingredientSet.size()
                     ? Ingredient.of(ingredientTag)

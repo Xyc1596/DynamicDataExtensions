@@ -1,13 +1,10 @@
 package com.xyc.dynamicdataext.utils;
 
 import com.xyc.dynamicdataext.base.Module;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-@SuppressWarnings("unused")
 public final class LocationUtils {
     @ParametersAreNonnullByDefault
     public static ResourceLocation withDefaultNamespace(String... paths) {
@@ -25,20 +22,15 @@ public final class LocationUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static String createContentNameWithModuleId(Module module, String id) {
+    public static String createNameWithModuleId(Module module, String id) {
         return module.getModuleId() + "." + id;
     }
 
     @ParametersAreNonnullByDefault
-    public static ResourceLocation createContentLocationWithModuleId(Module module, String id) {
+    public static ResourceLocation createLocationWithModuleId(Module module, String id) {
         return LocationUtils.fromNamespaceAndPath(
             module.getNamespace(),
-            createContentNameWithModuleId(module, id)
+            createNameWithModuleId(module, id)
         );
-    }
-
-    @ParametersAreNonnullByDefault
-    public static String getItemId(Item item) {
-        return BuiltInRegistries.ITEM.getKey(item).getPath();
     }
 }

@@ -4,7 +4,7 @@ import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.base.DynamicTagEntry;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.utils.TagUtils;
+import com.xyc.dynamicdataext.utils.RegistryUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
@@ -23,13 +23,13 @@ public class TagsTest extends Module {
         super(DynamicDataMain.MOD_ID, "tags_test");
     }
 
-    private static final TagKey<Item> TEST_TAG = TagUtils.createItemTag(
+    private static final TagKey<Item> TEST_TAG = RegistryUtils.createItemTag(
         LocationUtils.fromNamespaceAndPath(DynamicDataMain.MOD_ID, "test_tag")
     );
 
     @Override
     public @NotNull Set<DynamicTagEntry<?>> gatherTagsToAdd() {
-        return Set.of(DynamicTagEntry.itemTag(TEST_TAG, Set.of(TagUtils.getItemHolder(Items.ROTTEN_FLESH))));
+        return Set.of(DynamicTagEntry.itemTag(TEST_TAG, Set.of(RegistryUtils.getItemHolder(Items.ROTTEN_FLESH))));
     }
 
     @Override

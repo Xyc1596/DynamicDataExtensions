@@ -84,7 +84,7 @@ public class ReversibleCutting extends Module {
                         for (Item ingredientItem : resultLayerItems)
                             if (!ingredientItem.equals(result))
                                 ingredients[ingredientIdx++] = ingredientItem;
-                        String recipeId = LocationUtils.getItemId(result) + "_cutting";
+                        String recipeId = RegistryUtils.getItemId(result) + "_cutting";
                         output.add(RecipeUtils.createRecipeEntry(
                             this,
                             recipeId,

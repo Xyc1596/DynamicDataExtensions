@@ -1,8 +1,8 @@
 package com.xyc.dynamicdataext.base;
 
+import com.xyc.dynamicdataext.utils.RegistryUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
@@ -31,7 +31,7 @@ public class DynamicTagEntry<T> {
     }
 
     public static DynamicTagEntry<Item> itemTag(TagKey<Item> tag, Iterable<Holder<Item>> holders) {
-        return new DynamicTagEntry<>(BuiltInRegistries.ITEM, tag, holders);
+        return new DynamicTagEntry<>(RegistryUtils.ITEM_REGISTRY, tag, holders);
     }
 
     @Override

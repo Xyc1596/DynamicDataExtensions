@@ -8,10 +8,7 @@ import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
-import com.xyc.dynamicdataext.utils.ConfigUtils;
-import com.xyc.dynamicdataext.utils.CriterionUtils;
-import com.xyc.dynamicdataext.utils.LocationUtils;
-import com.xyc.dynamicdataext.utils.RecipeUtils;
+import com.xyc.dynamicdataext.utils.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -99,7 +96,7 @@ public class TrapdoorBalance extends Module {
     ) {
         Set<Ingredient> ingredients = Set.copyOf(pattern.ingredients());
         Item result = resultStack.getItem();
-        String resultName = LocationUtils.getItemId(result);
+        String resultName = RegistryUtils.getItemId(result);
         if (ingredients.size() == 1) {
             this.newRecipes.add(RecipeUtils.createRecipeEntry(
                 this,

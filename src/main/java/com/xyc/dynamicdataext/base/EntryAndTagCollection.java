@@ -2,9 +2,9 @@ package com.xyc.dynamicdataext.base;
 
 import com.google.common.collect.Sets;
 import com.mojang.logging.LogUtils;
+import com.xyc.dynamicdataext.utils.RegistryUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -28,7 +28,7 @@ public class EntryAndTagCollection<T> {
     }
 
     public static EntryAndTagCollection<Item> items() {
-        return new EntryAndTagCollection<>(BuiltInRegistries.ITEM);
+        return new EntryAndTagCollection<>(RegistryUtils.ITEM_REGISTRY);
     }
 
     public EntryAndTagCollection<T> parseStrings(Iterable<String> ids) {
