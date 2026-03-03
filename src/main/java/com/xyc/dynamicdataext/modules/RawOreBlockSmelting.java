@@ -29,11 +29,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RawOreBlockSmelting extends Module {
+    public static final String MODULE_ID = "raw_ore_block_smelting";
     protected ModuleOption<List<String>> ingredientList;
     protected ModuleOption<ListMode> ingredientListMode;
 
     public RawOreBlockSmelting() {
-        super(DynamicDataMain.MOD_ID, "raw_ore_block_smelting");
+        super(DynamicDataMain.MOD_ID, MODULE_ID);
     }
 
     @Override

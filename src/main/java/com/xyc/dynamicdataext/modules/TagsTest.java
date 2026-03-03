@@ -4,10 +4,10 @@ import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.base.DynamicTagEntry;
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.utils.RegistryUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
+import com.xyc.dynamicdataext.utils.RegistryUtils;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.TagKey;
@@ -19,8 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class TagsTest extends Module {
+    public static final String MODULE_ID = "tags_test";
+
     public TagsTest() {
-        super(DynamicDataMain.MOD_ID, "tags_test");
+        super(DynamicDataMain.MOD_ID, MODULE_ID);
     }
 
     private static final TagKey<Item> TEST_TAG = RegistryUtils.createItemTag(

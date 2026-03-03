@@ -9,8 +9,10 @@ import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.NotNull;
 
 public class Common extends Module {
+    public static final String MODULE_ID = "common";
+
     public Common() {
-        super(DynamicDataMain.MOD_ID, "common");
+        super(DynamicDataMain.MOD_ID, MODULE_ID);
     }
 
     @Override

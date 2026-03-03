@@ -6,9 +6,11 @@ import com.google.common.collect.Sets;
 import com.mojang.logging.LogUtils;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.*;
+import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.PlaceholderLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.modules.Common;
 import com.xyc.dynamicdataext.utils.ModMainUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -81,11 +83,13 @@ public final class DynamicDataRegistry {
     }
 
     public static boolean autoReloading() {
-        return (boolean) ddConfigs.get(DynamicDataMain.MOD_ID)
-                                  .getModule("common")
-                                  .getConfig()
-                                  .getOption("auto_reload")
-                                  .getValue();
+        return (boolean) getModuleConfig(DynamicDataMain.MOD_ID, Common.MODULE_ID)
+            .getOption("auto_reload")
+            .getValue();
+    }
+
+    public static ModuleConfig getModuleConfig(String namespace, String moduleId) {
+        return ddConfigs.get(namespace).getModule(moduleId).getConfig();
     }
 
     public static IRecipeManagerExtensions getRecipeManager() {

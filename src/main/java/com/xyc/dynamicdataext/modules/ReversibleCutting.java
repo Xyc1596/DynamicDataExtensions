@@ -29,12 +29,13 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class ReversibleCutting extends Module {
+    public static final String MODULE_ID = "reversible_cutting";
     private final SingleItemRecipeGraph graph = new SingleItemRecipeGraph();
     protected ModuleOption<List<String>> recipeList;
     protected ModuleOption<ListMode> recipeListMode;
 
     public ReversibleCutting() {
-        super(DynamicDataMain.MOD_ID, "reversible_cutting");
+        super(DynamicDataMain.MOD_ID, MODULE_ID);
     }
 
     @Override

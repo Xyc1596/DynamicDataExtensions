@@ -33,21 +33,24 @@ public class GlassCutting extends Module {
     public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
         Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
 
-        Optional<HolderSet.Named<Item>> glassBlocks = RegistryUtils.getItemTagContents(Tags.Items.GLASS_BLOCKS);
-        if (glassBlocks.isEmpty())
-            return Set.of();
+        Optional<HolderSet.Named<Item>> glassBlocks_ = RegistryUtils.getItemTagContents(Tags.Items.GLASS_BLOCKS);
+        if (glassBlocks_.isEmpty())
+            return output;
 
-        for (Holder<Item> holder : glassBlocks.get()) {
+        for (Holder<Item> holder : glassBlocks_.get()) {
             Item glassBlock = holder.value();
             String glassBlockName = RegistryUtils.getItemId(glassBlock);
             String glassPaneName = glassBlockName + "_pane";
-            Item glassPane = RegistryUtils.getItem(LocationUtils.withDefaultNamespace(glassPaneName));
+            Optional<Item> glassPane_ = RegistryUtils.getItem(LocationUtils.withDefaultNamespace(glassPaneName));
+            if (glassPane_.isEmpty())
+                continue;
+            Item glassPane = glassPane_.get();
             output.add(RecipeUtils.createRecipeEntry(
                 this,
                 glassPaneName + "_from_cutting",
                 SingleItemRecipeBuilder.stonecutting(
                     Ingredient.of(glassBlock),
-                    RecipeCategory.BUILDING_BLOCKS,
+                    RecipeCategory.MISC,
                     glassPane,
                     4
                 ).unlockedBy("has_material", CriterionUtils.hasItems(glassBlock))
@@ -56,7 +59,7 @@ public class GlassCutting extends Module {
                 output.add(RecipeUtils.createRecipeEntry(
                     this,
                     glassBlockName + "_from_pane",
-                    ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, glassBlock)
+                    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, glassBlock)
                                        .define('#', glassPane).pattern("##").pattern("##")
                                        .unlockedBy("has_material", CriterionUtils.hasItems(glassPane))
                 ));

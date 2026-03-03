@@ -24,8 +24,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ConvenientCrafting extends Module {
+    public static final String MODULE_ID = "convenient_crafting";
+
     public ConvenientCrafting() {
-        super(DynamicDataMain.MOD_ID, "convenient_crafting");
+        super(DynamicDataMain.MOD_ID, MODULE_ID);
     }
 
     @Override

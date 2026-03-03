@@ -31,10 +31,12 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class TrapdoorBalance extends Module {
+    public static final String MODULE_ID = "trapdoor_balance";
+
     protected Set<DynamicRecipeEntry> newRecipes = new LinkedHashSet<>();
 
     public TrapdoorBalance() {
-        super(DynamicDataMain.MOD_ID, "trapdoor_balance");
+        super(DynamicDataMain.MOD_ID, MODULE_ID);
     }
 
     @Override

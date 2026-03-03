@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
@@ -66,7 +67,8 @@ public final class RegistryUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static Item getItem(ResourceLocation location) {
-        return ITEM_REGISTRY.get(location);
+    public static Optional<Item> getItem(ResourceLocation location) {
+        Item item = ITEM_REGISTRY.get(location);
+        return item == Items.AIR ? Optional.empty() : Optional.of(item);
     }
 }

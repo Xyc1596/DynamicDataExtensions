@@ -1,8 +1,8 @@
 package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.DynamicDataMain;
-import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
+import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
@@ -20,8 +20,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class WoolToString extends Module {
+    public static final String MODULE_ID = "wool_and_carpet_to_string";
+
     public WoolToString() {
-        super(DynamicDataMain.MOD_ID, "wool_and_carpet_to_string");
+        super(DynamicDataMain.MOD_ID, MODULE_ID);
     }
 
     @Override

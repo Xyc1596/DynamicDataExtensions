@@ -16,15 +16,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class LeatherFromRottenFlesh extends Module {
+    public static final String MODULE_ID = "leather_from_rotten_flesh";
+
     public LeatherFromRottenFlesh() {
-        super(DynamicDataMain.MOD_ID, "leather_from_rotten_flesh");
+        super(DynamicDataMain.MOD_ID, MODULE_ID);
     }
 
     @Override
     public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
         return RecipeUtils.createSmokingAll(
             this,
-            this.moduleId,
+            MODULE_ID,
             Ingredient.of(Items.ROTTEN_FLESH),
             RecipeCategory.MISC,
             Items.LEATHER,
