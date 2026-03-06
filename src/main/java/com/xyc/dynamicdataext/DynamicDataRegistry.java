@@ -25,6 +25,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -83,13 +84,28 @@ public final class DynamicDataRegistry {
     }
 
     public static boolean autoReloading() {
-        return (boolean) getModuleConfig(DynamicDataMain.MOD_ID, Common.MODULE_ID)
+        ModuleConfig config = getModuleConfig(DynamicDataMain.MOD_ID, Common.MODULE_ID);
+        return config != null && (boolean) config
             .getOption("auto_reload")
             .getValue();
     }
 
-    public static ModuleConfig getModuleConfig(String namespace, String moduleId) {
-        return ddConfigs.get(namespace).getModule(moduleId).getConfig();
+    public static boolean isModuleEnabled(String namespace, String moduleId) {
+        ModuleConfig config = getModuleConfig(namespace, moduleId);
+        return config != null && config.isEnabled();
+    }
+
+    public static @Nullable ModuleConfig getModuleConfig(String namespace, String moduleId) {
+        if (ddConfigs.containsKey(namespace)) {
+            Module module = ddConfigs.get(namespace).getModule(moduleId);
+            if (module==null) {
+                LOGGER.warn("Module {} not found in namespace {}", moduleId, namespace);
+                return null;
+            } else return module.getConfig();
+        } else {
+            LOGGER.warn("Namespace {} not found", namespace);
+            return null;
+        }
     }
 
     public static IRecipeManagerExtensions getRecipeManager() {

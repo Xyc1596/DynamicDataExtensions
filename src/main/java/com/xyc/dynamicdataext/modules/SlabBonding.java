@@ -9,7 +9,6 @@ import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.utils.*;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import org.apache.commons.lang3.StringUtils;
@@ -33,9 +32,8 @@ public class SlabBonding extends Module {
         RegistryUtils
             .getItemTagContents(ItemTags.SLABS)
             .ifPresent(holders -> holders.forEach(
-                holder -> holder.unwrapKey().ifPresent(
-                    key -> {
-                        ResourceLocation location = key.location();
+                holder -> RegistryUtils.getLocation(holder).ifPresent(
+                    location -> {
                         String name = location.getPath();
                         String resultName = holder.is(ItemTags.WOODEN_SLABS)
                             ? StringUtils.stripEnd(name, NORMAL_SUFFIX) + "_planks"

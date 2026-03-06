@@ -39,12 +39,17 @@ public class GlassCutting extends Module {
 
         for (Holder<Item> holder : glassBlocks_.get()) {
             Item glassBlock = holder.value();
-            String glassBlockName = RegistryUtils.getItemId(glassBlock);
+            Optional<String> glassBlockName_ = RegistryUtils.getItemId(glassBlock);
+            if (glassBlockName_.isEmpty())
+                continue;
+            String glassBlockName = glassBlockName_.get();
+
             String glassPaneName = glassBlockName + "_pane";
             Optional<Item> glassPane_ = RegistryUtils.getItem(LocationUtils.withDefaultNamespace(glassPaneName));
             if (glassPane_.isEmpty())
                 continue;
             Item glassPane = glassPane_.get();
+
             output.add(RecipeUtils.createRecipeEntry(
                 this,
                 glassPaneName + "_from_cutting",

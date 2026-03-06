@@ -28,6 +28,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -82,7 +83,7 @@ public class DynamicDataConfig {
         return moduleMap.values();
     }
 
-    public Module getModule(String moduleId) {
+    public @Nullable Module getModule(String moduleId) {
         return this.moduleMap.get(moduleId);
     }
 

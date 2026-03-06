@@ -30,10 +30,11 @@ public class DynamicDataMain {
             new WoolToString(),
             new ConvenientCrafting(),
             new AllStones(),
-            new SlabRecycling(),
+            new SlabBonding(),
             new TrapdoorBalance(),
             new ReversibleCutting(),
             new GlassCutting(),
+            new WoodCutting(),
             new TagsTest(),
             new Common()
         );

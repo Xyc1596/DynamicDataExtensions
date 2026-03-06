@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -61,14 +62,37 @@ public final class RegistryUtils {
         return ITEM_REGISTRY.getTag(tag);
     }
 
+    /**
+     * 不包括命名空间
+     */
     @ParametersAreNonnullByDefault
-    public static String getItemId(Item item) {
-        return ITEM_REGISTRY.getKey(item).getPath();
+    public static Optional<String> getItemId(Item item) {
+        ResourceLocation location = ITEM_REGISTRY.getKey(item);
+        return location.equals(ITEM_REGISTRY.getDefaultKey()) ? Optional.empty() : Optional.of(location.getPath());
+    }
+
+    @ParametersAreNonnullByDefault
+    public static Optional<ResourceLocation> getItemLocation(Item item) {
+        ResourceLocation location = ITEM_REGISTRY.getKey(item);
+        return location.equals(ITEM_REGISTRY.getDefaultKey()) ? Optional.empty() : Optional.of(location);
     }
 
     @ParametersAreNonnullByDefault
     public static Optional<Item> getItem(ResourceLocation location) {
         Item item = ITEM_REGISTRY.get(location);
         return item == Items.AIR ? Optional.empty() : Optional.of(item);
+    }
+
+    @SuppressWarnings("unused")
+    @ParametersAreNonnullByDefault
+    public static <T> Optional<String> getHolderId(Holder<T> holder) {
+        Optional<ResourceKey<T>> key = holder.unwrapKey();
+        return key.map(resourceKey -> resourceKey.location().getPath());
+    }
+
+    @ParametersAreNonnullByDefault
+    public static <T> Optional<ResourceLocation> getLocation(Holder<T> holder) {
+        Optional<ResourceKey<T>> key = holder.unwrapKey();
+        return key.map(ResourceKey::location);
     }
 }

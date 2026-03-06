@@ -10,21 +10,19 @@ import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.PlaceholderLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
-import com.xyc.dynamicdataext.utils.*;
+import com.xyc.dynamicdataext.utils.ConfigUtils;
+import com.xyc.dynamicdataext.utils.ListMode;
 import net.minecraft.ChatFormatting;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
-import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
@@ -49,7 +47,7 @@ public class ReversibleCutting extends Module {
                 ItemStack resultStack = manager.getResultItemStack(r);
                 for (Ingredient ingredient : r.getIngredients())
                     for (ItemStack itemStack : ingredient.getItems())
-                        this.graph.addItem(resultStack, itemStack.getItem());
+                        this.graph.addConnection(itemStack.getItem(), resultStack);
                 return true;
             }
             return false;
@@ -58,68 +56,7 @@ public class ReversibleCutting extends Module {
 
     @Override
     public @Nullable Supplier<Set<DynamicRecipeEntry>> gatherRecipeProvider() {
-        return () -> {
-            Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
-            for (Map.Entry<Item, Map<Item, Integer>> group : this.graph.getAllGroups().entrySet()) {
-                Map<Item, Integer> itemMap = group.getValue();
-                Integer[] counts = new TreeSet<>(itemMap.values()).toArray(new Integer[0]);
-                Map<Integer, List<Item>> countToItemList = new HashMap<>();
-                Map<Integer, Item[]> countToItemArray = new HashMap<>();
-                for (Map.Entry<Item, Integer> entry : itemMap.entrySet())
-                    countToItemList.computeIfAbsent(entry.getValue(), c -> new LinkedList<>()).add(entry.getKey());
-                for (Map.Entry<Integer, List<Item>> entry : countToItemList.entrySet())
-                    countToItemArray.put(entry.getKey(), entry.getValue().toArray(new Item[0]));
-
-                for (int resultLayerIdx = 0; resultLayerIdx < counts.length; resultLayerIdx++) {
-                    int resultLayerCount = counts[resultLayerIdx];
-                    List<Item> resultLayerItems = countToItemList.get(resultLayerCount);
-                    int resultLayerItemCount = resultLayerItems.size();
-
-                    // 获取比当前物品count更小的count值
-                    Integer[] upperLayerCounts = ArrayUtils.subarray(counts, 0, resultLayerIdx);
-
-                    for (Item result : resultLayerItems) {
-                        // 同层物品合成
-                        Item[] ingredients = new Item[resultLayerItemCount - 1];
-                        int ingredientIdx = 0;
-                        for (Item ingredientItem : resultLayerItems)
-                            if (!ingredientItem.equals(result))
-                                ingredients[ingredientIdx++] = ingredientItem;
-                        String recipeId = RegistryUtils.getItemId(result) + "_cutting";
-                        output.add(RecipeUtils.createRecipeEntry(
-                            this,
-                            recipeId,
-                            SingleItemRecipeBuilder.stonecutting(
-                                Ingredient.of(ingredients),
-                                RecipeCategory.BUILDING_BLOCKS,
-                                result,
-                                1
-                            ).unlockedBy("has_materials", CriterionUtils.hasItems(ingredients))
-                        ));
-
-                        // count更小的层合成
-                        for (int upperLayerCount : upperLayerCounts) {
-                            Item[] upperLayerIngredients = countToItemArray.get(upperLayerCount);
-                            if (resultLayerCount % upperLayerCount > 0)
-                                continue;
-                            int resultCount = resultLayerCount / upperLayerCount;
-                            String upperLayerRecipeId = recipeId + "_" + resultCount;
-                            output.add(RecipeUtils.createRecipeEntry(
-                                this,
-                                upperLayerRecipeId,
-                                SingleItemRecipeBuilder.stonecutting(
-                                    Ingredient.of(upperLayerIngredients),
-                                    RecipeCategory.BUILDING_BLOCKS,
-                                    result,
-                                    resultCount
-                                ).unlockedBy("has_materials", CriterionUtils.hasItems(upperLayerIngredients))
-                            ));
-                        }
-                    }
-                }
-            }
-            return output;
-        };
+        return () -> this.graph.createAllReversibleRecipes(this);
     }
 
     @Override
