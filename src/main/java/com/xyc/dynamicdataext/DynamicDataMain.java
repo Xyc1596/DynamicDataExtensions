@@ -25,18 +25,18 @@ public class DynamicDataMain {
             title,
             modEventBus,
             container,
-            new LeatherFromRottenFlesh(),
-            new RawOreBlockSmelting(),
-            new WoolToString(),
-            new ConvenientCrafting(),
-            new AllStones(),
-            new SlabBonding(),
-            new TrapdoorBalance(),
-            new ReversibleCutting(),
-            new GlassCutting(),
-            new WoodCutting(),
-            new TagsTest(),
-            new Common()
+            LeatherFromRottenFlesh.INSTANCE,
+            RawOreBlockSmelting.INSTANCE,
+            WoolToString.INSTANCE,
+            ConvenientCrafting.INSTANCE,
+            AllStones.INSTANCE,
+            SlabBonding.INSTANCE,
+            TrapdoorBalance.INSTANCE,
+            ReversibleCutting.INSTANCE,
+            GlassCutting.INSTANCE,
+            WoodCutting.INSTANCE,
+            TagsTest.INSTANCE,
+            Common.INSTANCE
         );
         DynamicDataRegistry.registerConfig(CONFIG);
 

@@ -4,8 +4,8 @@ import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
-import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.*;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -19,10 +19,15 @@ import java.util.Optional;
 import java.util.Set;
 
 public class SlabBonding extends Module {
-    public static final String MODULE_ID = "slab_bonding";
+    public static final SlabBonding INSTANCE = new SlabBonding(DynamicDataMain.MOD_ID, "slab_bonding");
+    public static final TranslatableLang TITLE = INSTANCE.configBuilder
+        .getTitleLangBuilder()
+        .translation("zh_cn", "台阶拼合")
+        .translation("en_us", "Slab Bonding")
+        .build();
 
-    public SlabBonding() {
-        super(DynamicDataMain.MOD_ID, MODULE_ID);
+    protected SlabBonding(String namespace, String moduleId) {
+        super(namespace, moduleId);
     }
 
     @Override
@@ -64,15 +69,10 @@ public class SlabBonding extends Module {
 
     @Override
     protected @NotNull ModuleConfig buildConfig() {
-        ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
-        return builder
-            .setTitle(builder
-                .getTitleLangBuilder()
-                .translation("zh_cn", "台阶拼合")
-                .translation("en_us", "Slab Bonding")
-                .build()
-            ).defineEnabled(enabled
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(this.configBuilder);
+        return this.configBuilder
+            .setTitle(TITLE)
+            .defineEnabled(enabled
                 .setDefaultValue(true)
                 .setTooltip(enabled
                     .getTooltipLangBuilder()

@@ -5,7 +5,6 @@ import com.xyc.dynamicdataext.DynamicDataRegistry;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.*;
 import com.xyc.dynamicdataext.config.ModuleConfig;
-import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.PlaceholderLang;
@@ -27,13 +26,21 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class ReversibleCutting extends Module {
-    public static final String MODULE_ID = "reversible_cutting";
-    private final SingleItemRecipeGraph graph = new SingleItemRecipeGraph();
+    public static final ReversibleCutting INSTANCE = new ReversibleCutting(
+        DynamicDataMain.MOD_ID, "reversible_cutting"
+    );
+    public static final TranslatableLang TITLE = INSTANCE.configBuilder
+        .getTitleLangBuilder()
+        .translation("zh_cn", "可逆切石")
+        .translation("en_us", "Reversible Cutting")
+        .build();
+
+    protected final SingleItemRecipeGraph graph = new SingleItemRecipeGraph();
     protected ModuleOption<List<String>> recipeList;
     protected ModuleOption<ListMode> recipeListMode;
 
-    public ReversibleCutting() {
-        super(DynamicDataMain.MOD_ID, MODULE_ID);
+    protected ReversibleCutting(String namespace, String moduleId) {
+        super(namespace, moduleId);
     }
 
     @Override
@@ -56,15 +63,14 @@ public class ReversibleCutting extends Module {
 
     @Override
     public @Nullable Supplier<Set<DynamicRecipeEntry>> gatherRecipeProvider() {
-        return () -> this.graph.createAllReversibleRecipes(this);
+        return () -> this.graph.createAllRecipes(this, true);
     }
 
     @Override
     protected @NotNull ModuleConfig buildConfig() {
-        ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(this.configBuilder);
 
-        ModuleOptionBuilder<List<String>> recipeList = builder
+        ModuleOptionBuilder<List<String>> recipeList = this.configBuilder
             .createStringListOptionBuilder("recipe_list")
             .setDefaultValue(List.of("@create:.*"))
             .setTooltip(ConfigUtils.DEFAULT_SINGLE_FORMAT_INSTRUCTION);
@@ -77,7 +83,7 @@ public class ReversibleCutting extends Module {
         this.recipeList = recipeList.setTitle(recipeListTitle).build();
 
         ModuleOptionBuilder<ListMode> recipeListMode = ConfigUtils.createListModeOptionBuilderWithTitle(
-            builder, this.recipeList, ListMode.BLACKLIST
+            this.configBuilder, this.recipeList, ListMode.BLACKLIST
         );
         this.recipeListMode = recipeListMode
             .setTooltip(recipeListMode
@@ -109,13 +115,9 @@ public class ReversibleCutting extends Module {
                 .build()
             ).build();
 
-        return builder
-            .setTitle(builder
-                .getTitleLangBuilder()
-                .translation("zh_cn", "可逆切石")
-                .translation("en_us", "Reversible Cutting")
-                .build()
-            ).defineEnabled(enabled
+        return this.configBuilder
+            .setTitle(TITLE)
+            .defineEnabled(enabled
                 .setTooltip(enabled
                     .getTooltipLangBuilder()
                     .translation(

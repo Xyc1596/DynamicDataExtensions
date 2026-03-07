@@ -1,11 +1,11 @@
 package com.xyc.dynamicdataext.modules;
 
 import com.xyc.dynamicdataext.DynamicDataMain;
-import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
+import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
-import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
@@ -24,10 +24,17 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ConvenientCrafting extends Module {
-    public static final String MODULE_ID = "convenient_crafting";
+    public static final ConvenientCrafting INSTANCE = new ConvenientCrafting(
+        DynamicDataMain.MOD_ID, "convenient_crafting"
+    );
+    public static final TranslatableLang TITLE = INSTANCE.configBuilder
+        .getTitleLangBuilder()
+        .translation("zh_cn", "便捷合成")
+        .translation("en_us", "Convenient Crafting")
+        .build();
 
-    public ConvenientCrafting() {
-        super(DynamicDataMain.MOD_ID, MODULE_ID);
+    protected ConvenientCrafting(String namespace, String moduleId) {
+        super(namespace, moduleId);
     }
 
     @Override
@@ -158,37 +165,33 @@ public class ConvenientCrafting extends Module {
 
     @Override
     protected @NotNull ModuleConfig buildConfig() {
-        ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
-        return builder.setTitle(builder
-            .getTitleLangBuilder()
-            .translation("zh_cn", "便捷合成")
-            .translation("en_us", "Convenient Crafting")
-            .build()
-        ).defineEnabled(enabled
-            .setDefaultValue(true)
-            .setTooltip(enabled
-                .getTooltipLangBuilder()
-                .translation(
-                    "zh_cn",
-                    "省略部分中间产物 / 添加包含中间产物的合成路线\n%s\n%s"
-                ).translation(
-                    "en_us",
-                    "Omit some intermediate products / add routes with intermediate products\n%s\n%s"
-                ).child(enabled
-                    .createTooltipChildLangBuilder()
-                    .translation("zh_cn", "灵感来源：Quark")
-                    .translation("en_us", "Inspired by: Quark")
-                    .format(ChatFormatting.ITALIC)
-                    .build()
-                ).child(enabled
-                    .createTooltipChildLangBuilder()
-                    .translation("zh_cn", "例：8 原木 → 4 箱子，投掷器 + 弓 → 发射器")
-                    .translation("en_us", "E.g. 8 Logs → 4 chests, dropper + bow → dispenser")
-                    .format(ChatFormatting.GRAY)
-                    .build()
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(this.configBuilder);
+        return this.configBuilder
+            .setTitle(TITLE)
+            .defineEnabled(enabled
+                .setDefaultValue(true)
+                .setTooltip(enabled
+                    .getTooltipLangBuilder()
+                    .translation(
+                        "zh_cn",
+                        "省略部分中间产物 / 添加包含中间产物的合成路线\n%s\n%s"
+                    ).translation(
+                        "en_us",
+                        "Omit some intermediate products / add routes with intermediate products\n%s\n%s"
+                    ).child(enabled
+                        .createTooltipChildLangBuilder()
+                        .translation("zh_cn", "灵感来源：Quark")
+                        .translation("en_us", "Inspired by: Quark")
+                        .format(ChatFormatting.ITALIC)
+                        .build()
+                    ).child(enabled
+                        .createTooltipChildLangBuilder()
+                        .translation("zh_cn", "例：8 原木 → 4 箱子，投掷器 + 弓 → 发射器")
+                        .translation("en_us", "E.g. 8 Logs → 4 chests, dropper + bow → dispenser")
+                        .format(ChatFormatting.GRAY)
+                        .build()
+                    ).build()
                 ).build()
-            ).build()
-        ).build();
+            ).build();
     }
 }

@@ -28,8 +28,18 @@ public class SingleItemRecipeGraph {
     }
 
     public void addConnection(Item parent, Item result, int resultCount) {
-        this.roots.put(result, this.findRoot(parent));
-        this.counts.put(result, resultCount * this.counts.get(parent));
+        if (this.roots.containsValue(result)) {
+            Item root = this.findRoot(parent);
+            for (Map.Entry<Item, Item> entry : this.roots.entrySet())
+                if (entry.getValue().equals(result)) {
+                    Item key = entry.getKey();
+                    this.roots.put(key, root);
+                    this.counts.put(key, resultCount * this.counts.get(key));
+                }
+        } else {
+            this.roots.put(result, this.findRoot(parent));
+            this.counts.put(result, resultCount * this.counts.get(parent));
+        }
         this.parents.put(result, parent);
     }
 
@@ -47,9 +57,9 @@ public class SingleItemRecipeGraph {
     public Map<Item, Map<Item, Integer>> getAllGroups() {
         Map<Item, Map<Item, Integer>> output = new LinkedHashMap<>();
         for (Map.Entry<Item, Item> entry : this.roots.entrySet()) {
-            Item item = entry.getKey(), root = entry.getValue();
-            output.putIfAbsent(root, new LinkedHashMap<>());
-            output.get(root).put(item, this.counts.get(item));
+            Item item = entry.getKey();
+            output.computeIfAbsent(entry.getValue(), r -> new LinkedHashMap<>())
+                  .put(item, this.counts.get(item));
         }
         return output;
     }
@@ -60,11 +70,11 @@ public class SingleItemRecipeGraph {
         this.parents.clear();
     }
 
-    public Set<DynamicRecipeEntry> createAllReversibleRecipes(Module module) {
-        return createAllReversibleRecipes(module, "_cutting");
+    public Set<DynamicRecipeEntry> createAllRecipes(Module module, boolean reversible) {
+        return createAllRecipes(module, reversible, "_cutting");
     }
 
-    public Set<DynamicRecipeEntry> createAllReversibleRecipes(Module module, String... recipeIdSuffix) {
+    public Set<DynamicRecipeEntry> createAllRecipes(Module module, boolean reversible, String... recipeIdSuffix) {
         String recipeIdSuffixStr = "_" + String.join("_", recipeIdSuffix);
         Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         for (Map.Entry<Item, Map<Item, Integer>> group : this.getAllGroups().entrySet()) {
@@ -80,32 +90,37 @@ public class SingleItemRecipeGraph {
             for (int resultLayerIdx = 0; resultLayerIdx < counts.length; resultLayerIdx++) {
                 int resultLayerCount = counts[resultLayerIdx];
                 List<Item> resultLayerItems = countToItemList.get(resultLayerCount);
-                int resultLayerItemCount = resultLayerItems.size();
 
                 // 获取比当前物品count更小的count值
                 Integer[] upperLayerCounts = ArrayUtils.subarray(counts, 0, resultLayerIdx);
 
                 for (Item result : resultLayerItems) {
                     // 同层物品合成
-                    Item[] ingredients = new Item[resultLayerItemCount - 1];
-                    int ingredientIdx = 0;
+                    Set<Item> ingredientSet = new LinkedHashSet<>();
                     for (Item ingredientItem : resultLayerItems)
-                        if (!ingredientItem.equals(result))
-                            ingredients[ingredientIdx++] = ingredientItem;
+                        if (!ingredientItem.equals(result)) {
+                            if (reversible || this.parents.containsEntry(result, ingredientItem))
+                                ingredientSet.add(ingredientItem);
+                        }
+
                     Optional<String> resultId_ = RegistryUtils.getItemId(result);
                     if (resultId_.isEmpty())
                         continue;
                     String recipeId = resultId_.get() + recipeIdSuffixStr;
-                    output.add(RecipeUtils.createRecipeEntry(
-                        module,
-                        recipeId,
-                        SingleItemRecipeBuilder.stonecutting(
-                            Ingredient.of(ingredients),
-                            RecipeCategory.BUILDING_BLOCKS,
-                            result,
-                            1
-                        ).unlockedBy("has_materials", CriterionUtils.hasItems(ingredients))
-                    ));
+
+                    if (!ingredientSet.isEmpty()) {
+                        Item[] ingredients = ingredientSet.toArray(new Item[0]);
+                        output.add(RecipeUtils.createRecipeEntry(
+                            module,
+                            recipeId,
+                            SingleItemRecipeBuilder.stonecutting(
+                                Ingredient.of(ingredients),
+                                RecipeCategory.BUILDING_BLOCKS,
+                                result,
+                                1
+                            ).unlockedBy("has_materials", CriterionUtils.hasItems(ingredients))
+                        ));
+                    }
 
                     // count更小的层合成
                     for (int upperLayerCount : upperLayerCounts) {
@@ -126,43 +141,6 @@ public class SingleItemRecipeGraph {
                         ));
                     }
                 }
-            }
-        }
-        return output;
-    }
-
-    public Set<DynamicRecipeEntry> createAllSequentialRecipes(Module module) {
-        return createAllSequentialRecipes(module, "_cutting");
-    }
-
-    public Set<DynamicRecipeEntry> createAllSequentialRecipes(Module module, String... recipeIdSuffix) {
-        String recipeIdSuffixStr = "_" + String.join("_", recipeIdSuffix);
-        Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
-        for (Map.Entry<Item, Collection<Item>> entry : this.parents.asMap().entrySet()) {
-            Item result = entry.getKey();
-            Optional<String> resultId_ = RegistryUtils.getItemId(result);
-            if (resultId_.isEmpty())
-                continue;
-
-            Map<Integer, Set<Item>> countToParentSet = new HashMap<>();
-            for (Item parent : entry.getValue())
-                if (!parent.equals(result))
-                    countToParentSet.computeIfAbsent(this.counts.get(result), c -> new LinkedHashSet<>())
-                                    .add(parent);
-            for (Map.Entry<Integer, Set<Item>> countAndParents : countToParentSet.entrySet()) {
-                Set<Item> parentSet = countAndParents.getValue();
-                Item[] parents = parentSet.toArray(new Item[0]);
-
-                output.add(RecipeUtils.createRecipeEntry(
-                    module,
-                    resultId_.get() + recipeIdSuffixStr,
-                    SingleItemRecipeBuilder.stonecutting(
-                        Ingredient.of(parents),
-                        RecipeCategory.BUILDING_BLOCKS,
-                        result,
-                        countAndParents.getKey()
-                    ).unlockedBy("has_materials", CriterionUtils.hasItems(parents))
-                ));
             }
         }
         return output;

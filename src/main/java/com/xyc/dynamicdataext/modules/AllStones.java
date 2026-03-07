@@ -4,9 +4,9 @@ import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
-import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
+import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
@@ -24,10 +24,15 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class AllStones extends Module {
-    public static final String MODULE_ID = "all_stones";
+    public static final AllStones INSTANCE = new AllStones(DynamicDataMain.MOD_ID, "all_stones");
+    public static final TranslatableLang TITLE = INSTANCE.configBuilder
+        .getTitleLangBuilder()
+        .translation("zh_cn", "石材通用")
+        .translation("en_us", "All stones")
+        .build();
 
-    public AllStones() {
-        super(DynamicDataMain.MOD_ID, MODULE_ID);
+    protected AllStones(String namespace, String moduleId) {
+        super(namespace, moduleId);
     }
 
     @Override
@@ -122,35 +127,31 @@ public class AllStones extends Module {
 
     @Override
     protected @NotNull ModuleConfig buildConfig() {
-        ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
-        return builder.setTitle(builder
-            .getTitleLangBuilder()
-            .translation("zh_cn", "石材通用")
-            .translation("en_us", "All stones")
-            .build()
-        ).defineEnabled(enabled
-            .setDefaultValue(true)
-            .setTooltip(enabled
-                .getTooltipLangBuilder()
-                .translation(
-                    "zh_cn",
-                    "部分配方中的石头可以替换为标签 %s 包含的任何材料\n%s"
-                )
-                .translation(
-                    "en_us",
-                    "Stones / cobblestones in some recipes can be replaced with any material matching " +
-                        "tag %s / %s\n%s"
-                )
-                .child(ModuleLangBuilder.literal("#c:stones").format(ChatFormatting.LIGHT_PURPLE).build())
-                .child(enabled
-                    .createTooltipChildLangBuilder("1")
-                    .translation("zh_cn", "例：石头 → 石头 / 深板岩 / 安山岩 / 闪长岩 / 花岗岩")
-                    .translation("en_us", "E.g. stone → stone / deepslate / andesite / diorite / granite")
-                    .format(ChatFormatting.GRAY)
-                    .build()
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(this.configBuilder);
+        return this.configBuilder
+            .setTitle(TITLE)
+            .defineEnabled(enabled
+                .setDefaultValue(true)
+                .setTooltip(enabled
+                    .getTooltipLangBuilder()
+                    .translation(
+                        "zh_cn",
+                        "部分配方中的石头可以替换为标签 %s 包含的任何材料\n%s"
+                    )
+                    .translation(
+                        "en_us",
+                        "Stones / cobblestones in some recipes can be replaced with any material matching " +
+                            "tag %s / %s\n%s"
+                    )
+                    .child(ModuleLangBuilder.literal("#c:stones").format(ChatFormatting.LIGHT_PURPLE).build())
+                    .child(enabled
+                        .createTooltipChildLangBuilder("1")
+                        .translation("zh_cn", "例：石头 → 石头 / 深板岩 / 安山岩 / 闪长岩 / 花岗岩")
+                        .translation("en_us", "E.g. stone → stone / deepslate / andesite / diorite / granite")
+                        .format(ChatFormatting.GRAY)
+                        .build()
+                    ).build()
                 ).build()
-            ).build()
-        ).build();
+            ).build();
     }
 }

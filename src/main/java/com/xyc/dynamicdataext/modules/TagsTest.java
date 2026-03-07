@@ -19,10 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class TagsTest extends Module {
-    public static final String MODULE_ID = "tags_test";
+    public static final TagsTest INSTANCE = new TagsTest(DynamicDataMain.MOD_ID, "tags_test");
 
-    public TagsTest() {
-        super(DynamicDataMain.MOD_ID, MODULE_ID);
+    protected TagsTest(String namespace, String moduleId) {
+        super(namespace, moduleId);
     }
 
     private static final TagKey<Item> TEST_TAG = RegistryUtils.createItemTag(

@@ -6,8 +6,8 @@ import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.base.IRecipeManagerExtensions;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
-import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
 import com.xyc.dynamicdataext.utils.RecipeUtils;
@@ -35,12 +35,19 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class TrapdoorBalance extends Module {
-    public static final String MODULE_ID = "trapdoor_balance";
+    public static final TrapdoorBalance INSTANCE = new TrapdoorBalance(
+        DynamicDataMain.MOD_ID, "trapdoor_balance"
+    );
+    public static final TranslatableLang TITLE = INSTANCE.configBuilder
+        .getTitleLangBuilder()
+        .translation("zh_cn", "活板门配方平衡")
+        .translation("en_us", "Trapdoor Recipe Balance")
+        .build();
 
     protected Set<DynamicRecipeEntry> newRecipes = new LinkedHashSet<>();
 
-    public TrapdoorBalance() {
-        super(DynamicDataMain.MOD_ID, MODULE_ID);
+    protected TrapdoorBalance(String namespace, String moduleId) {
+        super(namespace, moduleId);
     }
 
     @Override
@@ -72,27 +79,23 @@ public class TrapdoorBalance extends Module {
 
     @Override
     protected @NotNull ModuleConfig buildConfig() {
-        ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
-        return builder.setTitle(builder
-            .getTitleLangBuilder()
-            .translation("zh_cn", "活板门配方平衡")
-            .translation("en_us", "Trapdoor Recipe Balance")
-            .build()
-        ).defineEnabled(enabled
-            .setTooltip(enabled
-                .getTooltipLangBuilder()
-                .translation("zh_cn", "增加活板门合成配方的产物数量\n%s")
-                .translation("en_us", "Increase the result count of the crafting recipe of trapdoors\n%s")
-                .child(enabled
-                    .createTooltipChildLangBuilder()
-                    .translation("zh_cn", "为什么6块木板能合成3个门却只能合成2个活板门？")
-                    .translation("en_us", "Why can 6 planks craft 3 doors but only 2 trapdoors?")
-                    .format(ChatFormatting.ITALIC)
-                    .build()
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(this.configBuilder);
+        return this.configBuilder
+            .setTitle(TITLE)
+            .defineEnabled(enabled
+                .setTooltip(enabled
+                    .getTooltipLangBuilder()
+                    .translation("zh_cn", "增加活板门合成配方的产物数量\n%s")
+                    .translation("en_us", "Increase the result count of the crafting recipe of trapdoors\n%s")
+                    .child(enabled
+                        .createTooltipChildLangBuilder()
+                        .translation("zh_cn", "为什么6块木板能合成3个门却只能合成2个活板门？")
+                        .translation("en_us", "Why can 6 planks craft 3 doors but only 2 trapdoors?")
+                        .format(ChatFormatting.ITALIC)
+                        .build()
+                    ).build()
                 ).build()
-            ).build()
-        ).build();
+            ).build();
     }
 
     protected boolean processOriginalRecipe(

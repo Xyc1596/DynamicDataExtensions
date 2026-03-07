@@ -14,11 +14,13 @@ import java.util.function.Supplier;
 public abstract class Module {
     protected final String moduleId;
     protected final String namespace;
+    protected final ModuleConfigBuilder configBuilder;
     protected ModuleConfig config;
 
     protected Module(String namespace, String moduleId) {
         this.moduleId = moduleId;
         this.namespace = namespace;
+        this.configBuilder = new ModuleConfigBuilder(namespace, moduleId);
     }
 
     public final String getModuleId() {
@@ -83,7 +85,7 @@ public abstract class Module {
 
     @Nonnull
     protected ModuleConfig buildConfig() {
-        return ModuleConfig.defaultConfig(this.namespace, this.moduleId);
+        return this.configBuilder.build();
     }
 
     public final ModuleConfig getConfig() {
@@ -93,7 +95,7 @@ public abstract class Module {
         return this.config;
     }
 
-    protected final ModuleConfigBuilder createConfigBuilder() {
-        return new ModuleConfigBuilder(this.namespace, this.moduleId);
+    public final boolean isEnabled() {
+        return this.getConfig().isEnabled();
     }
 }

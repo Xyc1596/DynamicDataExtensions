@@ -5,7 +5,6 @@ import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.base.EntryAndTagCollection;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
-import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.PlaceholderLang;
@@ -29,12 +28,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RawOreBlockSmelting extends Module {
-    public static final String MODULE_ID = "raw_ore_block_smelting";
+    public static final RawOreBlockSmelting INSTANCE = new RawOreBlockSmelting(
+        DynamicDataMain.MOD_ID, "raw_ore_block_smelting"
+    );
+    public static final TranslatableLang TITLE = INSTANCE.configBuilder
+        .getTitleLangBuilder()
+        .translation("zh_cn", "粗矿物块烧炼")
+        .translation("en_us", "Raw Ore Block Smelting")
+        .build();
+
     protected ModuleOption<List<String>> ingredientList;
     protected ModuleOption<ListMode> ingredientListMode;
 
-    public RawOreBlockSmelting() {
-        super(DynamicDataMain.MOD_ID, MODULE_ID);
+    protected RawOreBlockSmelting(String namespace, String moduleId) {
+        super(namespace, moduleId);
     }
 
     @Override
@@ -45,7 +52,8 @@ public class RawOreBlockSmelting extends Module {
         Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         boolean whitelistMode = this.ingredientListMode.getValue() == ListMode.WHITELIST;
 
-        Optional<HolderSet.Named<Item>> storageBlockHolders = RegistryUtils.getItemTagContents(Tags.Items.STORAGE_BLOCKS);
+        Optional<HolderSet.Named<Item>> storageBlockHolders =
+            RegistryUtils.getItemTagContents(Tags.Items.STORAGE_BLOCKS);
         if (storageBlockHolders.isEmpty())
             return Set.of();
 
@@ -97,10 +105,9 @@ public class RawOreBlockSmelting extends Module {
 
     @Override
     protected @NotNull ModuleConfig buildConfig() {
-        ModuleConfigBuilder builder = this.createConfigBuilder();
-        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(builder);
+        ModuleOptionBuilder<Boolean> enabled = ConfigUtils.createEnabledOptionBuilderWithTitle(this.configBuilder);
 
-        ModuleOptionBuilder<List<String>> ingredientListBuilder = builder
+        ModuleOptionBuilder<List<String>> ingredientListBuilder = this.configBuilder
             .createStringListOptionBuilder("ingredient_list")
             .setDefaultValue(List.of())
             .setTooltip(ConfigUtils.DEFAULT_ID_FORMAT_INSTRUCTION);
@@ -113,7 +120,7 @@ public class RawOreBlockSmelting extends Module {
         this.ingredientList = ingredientListBuilder.setTitle(ingredientListTitle).build();
 
         ModuleOptionBuilder<ListMode> ingredientListModeBuilder = ConfigUtils
-            .createListModeOptionBuilderWithTitle(builder, this.ingredientList, ListMode.BLACKLIST);
+            .createListModeOptionBuilderWithTitle(this.configBuilder, this.ingredientList, ListMode.BLACKLIST);
         this.ingredientListMode = ingredientListModeBuilder
             .setTooltip(ingredientListModeBuilder
                 .getTooltipLangBuilder()
@@ -152,13 +159,9 @@ public class RawOreBlockSmelting extends Module {
                 .build()
             ).build();
 
-        return builder
-            .setTitle(builder
-                .getTitleLangBuilder()
-                .translation("zh_cn", "粗矿物块烧炼")
-                .translation("en_us", "Raw Ore Block Smelting")
-                .build()
-            ).defineEnabled(enabled
+        return this.configBuilder
+            .setTitle(TITLE)
+            .defineEnabled(enabled
                 .setTooltip(enabled
                     .getTooltipLangBuilder()
                     .translation("zh_cn", "粗矿物块可以直接烧炼成矿物块")

@@ -102,7 +102,7 @@ public final class ConfigUtils {
             true,
             "module",
             DynamicDataMain.MOD_ID,
-            ArrayUtils.insert(0, id, "__default__")
+            ArrayUtils.insert(0, id, "_")
         );
     }
 

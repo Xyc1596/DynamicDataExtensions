@@ -84,7 +84,7 @@ public final class DynamicDataRegistry {
     }
 
     public static boolean autoReloading() {
-        ModuleConfig config = getModuleConfig(DynamicDataMain.MOD_ID, Common.MODULE_ID);
+        ModuleConfig config = getModuleConfig(DynamicDataMain.MOD_ID, Common.INSTANCE.getModuleId());
         return config != null && (boolean) config
             .getOption("auto_reload")
             .getValue();
