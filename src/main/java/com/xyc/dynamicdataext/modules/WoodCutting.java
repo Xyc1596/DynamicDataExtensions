@@ -66,9 +66,9 @@ public class WoodCutting extends Module {
         boolean doorEnabled = doorOption.getValue();
 
         Map<String, Item> materialToLogMap = new HashMap<>();
-        Optional<HolderSet.Named<Item>> logs_ = RegistryUtils.getItemTagContents(ItemTags.LOGS);
-        if (logs_.isPresent()) {
-            for (Holder<Item> holder : logs_.get()) {
+        HolderSet.Named<Item> logs = RegistryUtils.getItemTagContents(ItemTags.LOGS);
+        if (logs != null) {
+            for (Holder<Item> holder : logs) {
                 Item log = holder.value();
                 Optional<ResourceKey<Item>> name_ = holder.unwrapKey();
                 if (name_.isPresent()) {
@@ -96,22 +96,23 @@ public class WoodCutting extends Module {
 
                     graph.addConnection(materialToLogMap.get(material), log);
                     if (doorEnabled) {
-                        RegistryUtils.getItem(
+                        Item door = RegistryUtils.getItem(
                             LocationUtils.fromNamespaceAndPath(namespace, material + "_door")
-                        ).ifPresent(item -> graph.addConnection(log, item, 2));
+                        );
+                        if (door != null)
+                            graph.addConnection(log, door, 2);
                     }
                 }
             }
         }
 
-        Optional<HolderSet.Named<Item>> planks_ = RegistryUtils.getItemTagContents(ItemTags.PLANKS);
-        if (planks_.isPresent()) {
-            for (Holder<Item> holder : planks_.get()) {
+        HolderSet.Named<Item> planks = RegistryUtils.getItemTagContents(ItemTags.PLANKS);
+        if (planks != null) {
+            for (Holder<Item> holder : planks) {
                 Item plank = holder.value();
-                Optional<ResourceLocation> plankLocation_ = RegistryUtils.getItemLocation(plank);
-                if (plankLocation_.isEmpty())
+                ResourceLocation plankLocation = RegistryUtils.getItemLocation(plank);
+                if (plankLocation == null)
                     continue;
-                ResourceLocation plankLocation = plankLocation_.get();
                 String namespace = plankLocation.getNamespace();
                 String plankName = plankLocation.getPath();
                 String material = StringUtils.removeEnd(plankName, "_planks");
@@ -122,18 +123,18 @@ public class WoodCutting extends Module {
                 Consumer<Item> add = item -> graph.addConnection(plank, item);
                 Consumer<Item> add2 = item -> graph.addConnection(plank, item, 2);
 
-                RegistryUtils.getItem(LocationUtils.fromNamespaceAndPath(namespace, material + "_slab"))
+                RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material + "_slab"))
                              .ifPresent(add2);
-                RegistryUtils.getItem(LocationUtils.fromNamespaceAndPath(namespace, material + "_stairs"))
+                RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material + "_stairs"))
                              .ifPresent(add);
                 if (fenceEnabled)
-                    RegistryUtils.getItem(LocationUtils.fromNamespaceAndPath(namespace, material + "_fence"))
+                    RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material + "_fence"))
                                  .ifPresent(add);
                 if (fenceGateEnabled)
-                    RegistryUtils.getItem(LocationUtils.fromNamespaceAndPath(namespace, material + "_fence_gate"))
+                    RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material + "_fence_gate"))
                                  .ifPresent(add);
                 if (trapdoorEnabled && trapdoorBalance)
-                    RegistryUtils.getItem(LocationUtils.fromNamespaceAndPath(namespace, material + "_trapdoor"))
+                    RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material + "_trapdoor"))
                                  .ifPresent(add);
             }
 

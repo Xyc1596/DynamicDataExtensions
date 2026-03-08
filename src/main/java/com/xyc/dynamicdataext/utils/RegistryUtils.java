@@ -12,6 +12,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -29,7 +30,8 @@ public final class RegistryUtils {
     @ParametersAreNonnullByDefault
     public static <T> Set<T> getHolderSetContents(HolderSet<T> holders) {
         Set<T> output = new LinkedHashSet<>();
-        holders.forEach(holder -> output.add(holder.value()));
+        for (Holder<T> holder : holders)
+            output.add(holder.value());
         return output;
     }
 
@@ -38,8 +40,8 @@ public final class RegistryUtils {
         return item.getDefaultInstance().getItemHolder();
     }
 
-    @ParametersAreNonnullByDefault
     @SuppressWarnings("unused")
+    @ParametersAreNonnullByDefault
     public static DynamicTagEntry<Item> createItemTagEntry(TagKey<Item> tag, Collection<Item> contents) {
         return createItemTagEntry(tag, contents.toArray(new Item[0]));
     }
@@ -53,46 +55,74 @@ public final class RegistryUtils {
     }
 
     @ParametersAreNonnullByDefault
-    public static Optional<HolderSet.Named<Item>> getItemTagContents(ResourceLocation location) {
+    public static Optional<HolderSet.Named<Item>> getItemTagContentsOptional(ResourceLocation location) {
         return ITEM_REGISTRY.getTag(createItemTag(location));
     }
 
     @ParametersAreNonnullByDefault
-    public static Optional<HolderSet.Named<Item>> getItemTagContents(TagKey<Item> tag) {
+    public static @Nullable HolderSet.Named<Item> getItemTagContents(ResourceLocation location) {
+        return getItemTagContentsOptional(location).orElse(null);
+    }
+
+    @ParametersAreNonnullByDefault
+    public static Optional<HolderSet.Named<Item>> getItemTagContentsOptional(TagKey<Item> tag) {
         return ITEM_REGISTRY.getTag(tag);
+    }
+
+    @ParametersAreNonnullByDefault
+    public static @Nullable HolderSet.Named<Item> getItemTagContents(TagKey<Item> tag) {
+        return getItemTagContentsOptional(tag).orElse(null);
+    }
+
+    /**
+     * 不包括命名空间
+     */
+    @SuppressWarnings("unused")
+    @ParametersAreNonnullByDefault
+    public static Optional<String> getItemIdOptional(Item item) {
+        return Optional.ofNullable(getItemId(item));
     }
 
     /**
      * 不包括命名空间
      */
     @ParametersAreNonnullByDefault
-    public static Optional<String> getItemId(Item item) {
+    public static @Nullable String getItemId(Item item) {
         ResourceLocation location = ITEM_REGISTRY.getKey(item);
-        return location.equals(ITEM_REGISTRY.getDefaultKey()) ? Optional.empty() : Optional.of(location.getPath());
-    }
-
-    @ParametersAreNonnullByDefault
-    public static Optional<ResourceLocation> getItemLocation(Item item) {
-        ResourceLocation location = ITEM_REGISTRY.getKey(item);
-        return location.equals(ITEM_REGISTRY.getDefaultKey()) ? Optional.empty() : Optional.of(location);
-    }
-
-    @ParametersAreNonnullByDefault
-    public static Optional<Item> getItem(ResourceLocation location) {
-        Item item = ITEM_REGISTRY.get(location);
-        return item == Items.AIR ? Optional.empty() : Optional.of(item);
+        return location.equals(ITEM_REGISTRY.getDefaultKey()) ? null : location.getPath();
     }
 
     @SuppressWarnings("unused")
     @ParametersAreNonnullByDefault
-    public static <T> Optional<String> getHolderId(Holder<T> holder) {
-        Optional<ResourceKey<T>> key = holder.unwrapKey();
-        return key.map(resourceKey -> resourceKey.location().getPath());
+    public static Optional<ResourceLocation> getItemLocationOptional(Item item) {
+        return Optional.ofNullable(getItemLocation(item));
     }
 
     @ParametersAreNonnullByDefault
-    public static <T> Optional<ResourceLocation> getLocation(Holder<T> holder) {
-        Optional<ResourceKey<T>> key = holder.unwrapKey();
-        return key.map(ResourceKey::location);
+    public static @Nullable ResourceLocation getItemLocation(Item item) {
+        ResourceLocation location = ITEM_REGISTRY.getKey(item);
+        return location.equals(ITEM_REGISTRY.getDefaultKey()) ? null : location;
+    }
+
+    @ParametersAreNonnullByDefault
+    public static Optional<Item> getItemOptional(ResourceLocation location) {
+        return Optional.ofNullable(getItem(location));
+    }
+
+    @ParametersAreNonnullByDefault
+    public static @Nullable Item getItem(ResourceLocation location) {
+        Item item = ITEM_REGISTRY.get(location);
+        return item == Items.AIR ? null : item;
+    }
+
+    @SuppressWarnings("unused")
+    @ParametersAreNonnullByDefault
+    public static <T> Optional<String> getHolderIdOptional(Holder<T> holder) {
+        return holder.unwrapKey().map(resourceKey -> resourceKey.location().getPath());
+    }
+
+    @ParametersAreNonnullByDefault
+    public static <T> Optional<ResourceLocation> getHolderLocationOptional(Holder<T> holder) {
+        return holder.unwrapKey().map(ResourceKey::location);
     }
 }

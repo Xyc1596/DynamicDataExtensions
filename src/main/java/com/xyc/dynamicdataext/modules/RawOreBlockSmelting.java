@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,34 +51,33 @@ public class RawOreBlockSmelting extends Module {
         Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         boolean whitelistMode = this.ingredientListMode.getValue() == ListMode.WHITELIST;
 
-        Optional<HolderSet.Named<Item>> storageBlockHolders =
+        HolderSet.Named<Item> storageBlockHolders =
             RegistryUtils.getItemTagContents(Tags.Items.STORAGE_BLOCKS);
-        if (storageBlockHolders.isEmpty())
+        if (storageBlockHolders == null)
             return Set.of();
 
-        for (Holder<Item> storageBlockHolder : storageBlockHolders.get())
+        for (Holder<Item> storageBlockHolder : storageBlockHolders)
             storageBlockHolder.tags().forEach(ingredientTag -> {
                 Matcher matcher = materialPattern.matcher(ingredientTag.location().getPath());
                 if (!matcher.find())
                     return;
 
                 String material = matcher.group(1);
-                Optional<HolderSet.Named<Item>> resultHolders_ = RegistryUtils.getItemTagContents(
+                HolderSet.Named<Item> resultHolders = RegistryUtils.getItemTagContents(
                     LocationUtils.withCommonNamespace("storage_blocks/" + material)
                 );
-                if (resultHolders_.isEmpty())
+                if (resultHolders == null)
                     return;
 
-                HolderSet.Named<Item> resultHolder = resultHolders_.get();
-                if (resultHolder.size() == 0)
+                if (resultHolders.size() == 0)
                     return;
 
-                Item result = resultHolder.get(0).value();
-                Optional<HolderSet.Named<Item>> ingredientHolders_ = RegistryUtils.getItemTagContents(ingredientTag);
-                if (ingredientHolders_.isEmpty())
+                Item result = resultHolders.get(0).value();
+                HolderSet.Named<Item> ingredientHolders = RegistryUtils.getItemTagContents(ingredientTag);
+                if (ingredientHolders == null)
                     return;
 
-                Set<Item> ingredientSet = RegistryUtils.getHolderSetContents(ingredientHolders_.get());
+                Set<Item> ingredientSet = RegistryUtils.getHolderSetContents(ingredientHolders);
                 Set<Item> filtered = ingredientList.applyToForSet(ingredientSet, whitelistMode);
                 Ingredient ingredient = filtered.size() == ingredientSet.size()
                     ? Ingredient.of(ingredientTag)

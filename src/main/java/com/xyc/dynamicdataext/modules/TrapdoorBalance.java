@@ -28,7 +28,6 @@ import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -105,10 +104,9 @@ public class TrapdoorBalance extends Module {
     ) {
         Set<Ingredient> ingredients = Set.copyOf(pattern.ingredients());
         Item result = resultStack.getItem();
-        Optional<String> resultName_ = RegistryUtils.getItemId(result);
-        if (resultName_.isEmpty())
+        String resultName = RegistryUtils.getItemId(result);
+        if (resultName == null)
             return false;
-        String resultName = resultName_.get();
 
         if (ingredients.size() == 1) {
             this.newRecipes.add(RecipeUtils.createRecipeEntry(

@@ -103,10 +103,10 @@ public class SingleItemRecipeGraph {
                                 ingredientSet.add(ingredientItem);
                         }
 
-                    Optional<String> resultId_ = RegistryUtils.getItemId(result);
-                    if (resultId_.isEmpty())
+                    String resultId = RegistryUtils.getItemId(result);
+                    if (resultId == null)
                         continue;
-                    String recipeId = resultId_.get() + recipeIdSuffixStr;
+                    String recipeId = resultId + recipeIdSuffixStr;
 
                     if (!ingredientSet.isEmpty()) {
                         Item[] ingredients = ingredientSet.toArray(new Item[0]);

@@ -19,7 +19,6 @@ import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public class GlassCutting extends Module {
@@ -40,22 +39,20 @@ public class GlassCutting extends Module {
     public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
         Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
 
-        Optional<HolderSet.Named<Item>> glassBlocks_ = RegistryUtils.getItemTagContents(Tags.Items.GLASS_BLOCKS);
-        if (glassBlocks_.isEmpty())
+        HolderSet.Named<Item> glassBlocks = RegistryUtils.getItemTagContents(Tags.Items.GLASS_BLOCKS);
+        if (glassBlocks == null)
             return output;
 
-        for (Holder<Item> holder : glassBlocks_.get()) {
+        for (Holder<Item> holder : glassBlocks) {
             Item glassBlock = holder.value();
-            Optional<String> glassBlockName_ = RegistryUtils.getItemId(glassBlock);
-            if (glassBlockName_.isEmpty())
+            String glassBlockName = RegistryUtils.getItemId(glassBlock);
+            if (glassBlockName == null)
                 continue;
-            String glassBlockName = glassBlockName_.get();
 
             String glassPaneName = glassBlockName + "_pane";
-            Optional<Item> glassPane_ = RegistryUtils.getItem(LocationUtils.withDefaultNamespace(glassPaneName));
-            if (glassPane_.isEmpty())
+            Item glassPane = RegistryUtils.getItem(LocationUtils.withDefaultNamespace(glassPaneName));
+            if (glassPane == null)
                 continue;
-            Item glassPane = glassPane_.get();
 
             output.add(RecipeUtils.createRecipeEntry(
                 this,

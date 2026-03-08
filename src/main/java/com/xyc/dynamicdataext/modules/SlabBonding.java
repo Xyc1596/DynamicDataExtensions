@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public class SlabBonding extends Module {
@@ -35,9 +34,9 @@ public class SlabBonding extends Module {
         final String BRICK_SUFFIX = "_brick_slab", NORMAL_SUFFIX = "_slab";
         Set<DynamicRecipeEntry> output = new LinkedHashSet<>();
         RegistryUtils
-            .getItemTagContents(ItemTags.SLABS)
+            .getItemTagContentsOptional(ItemTags.SLABS)
             .ifPresent(holders -> holders.forEach(
-                holder -> RegistryUtils.getLocation(holder).ifPresent(
+                holder -> RegistryUtils.getHolderLocationOptional(holder).ifPresent(
                     location -> {
                         String name = location.getPath();
                         String resultName = holder.is(ItemTags.WOODEN_SLABS)
@@ -45,11 +44,10 @@ public class SlabBonding extends Module {
                             : name.endsWith(BRICK_SUFFIX)
                             ? StringUtils.stripEnd(name, BRICK_SUFFIX) + "s"
                             : StringUtils.stripEnd(name, "_slab");
-                        Optional<Item> result_ = RegistryUtils.getItem(
+                        Item result = RegistryUtils.getItem(
                             LocationUtils.fromNamespaceAndPath(location.getNamespace(), resultName)
                         );
-                        if (result_.isPresent()) {
-                            Item result = result_.get();
+                        if (result != null) {
                             output.add(
                                 RecipeUtils.createRecipeEntry(
                                     this,
