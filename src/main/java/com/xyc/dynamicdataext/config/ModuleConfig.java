@@ -13,14 +13,14 @@ public class ModuleConfig {
     protected final TranslatableLang title;
     protected final String namespace;
     protected final String moduleId;
-    protected final @Nullable ModuleBooleanOption enabled;    // 为null时始终生效，不可关闭
+    protected final @Nullable BooleanOption enabled;    // 为null时始终生效，不可关闭
     protected final Map<String, ModuleOption<?>> allOptions;
 
     public ModuleConfig(
         String namespace,
         String moduleId,
         TranslatableLang title,
-        @Nullable ModuleBooleanOption enabled,
+        @Nullable BooleanOption enabled,
         Map<String, ModuleOption<?>> options
     ) {
         this.namespace = namespace;
@@ -70,15 +70,5 @@ public class ModuleConfig {
 
     public ModuleOption<?> getOption(String optionId) {
         return this.allOptions.get(optionId);
-    }
-
-    public static ModuleConfig defaultConfig(String namespace, String moduleId) {
-        return new ModuleConfig(
-            namespace,
-            moduleId,
-            TranslatableLang.empty("module", namespace, moduleId),
-            null,
-            Map.of()
-        );
     }
 }

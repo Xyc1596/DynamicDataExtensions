@@ -15,7 +15,7 @@ public class ModuleConfigBuilder {
     protected TranslatableLang title;
     protected final String namespace;
     protected final String moduleId;
-    protected @Nullable ModuleBooleanOption enabled = null;
+    protected @Nullable BooleanOption enabled = null;
     protected final Map<String, ModuleOption<?>> options = new LinkedHashMap<>();
     protected final TranslatableBuilder titleLangBuilder;
 
@@ -26,7 +26,7 @@ public class ModuleConfigBuilder {
     }
 
     public ModuleConfigBuilder defineEnabled(@NotNull ModuleOption<Boolean> option) {
-        this.enabled = (ModuleBooleanOption) option;
+        this.enabled = (BooleanOption) option;
         return this;
     }
 
@@ -58,14 +58,14 @@ public class ModuleConfigBuilder {
     }
 
     public ModuleOptionBuilder<Boolean> createBooleanOptionBuilder(String optionId) {
-        return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, ModuleBooleanOption::new);
+        return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, BooleanOption::new);
     }
 
     public ModuleOptionBuilder<List<String>> createStringListOptionBuilder(String optionId) {
-        return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, ModuleStringListOption::new);
+        return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, StringListOption::new);
     }
 
     public <T extends Enum<T> & NamedEnum> ModuleOptionBuilder<T> createEnumOptionBuilder(String optionId) {
-        return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, ModuleEnumOption<T>::new);
+        return new ModuleOptionBuilder<>(this.namespace, this.moduleId, optionId, EnumOption<T>::new);
     }
 }
