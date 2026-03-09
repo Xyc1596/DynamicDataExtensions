@@ -1,5 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -10,7 +11,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class ModuleConfig {
-    protected final TranslatableLang title;
+    protected final ModuleLang title;
     protected final String namespace;
     protected final String moduleId;
     protected final @Nullable BooleanOption enabled;    // 为null时始终生效，不可关闭
@@ -19,7 +20,7 @@ public class ModuleConfig {
     public ModuleConfig(
         String namespace,
         String moduleId,
-        TranslatableLang title,
+        ModuleLang title,
         @Nullable BooleanOption enabled,
         Map<String, ModuleOption<?>> options
     ) {
@@ -57,10 +58,10 @@ public class ModuleConfig {
 
     public final List<TranslatableLang> getAllTranslatableLang() {
         List<TranslatableLang> output = new ArrayList<>();
-        output.add(this.title);
-        for (ModuleOption<?> option : this.allOptions.values()) {
+        if (this.title instanceof TranslatableLang translatable)
+            output.add(translatable);
+        for (ModuleOption<?> option : this.allOptions.values())
             output.addAll(option.getAllTranslatableLang());
-        }
         return output;
     }
 

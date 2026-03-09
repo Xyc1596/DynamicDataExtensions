@@ -11,8 +11,8 @@ public class ModuleOptionBuilder<T> {
     protected TranslatableLang tooltip;
     protected T defaultValue;
     protected final Factory<T> factory;
-    protected final TranslatableBuilder titleLangBuilder;
-    protected final TranslatableBuilder tooltipLangBuilder;
+    protected final TranslatableBuilder<TranslatableLang> titleLangBuilder;
+    protected final TranslatableBuilder<TranslatableLang> tooltipLangBuilder;
 
     protected ModuleOptionBuilder(
         String namespace,
@@ -36,17 +36,17 @@ public class ModuleOptionBuilder<T> {
         return this;
     }
 
-    public TranslatableBuilder getTitleLangBuilder() {
+    public TranslatableBuilder<TranslatableLang> getTitleLangBuilder() {
         return this.titleLangBuilder;
     }
 
     @SuppressWarnings("unused")
-    public TranslatableBuilder createTitleChildLangBuilder(String childId) {
+    public TranslatableBuilder<TranslatableLang> createTitleChildLangBuilder(String childId) {
         return this.titleLangBuilder.childTranslatableBuilder(childId);
     }
 
     @SuppressWarnings("unused")
-    public TranslatableBuilder createTitleChildLangBuilder() {
+    public TranslatableBuilder<TranslatableLang> createTitleChildLangBuilder() {
         return this.titleLangBuilder.childTranslatableBuilder();
     }
 
@@ -55,15 +55,15 @@ public class ModuleOptionBuilder<T> {
         return this;
     }
 
-    public TranslatableBuilder getTooltipLangBuilder() {
+    public TranslatableBuilder<TranslatableLang> getTooltipLangBuilder() {
         return this.tooltipLangBuilder;
     }
 
-    public TranslatableBuilder createTooltipChildLangBuilder(String childId) {
+    public TranslatableBuilder<TranslatableLang> createTooltipChildLangBuilder(String childId) {
         return this.tooltipLangBuilder.childTranslatableBuilder(childId);
     }
 
-    public TranslatableBuilder createTooltipChildLangBuilder() {
+    public TranslatableBuilder<TranslatableLang> createTooltipChildLangBuilder() {
         return this.tooltipLangBuilder.childTranslatableBuilder();
     }
 

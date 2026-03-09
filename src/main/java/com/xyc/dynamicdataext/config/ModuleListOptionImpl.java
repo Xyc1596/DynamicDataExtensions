@@ -1,21 +1,23 @@
 package com.xyc.dynamicdataext.config;
 
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ModuleListOptionImpl<T> implements ModuleOption<List<T>> {
     protected final String optionId;
-    protected final TranslatableLang title;
-    protected final TranslatableLang tooltip;
+    protected final ModuleLang title;
+    protected final ModuleLang tooltip;
     protected final List<T> defaultValue;
     protected ModConfigSpec.ConfigValue<List<? extends T>> value;
 
     public ModuleListOptionImpl(
         String optionId,
-        TranslatableLang title,
-        TranslatableLang tooltip,
+        ModuleLang title,
+        ModuleLang tooltip,
         List<T> defaultValue
     ) {
         this.optionId = optionId;
@@ -41,12 +43,15 @@ public abstract class ModuleListOptionImpl<T> implements ModuleOption<List<T>> {
     }
 
     @Override
-    public TranslatableLang getTitle() {
+    public ModuleLang getTitle() {
         return this.title;
     }
 
     @Override
     public final List<TranslatableLang> getAllTranslatableLang() {
-        return List.of(this.title, this.tooltip);
+        List<TranslatableLang> output = new ArrayList<>();
+        if (this.title instanceof TranslatableLang translatable) output.add(translatable);
+        if (this.tooltip instanceof TranslatableLang translatable) output.add(translatable);
+        return output;
     }
 }

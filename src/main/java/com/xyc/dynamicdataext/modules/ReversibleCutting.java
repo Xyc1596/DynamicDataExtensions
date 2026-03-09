@@ -7,7 +7,7 @@ import com.xyc.dynamicdataext.base.*;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
-import com.xyc.dynamicdataext.lang.PlaceholderLang;
+import com.xyc.dynamicdataext.lang.ReferenceLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.ListMode;
@@ -79,7 +79,7 @@ public class ReversibleCutting extends Module {
             .translation("zh_cn", "配方列表")
             .translation("en_us", "Recipe List")
             .build();
-        PlaceholderLang recipeListTitlePlaceholder = recipeListTitle.getPlaceholder(ChatFormatting.WHITE);
+        ReferenceLang recipeListTitlePlaceholder = ReferenceLang.of(recipeListTitle, ChatFormatting.WHITE);
         this.recipeList = recipeList.setTitle(recipeListTitle).build();
 
         ModuleOptionBuilder<ListMode> recipeListMode = ConfigUtils.createListModeOptionBuilderWithTitle(

@@ -2,7 +2,7 @@ package com.xyc.dynamicdataext;
 
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.lang.ModuleLang;
-import com.xyc.dynamicdataext.lang.PlaceholderLang;
+import com.xyc.dynamicdataext.lang.ReferenceLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -52,18 +52,18 @@ public class DynamicDataLanguageProvider {
         for (ModuleLang child : lang.getChildren()) {
             if (child instanceof TranslatableLang translatable)
                 this.addTranslatableLang(translatable, false);
-            else if (child instanceof PlaceholderLang placeholder) {
+            else if (child instanceof ReferenceLang placeholder) {
                 this.addPlaceholderLang(placeholder);
             }
         }
     }
 
-    protected void addPlaceholderLang(PlaceholderLang lang) {
+    protected void addPlaceholderLang(ReferenceLang lang) {
         if (!lang.isEmpty()) {
-            ModuleLang content = lang.getDefaultContent();
+            ModuleLang content = lang.get();
             if (content instanceof TranslatableLang translatable)
                 this.addTranslatableLang(translatable, true);
-            else if (content instanceof PlaceholderLang placeholder)
+            else if (content instanceof ReferenceLang placeholder)
                 this.addPlaceholderLang(placeholder);
         }
     }

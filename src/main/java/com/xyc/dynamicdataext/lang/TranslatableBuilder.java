@@ -1,56 +1,76 @@
 package com.xyc.dynamicdataext.lang;
 
+import net.minecraft.ChatFormatting;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class TranslatableBuilder extends ModuleLangBuilder<TranslatableBuilder> {
+public class TranslatableBuilder<T extends TranslatableLang> extends ModuleLangBuilder<TranslatableBuilder<T>> {
     protected final String category;
     protected final String namespace;
     protected final String[] id;
+    protected final String[] appendId;
+    protected final Factory<T> factory;
     protected final List<ModuleLang> children = new ArrayList<>();
     protected final Map<String, String> translations = new HashMap<>();
-    protected boolean isTemplate;
 
-    public TranslatableBuilder(boolean isTemplate, String category, String namespace, String... id) {
-        this.isTemplate = isTemplate;
+    public TranslatableBuilder(Factory<T> factory, String category, String namespace, String... id) {
+        this(factory, category, namespace, id, new String[0]);
+    }
+
+    public TranslatableBuilder(
+        Factory<T> factory,
+        String category,
+        String namespace,
+        String[] id,
+        String... appendId
+    ) {
+        this.factory = factory;
         this.category = category;
         this.namespace = namespace;
         this.id = id;
+        this.appendId = appendId;
     }
 
-    public com.xyc.dynamicdataext.lang.TranslatableBuilder child(ModuleLang child) {
+    public TranslatableBuilder<T> child(ModuleLang child) {
         this.children.add(child);
         return this;
     }
 
-    public com.xyc.dynamicdataext.lang.TranslatableBuilder translation(String locale, String text) {
+    public TranslatableBuilder<T> translation(String locale, String text) {
         this.translations.put(locale, text);
         return this;
     }
 
-    public TranslatableLang build() {
-        return new TranslatableLang(
+    public T build() {
+        return this.factory.build(
             this.category,
             this.namespace,
             this.id,
-            this.formats,
             this.children,
             this.translations,
-            this.isTemplate
+            this.formats
         );
     }
 
-    public TranslatableBuilder childTranslatableBuilder(String... appendId) {
+    public TranslatableBuilder<TranslatableLang> childTranslatableBuilder(String... appendId) {
         String[] newId = ArrayUtils.addAll(this.id, appendId);
-        return new TranslatableBuilder(false, this.category, this.namespace, newId);
+        return new TranslatableBuilder<>(TranslatableLang::new, this.category, this.namespace, newId);
     }
 
-    public TranslatableBuilder childTranslatableBuilder() {
+    public TranslatableBuilder<TranslatableLang> childTranslatableBuilder() {
         String[] newId = ArrayUtils.addAll(this.id, String.valueOf(this.children.size()));
-        return new TranslatableBuilder(false, this.category, this.namespace, newId);
+        return new TranslatableBuilder<>(TranslatableLang::new, this.category, this.namespace, newId);
+    }
+
+    public interface Factory<T> {
+        T build(
+            String category,
+            String namespace,
+            String[] id,
+            List<ModuleLang> children,
+            Map<String, String> translations,
+            Collection<ChatFormatting> formats
+        );
     }
 }

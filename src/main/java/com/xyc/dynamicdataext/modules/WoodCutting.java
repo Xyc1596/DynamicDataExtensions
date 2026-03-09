@@ -8,6 +8,7 @@ import com.xyc.dynamicdataext.base.SingleItemRecipeGraph;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
+import com.xyc.dynamicdataext.lang.ReferenceLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
@@ -203,7 +204,7 @@ public class WoodCutting extends Module {
                 .createTooltipChildLangBuilder()
                 .translation("zh_cn", "仅当【%s】模块开启时生效")
                 .translation("en_us", "Only effective when [%s] module is enabled")
-                .child(TrapdoorBalance.TITLE.getPlaceholder())
+                .child(ReferenceLang.of(TrapdoorBalance.TITLE))
                 .format(ChatFormatting.ITALIC)
                 .build()
             ).build()
@@ -233,7 +234,7 @@ public class WoodCutting extends Module {
                         .createTooltipChildLangBuilder(this.moduleId)
                         .translation("zh_cn", "兼容【%s】模块")
                         .translation("en_us", "Compatible with [%s] module")
-                        .child(ReversibleCutting.TITLE.getPlaceholder())
+                        .child(ReferenceLang.of(ReversibleCutting.TITLE))
                         .format(ChatFormatting.ITALIC)
                         .build()
                     ).build()

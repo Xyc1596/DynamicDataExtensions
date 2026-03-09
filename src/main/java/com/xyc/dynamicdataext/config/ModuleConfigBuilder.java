@@ -1,5 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.utils.NamedEnum;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableBuilder;
@@ -12,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ModuleConfigBuilder {
-    protected TranslatableLang title;
+    protected ModuleLang title;
     protected final String namespace;
     protected final String moduleId;
     protected @Nullable BooleanOption enabled = null;
     protected final Map<String, ModuleOption<?>> options = new LinkedHashMap<>();
-    protected final TranslatableBuilder titleLangBuilder;
+    protected final TranslatableBuilder<TranslatableLang> titleLangBuilder;
 
     public ModuleConfigBuilder(String namespace, String moduleId) {
         this.namespace = namespace;
@@ -38,11 +39,11 @@ public class ModuleConfigBuilder {
         return this;
     }
 
-    public TranslatableBuilder getTitleLangBuilder() {
+    public TranslatableBuilder<TranslatableLang> getTitleLangBuilder() {
         return this.titleLangBuilder;
     }
 
-    public ModuleConfigBuilder setTitle(TranslatableLang lang) {
+    public ModuleConfigBuilder setTitle(ModuleLang lang) {
         this.title = lang;
         return this;
     }

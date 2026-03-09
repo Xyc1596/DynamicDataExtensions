@@ -9,61 +9,32 @@ import java.util.*;
 public class TranslatableLang extends ModuleLang {
     protected final String key;
     protected final List<ModuleLang> children;
-    protected final Map<String, Map<String, String>> allTranslations;   // locale, (key, translation)
-    protected PlaceholderLang placeholder;
-    protected final boolean isTemplate;
-    protected final Map<String, String> translations;
+    protected final Map<String, String> translations; // locale, translation
+
+    protected TranslatableLang(
+        String key,
+        List<ModuleLang> children,
+        Map<String, String> translations,
+        ChatFormatting... formats
+    ) {
+        super(formats);
+        this.key = key;
+        this.children = children;
+        this.translations = translations;
+    }
 
     public TranslatableLang(
         String category,
         String namespace,
         String[] id,
-        Set<ChatFormatting> formats,
         List<ModuleLang> children,
-        Map<String, String> translations,    // locale, translation
-        boolean isTemplate
+        Map<String, String> translations,
+        Collection<ChatFormatting> formats
     ) {
         super(formats);
-        List<String> keyParts = new LinkedList<>();
-        if (!(category == null || category.isEmpty()))
-            keyParts.add(category);
-        if (namespace == null || namespace.isEmpty())
-            throw new IllegalArgumentException("Namespace is null or empty");
-        else
-            keyParts.add(namespace);
-        keyParts.addAll(Arrays.asList(id));
-
-        this.key = String.join(".", keyParts);
+        this.key = assembleKey(category, namespace, id);
         this.children = children;
         this.translations = translations;
-        this.allTranslations = new HashMap<>();
-        this.isTemplate = isTemplate;
-
-        Set<TranslatableLang> allTranslatableChildren = new HashSet<>();
-        for (ModuleLang child : children) {
-            if (child instanceof TranslatableLang tc) {
-                allTranslatableChildren.add(tc);
-            }
-        }
-
-        for (Map.Entry<String, String> entry : translations.entrySet()) {
-            String locale = entry.getKey(), translation = entry.getValue();
-            this.allTranslations.putIfAbsent(entry.getKey(), new HashMap<>());
-            this.allTranslations.get(locale).put(key, translation);
-        }
-
-        for (TranslatableLang child : allTranslatableChildren) {
-            Map<String, Map<String, String>> childAllTranslations = child.getAllTranslations();
-            for (Map.Entry<String, Map<String, String>> entry : childAllTranslations.entrySet()) {
-                String locale = entry.getKey();
-                this.allTranslations.putIfAbsent(locale, new HashMap<>());
-                this.allTranslations.get(locale).putAll(entry.getValue());
-            }
-        }
-    }
-
-    public static TranslatableLang empty(String category, String namespace, String... id) {
-        return new TranslatableLang(category, namespace, id, Set.of(), List.of(), Map.of(), false);
     }
 
     public String getKey() {
@@ -78,47 +49,24 @@ public class TranslatableLang extends ModuleLang {
         return this.translations;
     }
 
-    /**
-     * locale, (key, translation)
-     */
-    public Map<String, Map<String, String>> getAllTranslations() {
-        return this.allTranslations;
-    }
-
     @Override
     public MutableComponent toComponent() {
-        return Component.translatable(
-            this.key,
-            (Object[]) children.stream().map(ModuleLang::toComponent).toArray(MutableComponent[]::new)
-        ).withStyle(this.formats);
+        MutableComponent[] childComponents = new MutableComponent[this.children.size()];
+        int idx = 0;
+        for (ModuleLang child : this.children)
+            childComponents[idx++] = child.toComponent();
+        return Component.translatable(this.key, (Object) childComponents).withStyle(this.formats);
     }
 
-    public MutableComponent toComponentReplacingPlaceholders(Component... contents) {
-        List<Component> objects = new LinkedList<>();
-        Queue<Component> extra = new LinkedList<>(Arrays.asList(contents));
-        for (ModuleLang c : children) {
-            if (c instanceof PlaceholderLang cp)
-                objects.add(cp.isEmpty() ? cp.replaceWith(extra.poll()) : cp.toComponent());
-            else
-                objects.add(c.toComponent());
-        }
-        return Component.translatable(
-            this.key,
-            objects.toArray()
-        ).withStyle(this.formats);
-    }
-
-    @Override
-    public PlaceholderLang getPlaceholder(ChatFormatting... formats) {
-        if (this.placeholder == null)
-            this.placeholder = new PlaceholderLang(this, Set.of(formats));
-        return this.placeholder;
-    }
-
-    /**
-     * 是否允许在DataGen阶段重复出现
-     */
-    public boolean isTemplate() {
-        return this.isTemplate;
+    protected static String assembleKey(String category, String namespace, String[] id) {
+        List<String> keyParts = new ArrayList<>();
+        if (!(category == null || category.isEmpty()))
+            keyParts.add(category);
+        if (namespace == null || namespace.isEmpty())
+            throw new IllegalArgumentException("Namespace is null or empty");
+        else
+            keyParts.add(namespace);
+        keyParts.addAll(Arrays.asList(id));
+        return String.join(".", keyParts);
     }
 }

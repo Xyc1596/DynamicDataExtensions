@@ -1,10 +1,7 @@
 package com.xyc.dynamicdataext;
 
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.lang.ModuleLang;
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.PlaceholderLang;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.lang.*;
 import com.xyc.dynamicdataext.utils.ModMainUtils;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -35,14 +32,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class DynamicDataConfig {
-    protected final static TranslatableLang MESSAGE_RELOAD_CONFIG = ModuleLangBuilder
-        .translatable("message", DynamicDataMain.MOD_ID, "reload_config")
+    protected final static TemplateLang MESSAGE_RELOAD_CONFIG = ModuleLangBuilder
+        .template("message", DynamicDataMain.MOD_ID, "reload_config")
         .translation("zh_cn", "[%s] 重新加载中！")
         .translation("en_us", "[%s] Reloading!")
-        .child(PlaceholderLang.EMPTY)
+        .child(ReferenceLang.EMPTY)
         .build();
-    protected final static TranslatableLang MESSAGE_AUTO_RELOAD_DISABLED = ModuleLangBuilder
-        .translatable("message", DynamicDataMain.MOD_ID, "auto_reload_disabled")
+    protected final static TemplateLang MESSAGE_AUTO_RELOAD_DISABLED = ModuleLangBuilder
+        .template("message", DynamicDataMain.MOD_ID, "auto_reload_disabled")
         .translation(
             "zh_cn",
             "[%s] 自动重新加载已禁用！使用 /reload 命令使模块设置生效。"
@@ -51,10 +48,10 @@ public class DynamicDataConfig {
             "en_us",
             "[%s] Auto reloading is disabled! Use /reload for the module settings to take effect."
         )
-        .child(PlaceholderLang.EMPTY)
+        .child(ReferenceLang.EMPTY)
         .build();
-    protected final static TranslatableLang MESSAGE_NO_PERMISSION = ModuleLangBuilder
-        .translatable("message", DynamicDataMain.MOD_ID, "no_permission")
+    protected final static TemplateLang MESSAGE_NO_PERMISSION = ModuleLangBuilder
+        .template("message", DynamicDataMain.MOD_ID, "no_permission")
         .format(ChatFormatting.RED)
         .translation(
             "zh_cn",
@@ -65,7 +62,7 @@ public class DynamicDataConfig {
             "[%s] You have no permission to update the server configs! Your changes have been saved locally " +
                 "but will not be synchronized to the server."
         )
-        .child(PlaceholderLang.EMPTY)
+        .child(ReferenceLang.EMPTY)
         .build();
 
     private IConfigSpec.ILoadedConfig configCache;
@@ -157,7 +154,7 @@ public class DynamicDataConfig {
 
             if (!playerList.isOp(player.getGameProfile())) {
                 player.sendSystemMessage(
-                    MESSAGE_NO_PERMISSION.toComponentReplacingPlaceholders(this.titleComponent)
+                    MESSAGE_NO_PERMISSION.toComponentReplacingEmpty(this.titleComponent)
                 );
                 return;
             }
@@ -166,12 +163,12 @@ public class DynamicDataConfig {
         if (DynamicDataRegistry.autoReloading()) {
             server.reloadResources(server.getPackRepository().getSelectedIds());
             ModMainUtils.broadcastMessage(
-                MESSAGE_RELOAD_CONFIG.toComponentReplacingPlaceholders(this.titleComponent),
+                MESSAGE_RELOAD_CONFIG.toComponentReplacingEmpty(this.titleComponent),
                 this.logger::info
             );
         } else {
             ModMainUtils.broadcastMessage(
-                MESSAGE_AUTO_RELOAD_DISABLED.toComponentReplacingPlaceholders(this.titleComponent),
+                MESSAGE_AUTO_RELOAD_DISABLED.toComponentReplacingEmpty(this.titleComponent),
                 true,
                 this.logger::warn
             );

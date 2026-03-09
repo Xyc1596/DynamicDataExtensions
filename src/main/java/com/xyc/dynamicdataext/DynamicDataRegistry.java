@@ -8,7 +8,7 @@ import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.*;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.PlaceholderLang;
+import com.xyc.dynamicdataext.lang.ReferenceLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.modules.Common;
 import com.xyc.dynamicdataext.utils.ModMainUtils;
@@ -46,32 +46,32 @@ public final class DynamicDataRegistry {
         .translatable("message", DynamicDataMain.MOD_ID, "recipes", "failed")
         .translation("zh_cn", "[%s] 配方注入失败！%s")
         .translation("en_us", "[%s] Failed to inject recipes! %s")
-        .child(TITLE.getPlaceholder())
-        .child(PlaceholderLang.EMPTY)
+        .child(TITLE.getReference())
+        .child(ReferenceLang.EMPTY)
         .build();
     private static final TranslatableLang MESSAGE_DUPLICATE_RECIPE = ModuleLangBuilder
         .translatable("message", DynamicDataMain.MOD_ID, "recipes", "failed", "duplicate_id")
         .translation("zh_cn", "重复的配方ID：%s")
         .translation("en_us", "Duplicate recipe ID: %s")
-        .child(PlaceholderLang.EMPTY)
+        .child(ReferenceLang.EMPTY)
         .build();
     private static final TranslatableLang MESSAGE_SUCCESS_RECIPES = ModuleLangBuilder
         .translatable("message", DynamicDataMain.MOD_ID, "recipes", "success")
         .translation("zh_cn", "[%s] 配方注入成功：删除 %s，新增 %s，耗时 %s ms")
         .translation("en_us", "[%s] Successfully injected recipes: %s removed, %s added, took %s ms")
-        .child(TITLE.getPlaceholder())
-        .child(PlaceholderLang.EMPTY)
-        .child(PlaceholderLang.EMPTY)
-        .child(PlaceholderLang.EMPTY)
+        .child(TITLE.getReference())
+        .child(ReferenceLang.EMPTY)
+        .child(ReferenceLang.EMPTY)
+        .child(ReferenceLang.EMPTY)
         .build();
     private static final TranslatableLang MESSAGE_SUCCESS_TAGS = ModuleLangBuilder
         .translatable("message", DynamicDataMain.MOD_ID, "tags", "success")
         .translation("zh_cn", "[%s] 标签注入成功：修改 %s，新增 %s, 耗时 %s ms")
         .translation("en_us", "[%s] Successfully injected recipes: %s modified, %s added, took %s ms")
-        .child(TITLE.getPlaceholder())
-        .child(PlaceholderLang.EMPTY)
-        .child(PlaceholderLang.EMPTY)
-        .child(PlaceholderLang.EMPTY)
+        .child(TITLE.getReference())
+        .child(ReferenceLang.EMPTY)
+        .child(ReferenceLang.EMPTY)
+        .child(ReferenceLang.EMPTY)
         .build();
 
     private static final Map<String, DynamicDataConfig> ddConfigs = new LinkedHashMap<>();

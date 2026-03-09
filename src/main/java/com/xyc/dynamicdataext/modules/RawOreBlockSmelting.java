@@ -7,7 +7,7 @@ import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
-import com.xyc.dynamicdataext.lang.PlaceholderLang;
+import com.xyc.dynamicdataext.lang.ReferenceLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.*;
 import net.minecraft.ChatFormatting;
@@ -114,7 +114,7 @@ public class RawOreBlockSmelting extends Module {
             .translation("zh_cn", "原材料列表")
             .translation("en_us", "Ingredient List")
             .build();
-        PlaceholderLang ingredientListTitlePlaceholder = ingredientListTitle.getPlaceholder(ChatFormatting.WHITE);
+        ReferenceLang ingredientListTitlePlaceholder = ReferenceLang.of(ingredientListTitle, ChatFormatting.WHITE);
         this.ingredientList = ingredientListBuilder.setTitle(ingredientListTitle).build();
 
         ModuleOptionBuilder<ListMode> ingredientListModeBuilder = ConfigUtils

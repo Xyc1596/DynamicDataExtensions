@@ -4,27 +4,25 @@ import com.xyc.dynamicdataext.DynamicDataMain;
 import com.xyc.dynamicdataext.config.ModuleConfigBuilder;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.lang.*;
 import net.minecraft.ChatFormatting;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
 public final class ConfigUtils {
-    public static final TranslatableLang DEFAULT_ENABLED_TITLE = createDefaultLangBuilder("enabled")
+    public static final TemplateLang DEFAULT_ENABLED_TITLE = createDefaultLangBuilder("enabled")
         .translation("zh_cn", "启用模块")
         .translation("en_us", "Enable")
         .build();
 
-    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION_HEAD =
+    public static final TemplateLang DEFAULT_ID_FORMAT_INSTRUCTION_HEAD =
         createDefaultLangBuilder("id_format_instruction", "head")
             .translation("zh_cn", "命名空间ID格式")
             .translation("en_us", "Namespaced ID Formats")
             .format(ChatFormatting.ITALIC, ChatFormatting.WHITE)
             .build();
-    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION_SINGLE =
+    public static final TemplateLang DEFAULT_ID_FORMAT_INSTRUCTION_SINGLE =
         createDefaultLangBuilder("id_format_instruction", "single")
             .translation("zh_cn", "* 单项 - %s")
             .translation("en_us", "* Single - %s")
@@ -35,7 +33,7 @@ public final class ConfigUtils {
                 .build()
             ).format(ChatFormatting.GRAY)
             .build();
-    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION_TAG =
+    public static final TemplateLang DEFAULT_ID_FORMAT_INSTRUCTION_TAG =
         createDefaultLangBuilder("id_format_instruction", "tag")
             .translation("zh_cn", "* 标签 - %s")
             .translation("en_us", "* Tag    - %s")
@@ -46,7 +44,7 @@ public final class ConfigUtils {
                 .build()
             ).format(ChatFormatting.GRAY)
             .build();
-    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION_COMMENT =
+    public static final TemplateLang DEFAULT_ID_FORMAT_INSTRUCTION_COMMENT =
         createDefaultLangBuilder("id_format_instruction", "comment")
             .translation(
                 "zh_cn",
@@ -60,7 +58,7 @@ public final class ConfigUtils {
                     > Add "@" prefix to use regular expression matching"""
             ).format(ChatFormatting.GRAY, ChatFormatting.ITALIC)
             .build();
-    public static final TranslatableLang DEFAULT_ID_FORMAT_INSTRUCTION =
+    public static final TemplateLang DEFAULT_ID_FORMAT_INSTRUCTION =
         createDefaultLangBuilder("id_format_instruction")
             .translation("zh_cn", "%s\n%s\n%s\n%s")
             .translation("en_us", "%s\n%s\n%s\n%s")
@@ -69,7 +67,7 @@ public final class ConfigUtils {
             .child(DEFAULT_ID_FORMAT_INSTRUCTION_TAG)
             .child(DEFAULT_ID_FORMAT_INSTRUCTION_COMMENT)
             .build();
-    public static final TranslatableLang DEFAULT_SINGLE_FORMAT_INSTRUCTION =
+    public static final TemplateLang DEFAULT_SINGLE_FORMAT_INSTRUCTION =
         createDefaultLangBuilder("single_format_instruction")
             .translation("zh_cn", "%s\n%s\n%s")
             .translation("en_us", "%s\n%s\n%s")
@@ -78,28 +76,27 @@ public final class ConfigUtils {
             .child(DEFAULT_ID_FORMAT_INSTRUCTION_COMMENT)
             .build();
 
-    public static final TranslatableLang DEFAULT_LIST_MODE_BLACKLIST =
+    public static final TemplateLang DEFAULT_LIST_MODE_BLACKLIST =
         createDefaultLangBuilder("list_mode", "blacklist")
             .translation("zh_cn", "黑名单")
             .translation("en_us", "Blacklist")
             .format(ChatFormatting.RED)
             .build();
-    public static final TranslatableLang DEFAULT_LIST_MODE_WHITELIST =
+    public static final TemplateLang DEFAULT_LIST_MODE_WHITELIST =
         createDefaultLangBuilder("list_mode", "whitelist")
             .translation("zh_cn", "白名单")
             .translation("en_us", "Whitelist")
             .format(ChatFormatting.GREEN)
             .build();
-    public static final TranslatableLang DEFAULT_LIST_MODE_TOOLTIP_HEAD =
+    public static final TemplateLang DEFAULT_LIST_MODE_TOOLTIP_HEAD =
         createDefaultLangBuilder("list_mode", "tooltip_head")
             .translation("zh_cn", "列表模式")
             .translation("en_us", "List Mode")
             .format(ChatFormatting.ITALIC, ChatFormatting.WHITE)
             .build();
 
-    public static TranslatableBuilder createDefaultLangBuilder(String... id) {
-        return ModuleLangBuilder.translatable(
-            true,
+    public static TranslatableBuilder<TemplateLang> createDefaultLangBuilder(String... id) {
+        return ModuleLangBuilder.template(
             "module",
             DynamicDataMain.MOD_ID,
             ArrayUtils.insert(0, id, "_")
@@ -130,7 +127,7 @@ public final class ConfigUtils {
             .setTitle(createDefaultLangBuilder("list_mode")
                 .translation("zh_cn", "%s - 列表模式")
                 .translation("en_us", "%s - List Mode")
-                .child(list.getTitle().getPlaceholder())
+                .child(ReferenceLang.of(list.getTitle()))
                 .build()
             );
     }

@@ -4,14 +4,20 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Set;
+import java.util.Collection;
 
 public abstract class ModuleLang {
     @Unmodifiable
     protected final ChatFormatting[] formats;
+    protected final ReferenceLang reference;
 
-    public ModuleLang(Set<ChatFormatting> formats) {
-        this.formats = formats.toArray(ChatFormatting[]::new);
+    public ModuleLang(Collection<ChatFormatting> formats) {
+        this(formats.toArray(ChatFormatting[]::new));
+    }
+
+    public ModuleLang(ChatFormatting... formats) {
+        this.formats = formats;
+        this.reference = ReferenceLang.of(this);
     }
 
     public abstract MutableComponent toComponent();
@@ -20,5 +26,11 @@ public abstract class ModuleLang {
         return this.formats;
     }
 
-    public abstract PlaceholderLang getPlaceholder(ChatFormatting... formats);
+    public final ReferenceLang getReference() {
+        return this.reference;
+    }
+
+    public final ReferenceLang createReference(ChatFormatting... formats) {
+        return ReferenceLang.of(this, formats);
+    }
 }
