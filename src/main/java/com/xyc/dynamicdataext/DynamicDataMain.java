@@ -41,7 +41,6 @@ public class DynamicDataMain {
         DynamicDataRegistry.registerConfig(CONFIG);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            // DataGen
             DynamicDataLanguageProvider provider = new DynamicDataLanguageProvider(MOD_ID);
             provider.addModuleLang(title);
             CONFIG.getModules().forEach(provider::addModule);

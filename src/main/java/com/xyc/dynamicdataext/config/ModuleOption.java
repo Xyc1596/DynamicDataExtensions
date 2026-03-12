@@ -1,7 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
 import com.xyc.dynamicdataext.lang.ModuleLang;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -21,5 +20,5 @@ public interface ModuleOption<T> {
 
     ModuleLang getTitle();
 
-    List<TranslatableLang> getAllTranslatableLang();
+    List<ModuleLang> getAllModuleLang();
 }

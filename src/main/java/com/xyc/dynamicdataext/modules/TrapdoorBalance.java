@@ -43,7 +43,7 @@ public class TrapdoorBalance extends Module {
         .translation("en_us", "Trapdoor Recipe Balance")
         .build();
 
-    protected Set<DynamicRecipeEntry> newRecipes = new LinkedHashSet<>();
+    protected final Set<DynamicRecipeEntry> newRecipes = new LinkedHashSet<>();
 
     protected TrapdoorBalance(String namespace, String moduleId) {
         super(namespace, moduleId);

@@ -1,18 +1,18 @@
 package com.xyc.dynamicdataext.config;
 
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableBuilder;
+import com.xyc.dynamicdataext.lang.AbstractTranslatableLang;
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 
 public class ModuleOptionBuilder<T> {
     protected final String moduleId;
     protected final String optionId;
-    protected TranslatableLang title;
-    protected TranslatableLang tooltip;
+    protected ModuleLang title;
+    protected ModuleLang tooltip;
     protected T defaultValue;
     protected final Factory<T> factory;
-    protected final TranslatableBuilder<TranslatableLang> titleLangBuilder;
-    protected final TranslatableBuilder<TranslatableLang> tooltipLangBuilder;
+    protected final AbstractTranslatableLang.Builder titleLangBuilder;
+    protected final AbstractTranslatableLang.Builder tooltipLangBuilder;
 
     protected ModuleOptionBuilder(
         String namespace,
@@ -23,10 +23,10 @@ public class ModuleOptionBuilder<T> {
         this.moduleId = moduleId;
         this.optionId = optionId;
         this.factory = factory;
-        this.titleLangBuilder = ModuleLangBuilder.translatable(
+        this.titleLangBuilder = ModuleLang.translatable(
             "module", namespace, moduleId, optionId, "title"
         );
-        this.tooltipLangBuilder = ModuleLangBuilder.translatable(
+        this.tooltipLangBuilder = ModuleLang.translatable(
             "module", namespace, moduleId, optionId, "tooltip"
         );
     }
@@ -36,38 +36,40 @@ public class ModuleOptionBuilder<T> {
         return this;
     }
 
-    public TranslatableBuilder<TranslatableLang> getTitleLangBuilder() {
+    public TranslatableLang.Builder getTitleLangBuilder() {
         return this.titleLangBuilder;
     }
 
     @SuppressWarnings("unused")
-    public TranslatableBuilder<TranslatableLang> createTitleChildLangBuilder(String childId) {
+    public TranslatableLang.Builder createTitleChildLangBuilder(String childId) {
         return this.titleLangBuilder.childTranslatableBuilder(childId);
     }
 
     @SuppressWarnings("unused")
-    public TranslatableBuilder<TranslatableLang> createTitleChildLangBuilder() {
+    public TranslatableLang.Builder createTitleChildLangBuilder() {
         return this.titleLangBuilder.childTranslatableBuilder();
     }
 
-    public ModuleOptionBuilder<T> setTitle(TranslatableLang lang) {
+    public ModuleOptionBuilder<T> setTitle(ModuleLang lang) {
         this.title = lang;
         return this;
     }
 
-    public TranslatableBuilder<TranslatableLang> getTooltipLangBuilder() {
+    public TranslatableLang.Builder getTooltipLangBuilder() {
         return this.tooltipLangBuilder;
     }
 
-    public TranslatableBuilder<TranslatableLang> createTooltipChildLangBuilder(String childId) {
+    @SuppressWarnings("unused")
+    public TranslatableLang.Builder createTooltipChildLangBuilder(String childId) {
         return this.tooltipLangBuilder.childTranslatableBuilder(childId);
     }
 
-    public TranslatableBuilder<TranslatableLang> createTooltipChildLangBuilder() {
+    @SuppressWarnings("unused")
+    public TranslatableLang.Builder createTooltipChildLangBuilder() {
         return this.tooltipLangBuilder.childTranslatableBuilder();
     }
 
-    public ModuleOptionBuilder<T> setTooltip(TranslatableLang lang) {
+    public ModuleOptionBuilder<T> setTooltip(ModuleLang lang) {
         this.tooltip = lang;
         return this;
     }
@@ -85,6 +87,6 @@ public class ModuleOptionBuilder<T> {
     }
 
     public interface Factory<T> {
-        ModuleOption<T> create(String optionId, TranslatableLang title, TranslatableLang tooltip, T defaultValue);
+        ModuleOption<T> create(String optionId, ModuleLang title, ModuleLang tooltip, T defaultValue);
     }
 }

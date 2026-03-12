@@ -1,7 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
 import com.xyc.dynamicdataext.lang.ModuleLang;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.ArrayList;
@@ -42,10 +41,11 @@ public abstract class ModuleOptionImpl<T> implements ModuleOption<T> {
     }
 
     @Override
-    public final List<TranslatableLang> getAllTranslatableLang() {
-        List<TranslatableLang> output = new ArrayList<>();
-        if (this.title instanceof TranslatableLang translatable) output.add(translatable);
-        if (this.tooltip instanceof TranslatableLang translatable) output.add(translatable);
+    public final List<ModuleLang> getAllModuleLang() {
+        List<ModuleLang> output = new ArrayList<>();
+        output.add(this.title);
+        if (this.tooltip != null)
+            output.add(this.tooltip);
         return output;
     }
 }

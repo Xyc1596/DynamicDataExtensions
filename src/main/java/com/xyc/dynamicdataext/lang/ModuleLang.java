@@ -5,6 +5,8 @@ import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class ModuleLang {
     @Unmodifiable
@@ -31,6 +33,32 @@ public abstract class ModuleLang {
     }
 
     public final ReferenceLang createReference(ChatFormatting... formats) {
+        if (formats.length == 0)
+            return this.reference;
         return ReferenceLang.of(this, formats);
+    }
+
+    public static TranslatableLang.Builder translatable(String category, String namespace, String... id) {
+        return new TranslatableLang.Builder(category, namespace, id);
+    }
+
+    public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
+        protected final Set<ChatFormatting> formats = new LinkedHashSet<>();
+
+        @SuppressWarnings("unchecked")
+        protected final T self() {
+            return (T) this;
+        }
+
+        public T format(ChatFormatting format) {
+            this.formats.add(format);
+            return self();
+        }
+
+        public T format(ChatFormatting... formats) {
+            this.formats.addAll(Set.of(formats));
+            return self();
+        }
+
     }
 }

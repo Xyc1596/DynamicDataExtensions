@@ -79,7 +79,7 @@ public class ReversibleCutting extends Module {
             .translation("zh_cn", "配方列表")
             .translation("en_us", "Recipe List")
             .build();
-        ReferenceLang recipeListTitlePlaceholder = ReferenceLang.of(recipeListTitle, ChatFormatting.WHITE);
+        ReferenceLang recipeListTitleReference = recipeListTitle.createReference(ChatFormatting.WHITE);
         this.recipeList = recipeList.setTitle(recipeListTitle).build();
 
         ModuleOptionBuilder<ListMode> recipeListMode = ConfigUtils.createListModeOptionBuilderWithTitle(
@@ -106,11 +106,11 @@ public class ReversibleCutting extends Module {
                                  new recipes based on it will not be generated"""
                 ).child(ConfigUtils.DEFAULT_LIST_MODE_TOOLTIP_HEAD)
                 .child(ConfigUtils.DEFAULT_LIST_MODE_BLACKLIST)
-                .child(recipeListTitlePlaceholder)
-                .child(recipeListTitlePlaceholder)
+                .child(recipeListTitleReference)
+                .child(recipeListTitleReference)
                 .child(ConfigUtils.DEFAULT_LIST_MODE_WHITELIST)
-                .child(recipeListTitlePlaceholder)
-                .child(recipeListTitlePlaceholder)
+                .child(recipeListTitleReference)
+                .child(recipeListTitleReference)
                 .format(ChatFormatting.GRAY)
                 .build()
             ).build();

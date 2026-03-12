@@ -1,7 +1,9 @@
 package com.xyc.dynamicdataext;
 
 import com.xyc.dynamicdataext.base.Module;
-import com.xyc.dynamicdataext.lang.*;
+import com.xyc.dynamicdataext.lang.ModuleLang;
+import com.xyc.dynamicdataext.lang.ReferenceLang;
+import com.xyc.dynamicdataext.lang.TemplateLang;
 import com.xyc.dynamicdataext.utils.ModMainUtils;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -32,14 +34,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class DynamicDataConfig {
-    protected final static TemplateLang MESSAGE_RELOAD_CONFIG = ModuleLangBuilder
-        .template("message", DynamicDataMain.MOD_ID, "reload_config")
+    protected final static TemplateLang MESSAGE_RELOAD_CONFIG = ModuleLang
+        .translatable("message", DynamicDataMain.MOD_ID, "reload_config")
         .translation("zh_cn", "[%s] 重新加载中！")
         .translation("en_us", "[%s] Reloading!")
         .child(ReferenceLang.EMPTY)
-        .build();
-    protected final static TemplateLang MESSAGE_AUTO_RELOAD_DISABLED = ModuleLangBuilder
-        .template("message", DynamicDataMain.MOD_ID, "auto_reload_disabled")
+        .buildRootTemplate();
+    protected final static TemplateLang MESSAGE_AUTO_RELOAD_DISABLED = ModuleLang
+        .translatable("message", DynamicDataMain.MOD_ID, "auto_reload_disabled")
         .translation(
             "zh_cn",
             "[%s] 自动重新加载已禁用！使用 /reload 命令使模块设置生效。"
@@ -49,21 +51,19 @@ public class DynamicDataConfig {
             "[%s] Auto reloading is disabled! Use /reload for the module settings to take effect."
         )
         .child(ReferenceLang.EMPTY)
-        .build();
-    protected final static TemplateLang MESSAGE_NO_PERMISSION = ModuleLangBuilder
-        .template("message", DynamicDataMain.MOD_ID, "no_permission")
+        .buildRootTemplate();
+    protected final static TemplateLang MESSAGE_NO_PERMISSION = ModuleLang
+        .translatable("message", DynamicDataMain.MOD_ID, "no_permission")
         .format(ChatFormatting.RED)
         .translation(
             "zh_cn",
             "[%s] 你没有更新服务端配置的权限！配置变更已保存到本地但不会同步到服务端。"
-        )
-        .translation(
+        ).translation(
             "en_us",
             "[%s] You have no permission to update the server configs! Your changes have been saved locally " +
                 "but will not be synchronized to the server."
-        )
-        .child(ReferenceLang.EMPTY)
-        .build();
+        ).child(ReferenceLang.EMPTY)
+        .buildRootTemplate();
 
     private IConfigSpec.ILoadedConfig configCache;
     private final Map<String, Module> moduleMap = new LinkedHashMap<>();
@@ -176,7 +176,7 @@ public class DynamicDataConfig {
         this.configCache = loadedConfig;
     }
 
-    public static Set<TranslatableLang> gatherAllMessageLang() {
+    public static Set<ModuleLang> gatherAllMessageLang() {
         return Set.of(MESSAGE_RELOAD_CONFIG, MESSAGE_AUTO_RELOAD_DISABLED, MESSAGE_NO_PERMISSION);
     }
 

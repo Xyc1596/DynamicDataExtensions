@@ -1,7 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
 import com.xyc.dynamicdataext.lang.ModuleLang;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -56,12 +55,11 @@ public class ModuleConfig {
         }
     }
 
-    public final List<TranslatableLang> getAllTranslatableLang() {
-        List<TranslatableLang> output = new ArrayList<>();
-        if (this.title instanceof TranslatableLang translatable)
-            output.add(translatable);
+    public final List<ModuleLang> getAllModuleLang() {
+        List<ModuleLang> output = new ArrayList<>();
+        output.add(this.title);
         for (ModuleOption<?> option : this.allOptions.values())
-            output.addAll(option.getAllTranslatableLang());
+            output.addAll(option.getAllModuleLang());
         return output;
     }
 

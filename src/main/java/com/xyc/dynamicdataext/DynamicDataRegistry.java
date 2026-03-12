@@ -7,9 +7,9 @@ import com.mojang.logging.LogUtils;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.base.*;
 import com.xyc.dynamicdataext.config.ModuleConfig;
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.ReferenceLang;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.lang.TemplateLang;
 import com.xyc.dynamicdataext.modules.Common;
 import com.xyc.dynamicdataext.utils.ModMainUtils;
 import net.minecraft.ChatFormatting;
@@ -36,43 +36,43 @@ import java.util.function.Supplier;
  * 所有扩展模组共享
  */
 public final class DynamicDataRegistry {
-    private static final TranslatableLang TITLE = ModuleLangBuilder
+    private static final ReferenceLang TITLE = ModuleLang
         .translatable("message", DynamicDataMain.MOD_ID, "registry")
         .translation("zh_cn", "动态数据注册表")
         .translation("en_us", "Dynamic Data Registry")
         .format(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD)
-        .build();
-    private static final TranslatableLang MESSAGE_FAILED_RECIPES = ModuleLangBuilder
+        .buildReference();
+    private static final TemplateLang MESSAGE_FAILED_RECIPES = ModuleLang
         .translatable("message", DynamicDataMain.MOD_ID, "recipes", "failed")
         .translation("zh_cn", "[%s] 配方注入失败！%s")
         .translation("en_us", "[%s] Failed to inject recipes! %s")
-        .child(TITLE.getReference())
+        .child(TITLE)
         .child(ReferenceLang.EMPTY)
-        .build();
-    private static final TranslatableLang MESSAGE_DUPLICATE_RECIPE = ModuleLangBuilder
+        .buildRootTemplate();
+    private static final TemplateLang MESSAGE_DUPLICATE_RECIPE = ModuleLang
         .translatable("message", DynamicDataMain.MOD_ID, "recipes", "failed", "duplicate_id")
         .translation("zh_cn", "重复的配方ID：%s")
         .translation("en_us", "Duplicate recipe ID: %s")
         .child(ReferenceLang.EMPTY)
-        .build();
-    private static final TranslatableLang MESSAGE_SUCCESS_RECIPES = ModuleLangBuilder
+        .buildRootTemplate();
+    private static final TemplateLang MESSAGE_SUCCESS_RECIPES = ModuleLang
         .translatable("message", DynamicDataMain.MOD_ID, "recipes", "success")
         .translation("zh_cn", "[%s] 配方注入成功：删除 %s，新增 %s，耗时 %s ms")
         .translation("en_us", "[%s] Successfully injected recipes: %s removed, %s added, took %s ms")
-        .child(TITLE.getReference())
+        .child(TITLE)
         .child(ReferenceLang.EMPTY)
         .child(ReferenceLang.EMPTY)
         .child(ReferenceLang.EMPTY)
-        .build();
-    private static final TranslatableLang MESSAGE_SUCCESS_TAGS = ModuleLangBuilder
+        .buildRootTemplate();
+    private static final TemplateLang MESSAGE_SUCCESS_TAGS = ModuleLang
         .translatable("message", DynamicDataMain.MOD_ID, "tags", "success")
         .translation("zh_cn", "[%s] 标签注入成功：修改 %s，新增 %s, 耗时 %s ms")
         .translation("en_us", "[%s] Successfully injected recipes: %s modified, %s added, took %s ms")
-        .child(TITLE.getReference())
+        .child(TITLE)
         .child(ReferenceLang.EMPTY)
         .child(ReferenceLang.EMPTY)
         .child(ReferenceLang.EMPTY)
-        .build();
+        .buildRootTemplate();
 
     private static final Map<String, DynamicDataConfig> ddConfigs = new LinkedHashMap<>();
     private static IRecipeManagerExtensions recipeManager;
@@ -98,7 +98,7 @@ public final class DynamicDataRegistry {
     public static @Nullable ModuleConfig getModuleConfig(String namespace, String moduleId) {
         if (ddConfigs.containsKey(namespace)) {
             Module module = ddConfigs.get(namespace).getModule(moduleId);
-            if (module==null) {
+            if (module == null) {
                 LOGGER.warn("Module {} not found in namespace {}", moduleId, namespace);
                 return null;
             } else return module.getConfig();
@@ -172,8 +172,8 @@ public final class DynamicDataRegistry {
             ResourceLocation location = entry.getId();
             if (currentLocations.contains(location)) {
                 ModMainUtils.broadcastMessage(
-                    MESSAGE_FAILED_RECIPES.toComponentReplacingPlaceholders(
-                        MESSAGE_DUPLICATE_RECIPE.toComponentReplacingPlaceholders(Component.literal(location.toString()))
+                    MESSAGE_FAILED_RECIPES.toComponentReplacingEmpty(
+                        MESSAGE_DUPLICATE_RECIPE.toComponentReplacingEmpty(Component.literal(location.toString()))
                     ),
                     LOGGER::error
                 );
@@ -191,8 +191,8 @@ public final class DynamicDataRegistry {
                 ResourceLocation location = entry.getId();
                 if (currentLocations.contains(location)) {
                     ModMainUtils.broadcastMessage(
-                        MESSAGE_FAILED_RECIPES.toComponentReplacingPlaceholders(
-                            MESSAGE_DUPLICATE_RECIPE.toComponentReplacingPlaceholders(
+                        MESSAGE_FAILED_RECIPES.toComponentReplacingEmpty(
+                            MESSAGE_DUPLICATE_RECIPE.toComponentReplacingEmpty(
                                 Component.literal(location.toString())
                             )
                         ),
@@ -211,7 +211,7 @@ public final class DynamicDataRegistry {
         m.setByType(byTypeBuilder.build());
         m.setByName(byNameBuilder.build());
         ModMainUtils.broadcastMessage(
-            MESSAGE_SUCCESS_RECIPES.toComponentReplacingPlaceholders(
+            MESSAGE_SUCCESS_RECIPES.toComponentReplacingEmpty(
                 Component.literal(String.valueOf(locationsRemoved.size())),
                 Component.literal(String.valueOf(locationsAdded.size())),
                 Component.literal(String.valueOf(System.currentTimeMillis() - t1))
@@ -281,7 +281,7 @@ public final class DynamicDataRegistry {
 
         m.setResults(newResults);
         ModMainUtils.broadcastMessage(
-            MESSAGE_SUCCESS_TAGS.toComponentReplacingPlaceholders(
+            MESSAGE_SUCCESS_TAGS.toComponentReplacingEmpty(
                 Component.literal(String.valueOf(nModified)),
                 Component.literal(String.valueOf(nAdded)),
                 Component.literal(String.valueOf(System.currentTimeMillis() - t1))
@@ -290,7 +290,7 @@ public final class DynamicDataRegistry {
         );
     }
 
-    public static Set<TranslatableLang> gatherAllMessageLang() {
+    public static Set<ModuleLang> gatherAllMessageLang() {
         return Set.of(
             TITLE,
             MESSAGE_FAILED_RECIPES,

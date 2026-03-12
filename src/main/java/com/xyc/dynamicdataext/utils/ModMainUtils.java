@@ -1,7 +1,7 @@
 package com.xyc.dynamicdataext.utils;
 
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableBuilder;
+import com.xyc.dynamicdataext.lang.ModuleLang;
+import com.xyc.dynamicdataext.lang.TranslatableLang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public final class ModMainUtils {
-    public static TranslatableBuilder createModTitleBuilder(String namespace) {
-        return ModuleLangBuilder.translatable(null, namespace);
+    public static TranslatableLang.Builder createModTitleBuilder(String namespace) {
+        return ModuleLang.translatable(null, namespace);
     }
 
     public static void broadcastMessage(Component component, Consumer<String> logPrinter) {

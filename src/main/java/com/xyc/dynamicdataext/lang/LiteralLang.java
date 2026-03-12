@@ -4,12 +4,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
-import java.util.Set;
-
 public class LiteralLang extends ModuleLang {
     protected final String text;
 
-    public LiteralLang(String text, Set<ChatFormatting> formats) {
+    protected LiteralLang(String text, ChatFormatting... formats) {
         super(formats);
         this.text = text;
     }
@@ -19,5 +17,9 @@ public class LiteralLang extends ModuleLang {
         return Component.literal(this.text).withStyle(this.formats);
     }
 
-    public static final LiteralLang EMPTY = new LiteralLang("", Set.of());
+    public static LiteralLang of(String text, ChatFormatting... formats) {
+        return new LiteralLang(text, formats);
+    }
+
+    public static final LiteralLang EMPTY = new LiteralLang("");
 }

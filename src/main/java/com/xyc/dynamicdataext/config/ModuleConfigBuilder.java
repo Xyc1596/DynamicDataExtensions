@@ -1,10 +1,9 @@
 package com.xyc.dynamicdataext.config;
 
+import com.xyc.dynamicdataext.lang.AbstractTranslatableLang;
 import com.xyc.dynamicdataext.lang.ModuleLang;
-import com.xyc.dynamicdataext.utils.NamedEnum;
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
-import com.xyc.dynamicdataext.lang.TranslatableBuilder;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.utils.NamedEnum;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -18,12 +17,12 @@ public class ModuleConfigBuilder {
     protected final String moduleId;
     protected @Nullable BooleanOption enabled = null;
     protected final Map<String, ModuleOption<?>> options = new LinkedHashMap<>();
-    protected final TranslatableBuilder<TranslatableLang> titleLangBuilder;
+    protected final AbstractTranslatableLang.Builder titleLangBuilder;
 
     public ModuleConfigBuilder(String namespace, String moduleId) {
         this.namespace = namespace;
         this.moduleId = moduleId;
-        this.titleLangBuilder = ModuleLangBuilder.translatable("module", namespace, moduleId);
+        this.titleLangBuilder = ModuleLang.translatable("module", namespace, moduleId);
     }
 
     public ModuleConfigBuilder defineEnabled(@NotNull ModuleOption<Boolean> option) {
@@ -39,7 +38,7 @@ public class ModuleConfigBuilder {
         return this;
     }
 
-    public TranslatableBuilder<TranslatableLang> getTitleLangBuilder() {
+    public TranslatableLang.Builder getTitleLangBuilder() {
         return this.titleLangBuilder;
     }
 

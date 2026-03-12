@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -8,8 +8,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class BooleanOption extends ModuleOptionImpl<Boolean> {
     public BooleanOption(
         String optionId,
-        TranslatableLang title,
-        TranslatableLang tooltip,
+        ModuleLang title,
+        ModuleLang tooltip,
         Boolean defaultValue
     ) {
         super(optionId, title, tooltip, defaultValue);

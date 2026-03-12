@@ -8,7 +8,6 @@ import com.xyc.dynamicdataext.base.SingleItemRecipeGraph;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleOption;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
-import com.xyc.dynamicdataext.lang.ReferenceLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.LocationUtils;
@@ -132,7 +131,8 @@ public class WoodCutting extends Module {
                     RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material + "_fence"))
                                  .ifPresent(add);
                 if (fenceGateEnabled)
-                    RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material + "_fence_gate"))
+                    RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material +
+                                     "_fence_gate"))
                                  .ifPresent(add);
                 if (trapdoorEnabled && trapdoorBalance)
                     RegistryUtils.getItemOptional(LocationUtils.fromNamespaceAndPath(namespace, material + "_trapdoor"))
@@ -204,7 +204,7 @@ public class WoodCutting extends Module {
                 .createTooltipChildLangBuilder()
                 .translation("zh_cn", "仅当【%s】模块开启时生效")
                 .translation("en_us", "Only effective when [%s] module is enabled")
-                .child(ReferenceLang.of(TrapdoorBalance.TITLE))
+                .child(TrapdoorBalance.TITLE.getReference())
                 .format(ChatFormatting.ITALIC)
                 .build()
             ).build()
@@ -234,7 +234,7 @@ public class WoodCutting extends Module {
                         .createTooltipChildLangBuilder(this.moduleId)
                         .translation("zh_cn", "兼容【%s】模块")
                         .translation("en_us", "Compatible with [%s] module")
-                        .child(ReferenceLang.of(ReversibleCutting.TITLE))
+                        .child(ReversibleCutting.TITLE.getReference())
                         .format(ChatFormatting.ITALIC)
                         .build()
                     ).build()

@@ -39,8 +39,7 @@ public class Common extends Module {
                     .translation(
                         "zh_cn",
                         "更改配置后自动重新加载数据\n禁用该选项则需要手动使用 /reload 命令使模块设置生效"
-                    )
-                    .translation(
+                    ).translation(
                         "en_us",
                         "Automatically reload data after changing config.\n" +
                             "If disabled, you have to use /reload manually for the module configs to take effect."

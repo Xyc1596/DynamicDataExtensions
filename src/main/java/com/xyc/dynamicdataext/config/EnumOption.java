@@ -1,13 +1,13 @@
 package com.xyc.dynamicdataext.config;
 
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.utils.NamedEnum;
-import com.xyc.dynamicdataext.lang.TranslatableLang;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class EnumOption<T extends Enum<T> & NamedEnum> extends ModuleOptionImpl<T> {
-    public EnumOption(String optionId, TranslatableLang title, TranslatableLang tooltip, T defaultValue) {
+    public EnumOption(String optionId, ModuleLang title, ModuleLang tooltip, T defaultValue) {
         super(optionId, title, tooltip, defaultValue);
     }
 

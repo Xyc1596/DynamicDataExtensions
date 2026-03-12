@@ -34,7 +34,7 @@ public class ReferenceLang extends ModuleLang {
         return this.get().toComponent().withStyle(this.formats);
     }
 
-    public static ReferenceLang of(@NotNull ModuleLang content, ChatFormatting... formats) {
+    static ReferenceLang of(@NotNull ModuleLang content, ChatFormatting... formats) {
         if (content instanceof ReferenceLang reference)
             return Arrays.equals(reference.formats, formats)
                 ? reference

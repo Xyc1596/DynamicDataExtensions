@@ -114,7 +114,7 @@ public class RawOreBlockSmelting extends Module {
             .translation("zh_cn", "原材料列表")
             .translation("en_us", "Ingredient List")
             .build();
-        ReferenceLang ingredientListTitlePlaceholder = ReferenceLang.of(ingredientListTitle, ChatFormatting.WHITE);
+        ReferenceLang ingredientListTitleReference = ingredientListTitle.createReference(ChatFormatting.WHITE);
         this.ingredientList = ingredientListBuilder.setTitle(ingredientListTitle).build();
 
         ModuleOptionBuilder<ListMode> ingredientListModeBuilder = ConfigUtils
@@ -144,7 +144,7 @@ public class RawOreBlockSmelting extends Module {
                     .translation("en_us", "contain any")
                     .format(ConfigUtils.DEFAULT_LIST_MODE_BLACKLIST.getFormats())
                     .build()
-                ).child(ingredientListTitlePlaceholder)
+                ).child(ingredientListTitleReference)
                 .child(ConfigUtils.DEFAULT_LIST_MODE_WHITELIST)
                 .child(ingredientListModeBuilder
                     .createTooltipChildLangBuilder("not_contain")
@@ -152,7 +152,7 @@ public class RawOreBlockSmelting extends Module {
                     .translation("en_us", "do not contain any")
                     .format(ConfigUtils.DEFAULT_LIST_MODE_WHITELIST.getFormats())
                     .build()
-                ).child(ingredientListTitlePlaceholder)
+                ).child(ingredientListTitleReference)
                 .format(ChatFormatting.GRAY)
                 .build()
             ).build();

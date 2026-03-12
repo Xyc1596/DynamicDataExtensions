@@ -1,6 +1,6 @@
 package com.xyc.dynamicdataext.config;
 
-import com.xyc.dynamicdataext.lang.TranslatableLang;
+import com.xyc.dynamicdataext.lang.ModuleLang;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -11,8 +11,8 @@ import java.util.Objects;
 public class StringListOption extends ModuleListOptionImpl<String> {
     public StringListOption(
         String optionId,
-        TranslatableLang title,
-        TranslatableLang tooltip,
+        ModuleLang title,
+        ModuleLang tooltip,
         List<String> defaultValue
     ) {
         super(optionId, title, tooltip, defaultValue);

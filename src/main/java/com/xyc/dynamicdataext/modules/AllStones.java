@@ -5,7 +5,7 @@ import com.xyc.dynamicdataext.base.DynamicRecipeEntry;
 import com.xyc.dynamicdataext.base.Module;
 import com.xyc.dynamicdataext.config.ModuleConfig;
 import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
-import com.xyc.dynamicdataext.lang.ModuleLangBuilder;
+import com.xyc.dynamicdataext.lang.LiteralLang;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.utils.ConfigUtils;
 import com.xyc.dynamicdataext.utils.CriterionUtils;
@@ -137,13 +137,11 @@ public class AllStones extends Module {
                     .translation(
                         "zh_cn",
                         "部分配方中的石头可以替换为标签 %s 包含的任何材料\n%s"
-                    )
-                    .translation(
+                    ).translation(
                         "en_us",
                         "Stones / cobblestones in some recipes can be replaced with any material matching " +
                             "tag %s / %s\n%s"
-                    )
-                    .child(ModuleLangBuilder.literal("#c:stones").format(ChatFormatting.LIGHT_PURPLE).build())
+                    ).child(LiteralLang.of("#c:stones", ChatFormatting.LIGHT_PURPLE))
                     .child(enabled
                         .createTooltipChildLangBuilder("1")
                         .translation("zh_cn", "例：石头 → 石头 / 深板岩 / 安山岩 / 闪长岩 / 花岗岩")
