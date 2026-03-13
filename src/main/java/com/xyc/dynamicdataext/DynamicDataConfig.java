@@ -31,7 +31,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class DynamicDataConfig {
     protected final static TemplateLang MESSAGE_RELOAD_CONFIG = ModuleLang
@@ -85,7 +84,7 @@ public class DynamicDataConfig {
     }
 
     public final boolean isModuleEnabled(String moduleId) {
-        return this.moduleMap.get(moduleId).getConfig().isEnabled();
+        return this.moduleMap.get(moduleId).isEnabled();
     }
 
     public DynamicDataConfig(
@@ -174,10 +173,6 @@ public class DynamicDataConfig {
             );
         }
         this.configCache = loadedConfig;
-    }
-
-    public static Set<ModuleLang> gatherAllMessageLang() {
-        return Set.of(MESSAGE_RELOAD_CONFIG, MESSAGE_AUTO_RELOAD_DISABLED, MESSAGE_NO_PERMISSION);
     }
 
     protected ConfigBuilder getClothBuilder(ModuleLang title) {

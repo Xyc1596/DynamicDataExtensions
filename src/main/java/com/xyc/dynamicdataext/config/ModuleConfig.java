@@ -55,14 +55,6 @@ public class ModuleConfig {
         }
     }
 
-    public final List<ModuleLang> getAllModuleLang() {
-        List<ModuleLang> output = new ArrayList<>();
-        output.add(this.title);
-        for (ModuleOption<?> option : this.allOptions.values())
-            output.addAll(option.getAllModuleLang());
-        return output;
-    }
-
     public boolean isEnabled() {
         return enabled == null || enabled.getValue();
     }

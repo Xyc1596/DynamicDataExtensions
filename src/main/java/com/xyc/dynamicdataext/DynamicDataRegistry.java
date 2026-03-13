@@ -290,16 +290,6 @@ public final class DynamicDataRegistry {
         );
     }
 
-    public static Set<ModuleLang> gatherAllMessageLang() {
-        return Set.of(
-            TITLE,
-            MESSAGE_FAILED_RECIPES,
-            MESSAGE_DUPLICATE_RECIPE,
-            MESSAGE_SUCCESS_RECIPES,
-            MESSAGE_SUCCESS_TAGS
-        );
-    }
-
     private record InjectTagsResultContext<T>(LoadResult<T> result, int nModified, int nAdded) {
         public static <T> InjectTagsResultContext<T> create(
             ResourceKey<? extends Registry<T>> keys,

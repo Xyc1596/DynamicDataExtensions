@@ -44,7 +44,7 @@ public class RawOreBlockSmelting extends Module {
     }
 
     @Override
-    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
+    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {  // FIXME: not working
         EntryAndTagCollection<Item> ingredientList = EntryAndTagCollection
             .items().parseStrings(this.ingredientList.getValue());
         Pattern materialPattern = Pattern.compile("storage_blocks/raw_(.*)");

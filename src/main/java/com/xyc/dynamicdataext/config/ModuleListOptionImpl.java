@@ -45,8 +45,4 @@ public abstract class ModuleListOptionImpl<T> implements ModuleOption<List<T>> {
         return this.title;
     }
 
-    @Override
-    public final List<ModuleLang> getAllModuleLang() {
-        return List.of(this.title, this.tooltip);
-    }
 }

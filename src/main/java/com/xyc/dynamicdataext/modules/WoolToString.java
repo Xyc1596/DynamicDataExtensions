@@ -32,7 +32,7 @@ public class WoolToString extends Module {
     }
 
     @Override
-    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
+    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {  // FIXME: not working
         return Set.of(
             RecipeUtils.createRecipeEntry(
                 this,

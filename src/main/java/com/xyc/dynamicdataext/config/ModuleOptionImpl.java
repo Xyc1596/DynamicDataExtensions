@@ -3,9 +3,6 @@ package com.xyc.dynamicdataext.config;
 import com.xyc.dynamicdataext.lang.ModuleLang;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class ModuleOptionImpl<T> implements ModuleOption<T> {
     protected final String optionId;
     protected final ModuleLang title;
@@ -40,12 +37,4 @@ public abstract class ModuleOptionImpl<T> implements ModuleOption<T> {
         return this.title;
     }
 
-    @Override
-    public final List<ModuleLang> getAllModuleLang() {
-        List<ModuleLang> output = new ArrayList<>();
-        output.add(this.title);
-        if (this.tooltip != null)
-            output.add(this.tooltip);
-        return output;
-    }
 }

@@ -42,16 +42,18 @@ public final class RegistryUtils {
 
     @SuppressWarnings("unused")
     @ParametersAreNonnullByDefault
-    public static DynamicTagEntry<Item> createItemTagEntry(TagKey<Item> tag, Collection<Item> contents) {
+    public static <T> DynamicTagEntry<Item> createItemTagEntry(TagKey<Item> tag, Collection<Item> contents) {
         return createItemTagEntry(tag, contents.toArray(new Item[0]));
     }
 
+    // tag应当提前创建以便在其他环节中引用
+    // 故不提供从ResourceLocation直接创建DynamicTagEntry的方法
     @ParametersAreNonnullByDefault
     public static DynamicTagEntry<Item> createItemTagEntry(TagKey<Item> tag, Item... contents) {
         Set<Holder<Item>> holders = new LinkedHashSet<>();
         for (Item item : contents)
             holders.add(getItemHolder(item));
-        return DynamicTagEntry.itemTag(tag, holders);
+        return new DynamicTagEntry<>(tag, holders);
     }
 
     @ParametersAreNonnullByDefault

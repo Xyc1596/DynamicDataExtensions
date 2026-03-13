@@ -43,10 +43,6 @@ public abstract class AbstractTranslatableLang extends ModuleLang {
         return this.key;
     }
 
-    public List<ModuleLang> getChildren() {
-        return this.children;
-    }
-
     /**
      * @return locale -> text
      */
@@ -79,24 +75,13 @@ public abstract class AbstractTranslatableLang extends ModuleLang {
         protected final String category;
         protected final String namespace;
         protected final String[] id;
-        protected final String[] appendId;
         protected final List<ModuleLang> children = new ArrayList<>();
         protected final Map<String, String> translations = new HashMap<>();
 
         public Builder(String category, String namespace, String... id) {
-            this(category, namespace, id, new String[0]);
-        }
-
-        public Builder(
-            String category,
-            String namespace,
-            String[] id,
-            String... appendId
-        ) {
             this.category = category;
             this.namespace = namespace;
             this.id = id;
-            this.appendId = appendId;
         }
 
         public Builder child(ModuleLang child) {

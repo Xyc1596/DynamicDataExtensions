@@ -3,11 +3,9 @@ package com.xyc.dynamicdataext;
 import com.xyc.dynamicdataext.lang.TranslatableLang;
 import com.xyc.dynamicdataext.modules.*;
 import com.xyc.dynamicdataext.utils.ModMainUtils;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLEnvironment;
 
 @Mod(DynamicDataMain.MOD_ID)
 public class DynamicDataMain {
@@ -39,14 +37,5 @@ public class DynamicDataMain {
             Common.INSTANCE
         );
         DynamicDataRegistry.registerConfig(CONFIG);
-
-        // if (FMLEnvironment.dist == Dist.CLIENT) {
-        //     DynamicDataLanguageProvider provider = new DynamicDataLanguageProvider(MOD_ID);
-        //     provider.addModuleLang(title);
-        //     CONFIG.getModules().forEach(provider::addModule);
-        //     DynamicDataConfig.gatherAllMessageLang().forEach(provider::addModuleLang);
-        //     DynamicDataRegistry.gatherAllMessageLang().forEach(provider::addModuleLang);
-        //     modEventBus.addListener(provider::onGatherData);
-        // }
     }
 }

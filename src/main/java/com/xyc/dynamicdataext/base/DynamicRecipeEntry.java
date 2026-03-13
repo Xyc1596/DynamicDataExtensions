@@ -8,12 +8,10 @@ import net.minecraft.world.item.crafting.RecipeType;
 public class DynamicRecipeEntry {
     protected final ResourceLocation id;
     protected final Recipe<?> recipe;
-    protected final RecipeHolder<Recipe<?>> holder;
 
     public DynamicRecipeEntry(ResourceLocation id, Recipe<?> recipe) {
         this.id = id;
         this.recipe = recipe;
-        this.holder = new RecipeHolder<>(id, recipe);
     }
 
     public ResourceLocation getId() {

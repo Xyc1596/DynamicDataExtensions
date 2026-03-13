@@ -4,8 +4,6 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -22,9 +20,13 @@ public class TemplateLang extends AbstractTranslatableLang {
         Map<String, String> translations,
         Collection<ChatFormatting> formats
     ) {
-        this(null, assembleKey(category, namespace, id), children, translations, formats);
-        if (FMLEnvironment.dist == Dist.CLIENT)
-            DynamicLangRegistry.register(this);
+        super(category, namespace, id, children, translations, formats);
+        this.root = null;
+        for (int i = 0; i < children.size(); i++) {
+            ModuleLang child = children.get(i);
+            if (child instanceof ReferenceLang && ((ReferenceLang) child).isEmpty())
+                this.emptyChildIndices.add(i);
+        }
     }
 
     protected TemplateLang(

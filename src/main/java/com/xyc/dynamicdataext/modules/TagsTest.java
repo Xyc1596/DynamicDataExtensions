@@ -31,7 +31,7 @@ public class TagsTest extends Module {
 
     @Override
     public @NotNull Set<DynamicTagEntry<?>> gatherTagsToAdd() {
-        return Set.of(DynamicTagEntry.itemTag(TEST_TAG, Set.of(RegistryUtils.getItemHolder(Items.ROTTEN_FLESH))));
+        return Set.of(RegistryUtils.createItemTagEntry(TEST_TAG, Items.ROTTEN_FLESH));
     }
 
     @Override
