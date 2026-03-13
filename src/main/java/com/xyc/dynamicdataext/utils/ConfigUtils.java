@@ -7,6 +7,7 @@ import com.xyc.dynamicdataext.config.ModuleOptionBuilder;
 import com.xyc.dynamicdataext.lang.AbstractTranslatableLang;
 import com.xyc.dynamicdataext.lang.ModuleLang;
 import com.xyc.dynamicdataext.lang.ReferenceLang;
+import com.xyc.dynamicdataext.lang.TemplateLang;
 import net.minecraft.ChatFormatting;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -96,6 +97,12 @@ public final class ConfigUtils {
             .translation("en_us", "List Mode")
             .format(ChatFormatting.ITALIC, ChatFormatting.WHITE)
             .buildReference();
+    public static final TemplateLang DEFAULT_LIST_MODE_TITLE =
+        createDefaultLangBuilder("list_mode")
+            .translation("zh_cn", "%s - 列表模式")
+            .translation("en_us", "%s - List Mode")
+            .child(ReferenceLang.EMPTY)
+            .buildRootTemplate();
 
     public static AbstractTranslatableLang.Builder createDefaultLangBuilder(String... id) {
         return ModuleLang.translatable(
@@ -126,10 +133,9 @@ public final class ConfigUtils {
         return builder
             .<ListMode>createEnumOptionBuilder(list.getOptionId() + "_list_mode")
             .setDefaultValue(defaultValue)
-            .setTitle(createDefaultLangBuilder("list_mode")
-                .translation("zh_cn", "%s - 列表模式")
-                .translation("en_us", "%s - List Mode")
-                .child(list.getTitle().getReference())
+            .setTitle(DEFAULT_LIST_MODE_TITLE
+                .createFiller()
+                .fill(list.getTitle().getReference())
                 .build()
             );
     }

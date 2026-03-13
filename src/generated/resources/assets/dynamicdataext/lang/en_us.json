@@ -52,7 +52,7 @@
   "module.dynamicdataext.trapdoor_balance": "Trapdoor Recipe Balance",
   "module.dynamicdataext.trapdoor_balance.enabled.tooltip": "Increase the result count of the crafting recipe of trapdoors\n%s",
   "module.dynamicdataext.trapdoor_balance.enabled.tooltip.0": "Why can 6 planks craft 3 doors but only 2 trapdoors?",
-  "module.dynamicdataext.wood_cutting": "Wooden Plank Crafting",
+  "module.dynamicdataext.wood_cutting": "Wood Cutting",
   "module.dynamicdataext.wood_cutting.door.title": "Doors",
   "module.dynamicdataext.wood_cutting.door.tooltip": "1 log → 2 doors",
   "module.dynamicdataext.wood_cutting.enabled.tooltip": "Add stonecutting recipes for logs and planks\n%s",
@@ -65,7 +65,7 @@
   "module.dynamicdataext.wood_cutting.trapdoor.tooltip": "1 plank → 1 trapdoor / 1 log → 4 trapdoors\n%s",
   "module.dynamicdataext.wood_cutting.trapdoor.tooltip.0": "Only effective when [%s] module is enabled",
   "module.dynamicdataext.wood_cutting.wood.title": "Woods / hyphae",
-  "module.dynamicdataext.wood_cutting.wood.tooltip": "1 log / stem -> 1 wood / hyphae",
+  "module.dynamicdataext.wood_cutting.wood.tooltip": "1 log / stem → 1 wood / hyphae",
   "module.dynamicdataext.wool_and_carpet_to_string": "Wool & Carpet to String",
   "module.dynamicdataext.wool_and_carpet_to_string.enabled.tooltip": "4 wools / 6 carpets + 1 flint → 4 strings\n%s",
   "module.dynamicdataext.wool_and_carpet_to_string.enabled.tooltip.0": "Inspired by: I don't remember :("

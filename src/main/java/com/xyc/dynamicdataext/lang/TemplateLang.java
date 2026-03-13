@@ -4,6 +4,8 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -21,6 +23,8 @@ public class TemplateLang extends AbstractTranslatableLang {
         Collection<ChatFormatting> formats
     ) {
         this(null, assembleKey(category, namespace, id), children, translations, formats);
+        if (FMLEnvironment.dist == Dist.CLIENT)
+            DynamicLangRegistry.register(this);
     }
 
     protected TemplateLang(
@@ -32,21 +36,11 @@ public class TemplateLang extends AbstractTranslatableLang {
     ) {
         super(key, children, translations, formats);
         this.root = root;
-        for (int i = 0; i < children.size(); i++)
-            if (children.get(i) instanceof TemplateLang)
+        for (int i = 0; i < children.size(); i++) {
+            ModuleLang child = children.get(i);
+            if (child instanceof ReferenceLang && ((ReferenceLang) child).isEmpty())
                 this.emptyChildIndices.add(i);
-    }
-
-    public final boolean hasSameRootWith(TemplateLang other) {
-        return this.root != null && this.root.equals(other.root);
-    }
-
-    public final TemplateLang getRootOrSelf() {
-        return this.root != null ? this.root : this;
-    }
-
-    public final boolean isRoot() {
-        return this.root == null;
+        }
     }
 
     @Override
@@ -68,13 +62,13 @@ public class TemplateLang extends AbstractTranslatableLang {
                     " replacements, but got " + replacements.length
             );
 
-        Component[] childComponents = new MutableComponent[this.children.size()];
+        Object[] childComponents = new MutableComponent[this.children.size()];
         int idx = 0, replaceIdx = 0;
         for (ModuleLang child : this.children)
             childComponents[idx++] = child.equals(ReferenceLang.EMPTY)
                 ? replacements[replaceIdx++]
                 : child.toComponent();
-        return Component.translatable(this.key, (Object) childComponents).withStyle(this.formats);
+        return Component.translatable(this.key, childComponents).withStyle(this.formats);
     }
 
     public Builder createFiller() {

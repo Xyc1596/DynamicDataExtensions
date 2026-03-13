@@ -3,6 +3,8 @@ package com.xyc.dynamicdataext.lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.*;
@@ -20,10 +22,9 @@ public abstract class AbstractTranslatableLang extends ModuleLang {
         Map<String, String> translations,
         Collection<ChatFormatting> formats
     ) {
-        super(formats);
-        this.key = assembleKey(category, namespace, id);
-        this.children = children;
-        this.translations = translations;
+        this(assembleKey(category, namespace, id), children, translations, formats);
+        if (FMLEnvironment.dist == Dist.CLIENT)
+            DynamicLangRegistry.register(this);
     }
 
     protected AbstractTranslatableLang(
@@ -46,17 +47,20 @@ public abstract class AbstractTranslatableLang extends ModuleLang {
         return this.children;
     }
 
+    /**
+     * @return locale -> text
+     */
     public Map<String, String> getTranslations() {
         return this.translations;
     }
 
     @Override
     public MutableComponent toComponent() {
-        MutableComponent[] childComponents = new MutableComponent[this.children.size()];
+        Object[] childComponents = new MutableComponent[this.children.size()];
         int idx = 0;
         for (ModuleLang child : this.children)
             childComponents[idx++] = child.toComponent();
-        return Component.translatable(this.key, (Object) childComponents).withStyle(this.formats);
+        return Component.translatable(this.key, childComponents).withStyle(this.formats);
     }
 
     protected static String assembleKey(String category, String namespace, String[] id) {

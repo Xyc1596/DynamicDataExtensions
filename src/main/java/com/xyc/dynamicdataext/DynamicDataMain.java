@@ -40,13 +40,13 @@ public class DynamicDataMain {
         );
         DynamicDataRegistry.registerConfig(CONFIG);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            DynamicDataLanguageProvider provider = new DynamicDataLanguageProvider(MOD_ID);
-            provider.addModuleLang(title);
-            CONFIG.getModules().forEach(provider::addModule);
-            DynamicDataConfig.gatherAllMessageLang().forEach(provider::addModuleLang);
-            DynamicDataRegistry.gatherAllMessageLang().forEach(provider::addModuleLang);
-            modEventBus.addListener(provider::onGatherData);
-        }
+        // if (FMLEnvironment.dist == Dist.CLIENT) {
+        //     DynamicDataLanguageProvider provider = new DynamicDataLanguageProvider(MOD_ID);
+        //     provider.addModuleLang(title);
+        //     CONFIG.getModules().forEach(provider::addModule);
+        //     DynamicDataConfig.gatherAllMessageLang().forEach(provider::addModuleLang);
+        //     DynamicDataRegistry.gatherAllMessageLang().forEach(provider::addModuleLang);
+        //     modEventBus.addListener(provider::onGatherData);
+        // }
     }
 }
