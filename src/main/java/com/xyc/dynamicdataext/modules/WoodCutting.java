@@ -73,7 +73,7 @@ public class WoodCutting extends Module {
                 Optional<ResourceKey<Item>> name_ = holder.unwrapKey();
                 if (name_.isPresent()) {
                     ResourceLocation location = name_.get().location();
-                    String name = location.getPath();
+                    String name = location.getPath(), namespace = location.getNamespace();
                     boolean stripped = name.startsWith("stripped");
                     int materialStart = stripped ? 9 : 0;
                     String material;

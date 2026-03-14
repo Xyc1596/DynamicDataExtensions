@@ -114,11 +114,20 @@ public class EntryAndTagCollection<T> {
         return this.allEntries.isEmpty();
     }
 
+    /**
+     * 对集合进行过滤，返回符合条件的元素集合
+     *
+     * @param entries   要过滤的元素集合
+     * @param whitelist 是否为白名单模式<ul>
+     *                  <li>true：白名单模式，仅保留集合中包含的元素</li>
+     *                  <li>false：黑名单模式，仅保留集合中不包含的元素</li></ul>
+     * @return 剩余元素集合
+     */
     public Set<T> applyToForSet(Set<T> entries, boolean whitelist) {
         if (entries.isEmpty())
             return Set.of();
-        return this.isEmpty() ^ whitelist
-            ? Sets.intersection(entries, this.allEntries)
-            : Sets.difference(entries, this.allEntries);
+        return this.isEmpty() == whitelist
+            ? Sets.difference(entries, this.allEntries)
+            : Sets.intersection(entries, this.allEntries);
     }
 }

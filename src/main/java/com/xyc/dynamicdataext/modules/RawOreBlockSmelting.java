@@ -44,7 +44,7 @@ public class RawOreBlockSmelting extends Module {
     }
 
     @Override
-    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {  // FIXME: not working
+    public @NotNull Set<DynamicRecipeEntry> gatherRecipesToAdd() {
         EntryAndTagCollection<Item> ingredientList = EntryAndTagCollection
             .items().parseStrings(this.ingredientList.getValue());
         Pattern materialPattern = Pattern.compile("storage_blocks/raw_(.*)");
@@ -66,10 +66,7 @@ public class RawOreBlockSmelting extends Module {
                 HolderSet.Named<Item> resultHolders = RegistryUtils.getItemTagContents(
                     LocationUtils.withCommonNamespace("storage_blocks/" + material)
                 );
-                if (resultHolders == null)
-                    return;
-
-                if (resultHolders.size() == 0)
+                if (resultHolders == null || resultHolders.size() == 0)
                     return;
 
                 Item result = resultHolders.get(0).value();
@@ -78,10 +75,10 @@ public class RawOreBlockSmelting extends Module {
                     return;
 
                 Set<Item> ingredientSet = RegistryUtils.getHolderSetContents(ingredientHolders);
-                Set<Item> filtered = ingredientList.applyToForSet(ingredientSet, whitelistMode);
-                Ingredient ingredient = filtered.size() == ingredientSet.size()
+                Set<Item> afterFilter = ingredientList.applyToForSet(ingredientSet, whitelistMode);
+                Ingredient ingredient = afterFilter.size() == ingredientSet.size()
                     ? Ingredient.of(ingredientTag)
-                    : Ingredient.of(filtered.stream().map(ItemStack::new));
+                    : Ingredient.of(afterFilter.stream().map(ItemStack::new));
                 if (ingredient.isEmpty())
                     return;
 
