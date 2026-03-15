@@ -24,7 +24,17 @@ repositories {
     maven { url = "https://maven.aliyun.com/repository/gradle-plugin" }
     mavenLocal()
 
-    maven { url = "https://api.modrinth.com/maven" }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup("maven.modrinth")
+        }
+    }
 }
 
 base {
@@ -173,6 +183,11 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 // To avoid having to run "generateModMetadata" manually, make it run on every project reload
 neoForge.ideSyncTask generateModMetadata
+
+// Source JAR
+//java {
+//    withSourcesJar()
+//}
 
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
