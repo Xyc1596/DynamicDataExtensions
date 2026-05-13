@@ -110,6 +110,7 @@ public class EntryAndTagCollection<T> {
         return this.allEntries.contains(entry);
     }
 
+    @SuppressWarnings("unused")
     public boolean isEmpty() {
         return this.allEntries.isEmpty();
     }
@@ -126,8 +127,8 @@ public class EntryAndTagCollection<T> {
     public Set<T> applyToForSet(Set<T> entries, boolean whitelist) {
         if (entries.isEmpty())
             return Set.of();
-        return this.isEmpty() == whitelist
-            ? Sets.difference(entries, this.allEntries)
-            : Sets.intersection(entries, this.allEntries);
+        return whitelist
+            ? Sets.intersection(entries, this.allEntries)
+            : Sets.difference(entries, this.allEntries);
     }
 }
