@@ -7,6 +7,7 @@ import com.xyc.dynamicdataext.utils.RecipeUtils;
 import com.xyc.dynamicdataext.utils.RegistryUtils;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -103,9 +104,14 @@ public class SingleItemRecipeGraph {
                                 ingredientSet.add(ingredientItem);
                         }
 
-                    String resultId = RegistryUtils.getItemId(result);
-                    if (resultId == null)
+
+                    ResourceLocation resultLocation = RegistryUtils.getItemLocation(result);
+                    if (resultLocation == null)
                         continue;
+                    String resultNamespace = resultLocation.getNamespace();
+                    String resultId = resultNamespace.equals("minecraft")
+                        ? resultNamespace + "__" + resultLocation.getPath() // 防止不同命名空间同名物体造成配方ID重复
+                        : resultLocation.getPath();
                     String recipeId = resultId + recipeIdSuffixStr;
 
                     if (!ingredientSet.isEmpty()) {
